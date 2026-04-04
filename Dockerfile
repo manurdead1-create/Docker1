@@ -1,31 +1,23 @@
-FROM ubuntu:22.04
+FROM nginx:alpine
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y nginx
+# 1. Copy your website files
+COPY . /usr/share/nginx/html
 
-COPY index.html /var/www/html/index.html
+# 2. Create the Proxy configuration
+RUN echo 'server { \
+    listen 80; \
+    location / { \
+        root /usr/share/nginx/html; \
+        index index.html; \
+        try_files $uri $uri/ =404; \
+    } \
+    # THIS IS THE MISSING LINK: \
+    location /api/ { \
+        proxy_pass http://YOUR_ORIHOST_IP:5000/; \
+        proxy_set_header Host $host; \
+        proxy_set_header X-Real-IP $remote_addr; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
-RUN echo 'server { \n\
-    listen 30469 default_server; \n\
-    root /var/www/html; \n\
-    index index.html; \n\
-    \n\
-    location / { \n\
-        try_files $uri $uri/ /index.html; \n\
-    } \n\
-    \n\
-    # Routes License Validation to Orihost \n\
-    location /api/ { \n\
-        proxy_pass http://176.100.37.91:30469; \n\
-        proxy_set_header Host $host; \n\
-    } \n\
-    \n\
-    # Routes Live Stats from your .exe to Orihost \n\
-    location /stats { \n\
-        proxy_pass http://176.100.37.91:30469; \n\
-        proxy_set_header Host $host; \n\
-    } \n\
-}' > /etc/nginx/sites-available/default
-
-EXPOSE 30469
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
