@@ -1,23 +1,28 @@
 FROM nginx:alpine
 
-# 1. Copy your website files
-COPY . /usr/share/nginx/html
+# Copy your index.html to the default nginx location
+COPY index.html /usr/share/nginx/html/index.html
 
-# 2. Create the Proxy configuration
+# Overwrite the default Nginx config to support proxying
 RUN echo 'server { \
-    listen 80; \
+    listen 30469; \
+    server_name localhost; \
+    \
     location / { \
         root /usr/share/nginx/html; \
         index index.html; \
-        try_files $uri $uri/ =404; \
+        try_files $uri $uri/ /index.html; \
     } \
-    # THIS IS THE MISSING LINK: \
+    \
+    # Proxy requests to your Orihost Backend \
     location /api/ { \
-        proxy_pass http://176.100.37.91:30469/; \
+        proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
+        proxy_set_header X-Forwarded-Proto $scheme; \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Important: Railway needs to know you are using 30469
+EXPOSE 30469
