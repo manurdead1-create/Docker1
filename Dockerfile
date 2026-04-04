@@ -1,9 +1,6 @@
 FROM nginx:alpine
-
-# Copy your frontend files
 COPY . /usr/share/nginx/html
 
-# Create a config that listens on 30469 and proxies to Orihost
 RUN echo 'server { \
     listen 30469; \
     location / { \
@@ -11,6 +8,7 @@ RUN echo 'server { \
         index index.html; \
         try_files $uri $uri/ /index.html; \
     } \
+    # This sends /api requests to your Orihost server \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
