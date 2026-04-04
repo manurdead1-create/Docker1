@@ -13,7 +13,7 @@ RUN echo 'server { \
     } \
     # THIS IS THE MISSING LINK: \
     location /api/ { \
-        proxy_pass http://YOUR_ORIHOST_IP:5000/; \
+        proxy_pass http://176.100.37.91:30469/; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
     } \
