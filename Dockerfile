@@ -1,20 +1,15 @@
 FROM nginx:alpine
 
-# Copy your index.html to the default nginx location
-COPY index.html /usr/share/nginx/html/index.html
+COPY . /usr/share/nginx/html
 
-# Overwrite the default Nginx config to support proxying
+# This config fixes the redirect loop and routes API traffic
 RUN echo 'server { \
     listen 30469; \
-    server_name localhost; \
-    \
     location / { \
         root /usr/share/nginx/html; \
         index index.html; \
         try_files $uri $uri/ /index.html; \
     } \
-    \
-    # Proxy requests to your Orihost Backend \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
@@ -24,5 +19,4 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
-# Important: Railway needs to know you are using 30469
 EXPOSE 30469
