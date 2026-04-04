@@ -17,7 +17,7 @@
     .mono { font-family: 'JetBrains Mono', monospace; }
 
     /* ── Screens ────────────────────────────────── */
-    .screen { display: none; flex-direction: column; }
+    .screen { display: none; }
     .screen.active { display: flex; }
 
     /* ── Portal Login ───────────────────────────── */
@@ -381,6 +381,16 @@
     .stat-row-num { color: #fff; font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
+    /* Session rows */
+    .session-row { padding: 0.375rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .session-row:last-child { border-bottom: none; }
+    .session-top { display: flex; justify-content: space-between; align-items: center; }
+    .session-key { color: rgba(255,255,255,0.5); font-size: 11px; font-family: 'JetBrains Mono', monospace; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .session-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+    .session-badge.running { background: rgba(52,211,153,0.15); color: #34d399; }
+    .session-badge.stopped { background: rgba(248,113,113,0.15); color: #f87171; }
+    .session-sub { color: rgba(255,255,255,0.3); font-size: 11px; margin-top: 2px; }
+
     .stats-footer { margin-top: 2.5rem; text-align: center; color: rgba(255,255,255,0.2); font-size: 12px; }
   </style>
 </head>
@@ -389,7 +399,7 @@
 <div id="screen-login" class="screen active">
   <div class="login-card">
     <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo" />
-    <input id="portal-key-input" class="login-input mono" type="text" placeholder="Enter License Key" autocomplete="off" onkeydown="if(event.key==='Enter') portalLogin()" />
+    <input id="portal-key-input" class="login-input mono" type="text" placeholder="Enter License Key" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') portalLogin()" />
     <button id="portal-login-btn" class="login-btn" onclick="portalLogin()">Login</button>
     <p id="portal-error" class="error-msg"></p>
   </div>
@@ -416,36 +426,45 @@
       </div>
       <p class="mono" style="font-size:10px;color:#475569;margin-bottom:2.5rem;">Released: 2024-03-15</p>
 
-      <div class="features-grid">
+      <div style="display:flex;flex-direction:column;gap:2.5rem;">
         <section>
-          <p class="feature-heading">⚡ Core Features</p>
-          <ul class="feature-list">
-            <li>Hypixel Ban & Rank checker</li>
-            <li>DonutSMP Ban & Stats Checker</li>
-            <li>Microsoft Reward Points Fetcher</li>
-            <li>Xbox Game Pass detection</li>
-            <li>Xbox Codes & Nitro Promo Fetcher</li>
-            <li>High-speed multi-threading</li>
-            <li>Smart rate limiting & retries</li>
-          </ul>
+          <h3 style="color:#fff;font-weight:700;font-size:18px;margin-bottom:1rem;">WardenX — Microsoft &amp; Minecraft Audit Suite</h3>
+          <p style="font-size:14px;color:#94a3b8;line-height:1.8;max-width:680px;">
+            WardenX is a high-performance, multi-threaded audit tool built for Microsoft and Minecraft ecosystem analysis.
+            Designed for speed, stability, and stealth, it delivers powerful account insights with advanced session handling.
+          </p>
         </section>
-        <section>
-          <p class="feature-heading">🔐 Advanced Technology</p>
-          <ul class="feature-list">
-            <li>TLS fingerprinting for stable sessions</li>
-            <li>HWID-locked licensing</li>
-            <li>Multi-channel webhooks (Hypixel, Donut, Xbox)</li>
-            <li>Clean embed notifications</li>
-            <li>Minecraft skin previews</li>
-          </ul>
-        </section>
-      </div>
 
-      <div class="portal-footer">
-        <p>— CLI models support carried over</p>
-        <p>— Existing config.ini files fully compatible</p>
-        <p class="warn" style="margin-top:0.5rem;">⚠️ Fast checking MAY skip 2 to 5% hits</p>
-        <p class="warn">⚠️ Windows OS support only.</p>
+        <div class="features-grid">
+          <section>
+            <p class="feature-heading">⚡ Core Features</p>
+            <ul class="feature-list">
+              <li>Hypixel Ban & Rank checker</li>
+              <li>DonutSMP Ban & Stats Checker</li>
+              <li>Microsoft Reward Points Fetcher (Under Development)</li>
+              <li>Xbox Game Pass detection</li>
+              <li>Xbox Codes & Nitro Promo Fetcher</li>
+              <li>Microsoft balance checker (Under Development)</li>
+              <li>High-speed multi-threading</li>
+              <li>Smart rate limiting & retries</li>
+            </ul>
+          </section>
+          <section>
+            <p class="feature-heading">🔐 Advanced Technology</p>
+            <ul class="feature-list" style="margin-bottom:2.5rem;">
+              <li>TLS fingerprinting for stable sessions</li>
+              <li>Dual display modes (Log / GUI) [Under Development]</li>
+              <li>HWID-locked licensing</li>
+            </ul>
+            <p class="feature-heading">🛰️ Discord Integration</p>
+            <ul class="feature-list">
+              <li>Multi-channel webhooks (Hypixel, Donut, Xbox)</li>
+              <li>Clean embed notifications</li>
+              <li>Auto-spoiled credentials</li>
+              <li>Minecraft skin previews</li>
+            </ul>
+          </section>
+        </div>
       </div>
     </div>
   </div>
@@ -496,6 +515,7 @@
       <div id="banner-live" style="display:none;">
         <div class="stats-banner-icon">📡</div>
         <div class="stats-live-text">LIVE</div>
+        <div id="banner-session-count" class="stats-banner-sub"></div>
         <div class="big-stats-row">
           <div class="big-stat"><div id="bs-checked" class="big-stat-val">0</div><div class="big-stat-label">Checked</div></div>
           <div class="big-stat"><div id="bs-hits" class="big-stat-val">0</div><div class="big-stat-label">Hits</div></div>
@@ -516,28 +536,24 @@
         <div class="stat-row"><span class="stat-row-label">Invalid</span><div class="stat-row-val"><span id="s-bad" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
         <div class="stat-row"><span class="stat-row-label">Valid MS</span><div class="stat-row-val"><span id="s-hits" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
         <div class="stat-row"><span class="stat-row-label">2FA</span><div class="stat-row-val"><span id="s-twofa" class="stat-row-num">0</span><div class="dot" style="background:#ffb020;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">CPM</span><div class="stat-row-num">0</div><div id="s-cpm" class="stat-row-val"></div></div>
+        <div class="stat-row"><span class="stat-row-label">Errors</span><div class="stat-row-val"><span id="s-errors" class="stat-row-num">0</span><div class="dot" style="background:#ff6b6b;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">CPM</span><div class="stat-row-val"><span id="s-cpm" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
       </div>
       <div class="stat-card">
         <div class="stat-card-title">Hits Detail</div>
         <div class="stat-row"><span class="stat-row-label">MC Hits</span><div class="stat-row-val"><span id="s-mc" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">XGPU</span><div class="stat-row-val"><span id="s-xgpu" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">XGP</span><div class="stat-row-val"><span id="s-xgp" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">XGPU Hits</span><div class="stat-row-val"><span id="s-xgpu" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">XGP Hits</span><div class="stat-row-val"><span id="s-xgp" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">Bedrock</span><div class="stat-row-val"><span id="s-bedrock" class="stat-row-num">0</span><div class="dot" style="background:#7c5cff;"></div></div></div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-title">Hypixel</div>
-        <div class="stat-row"><span class="stat-row-label">Banned</span><div class="stat-row-val"><span id="s-hyp-ban" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">Unbanned</span><div class="stat-row-val"><span id="s-hyp-unban" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+        <div class="stat-card-title">Account Types</div>
+        <div class="stat-row"><span class="stat-row-label">SFA</span><div class="stat-row-val"><span id="s-sfa" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">MFA</span><div class="stat-row-val"><span id="s-mfa" class="stat-row-num">0</span><div class="dot" style="background:#ffb020;"></div></div></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-card-title">DonutSMP</div>
-        <div class="stat-row"><span class="stat-row-label">Banned</span><div class="stat-row-val"><span id="s-don-ban" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">Unbanned</span><div class="stat-row-val"><span id="s-don-unban" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-title">Rewards</div>
-        <div class="stat-row"><span class="stat-row-label">RP Hits</span><div class="stat-row-val"><span id="s-rp" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
-        <div class="stat-row"><span class="stat-row-label">Balance Hits</span><div class="stat-row-val"><span id="s-bal" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+      <div class="stat-card" id="sessions-card" style="display:none;">
+        <div class="stat-card-title">Sessions</div>
+        <div id="sessions-list"></div>
       </div>
     </div>
     <div class="stats-footer">WardenX Web Stats · Auto-refreshes every 3 seconds</div>
@@ -545,9 +561,9 @@
 </div>
 
 <script>
-  // Ensure both of these match your SSL domain
-  const STATS_API_URL = "https://wardenx.dpdns.org"; 
-  const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
+  // CONFIG: Keep STATS_API_URL empty if on same server
+  const STATS_API_URL = ""; 
+  const LICENSE_SERVER = "http://176.100.37.91:30469/api/validate";
   
   let statsInterval = null;
   let statsKey = '';
@@ -558,47 +574,32 @@
   }
 
   async function portalLogin() {
-    const keyInput = document.getElementById('portal-key-input');
-    const loginBtn = document.getElementById('portal-login-btn');
-    const errorDisplay = document.getElementById('portal-error');
-    const key = keyInput.value.trim();
-    
+    const key = document.getElementById('portal-key-input').value.trim();
+    const btn = document.getElementById('portal-login-btn');
+    const err = document.getElementById('portal-error');
     if (!key) return;
 
-    // Loading State
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Verifying...";
-    errorDisplay.textContent = "";
+    btn.disabled = true;
+    btn.textContent = "Verifying...";
 
     try {
       const res = await fetch(LICENSE_SERVER, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'X-Web-Bypass': 'dariobladez_web' 
-        },
-        body: JSON.stringify({ 
-            license_key: key, 
-            hwid: 'WEB_PORTAL', 
-            version: '1.0.0' 
-        })
+        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+        body: JSON.stringify({ license_key: key, hwid: 'WEB_PORTAL', version: '1.0.0' })
       });
-
-      if (!res.ok) throw new Error('SERVER_CONNECTION_ERROR');
-
       const data = await res.json();
       if (data.valid) {
         sessionStorage.setItem('portal_key', key);
         showScreen('screen-portal');
       } else {
-        errorDisplay.textContent = data.reason || 'Authentication Failed';
+        err.textContent = data.reason || 'Authentication Failed';
       }
-    } catch (err) {
-      errorDisplay.textContent = 'Server Unavailable - Check HTTPS/CORS';
-      console.error(err);
+    } catch {
+      err.textContent = 'Server Connection Error';
     } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent = "Login";
+      btn.disabled = false;
+      btn.textContent = "Login";
     }
   }
 
@@ -609,50 +610,36 @@
 
   function goToStats() {
     const saved = localStorage.getItem('stats_key');
-    if (saved) { 
-        startStatsSession(saved); 
-    } else { 
-        showScreen('screen-stats-login'); 
-    }
+    if (saved) { startStatsSession(saved); } 
+    else { showScreen('screen-stats-login'); }
   }
 
   async function statsLogin() {
-    const loginBtn = document.getElementById('stats-login-btn');
-    const errorDisplay = document.getElementById('stats-error');
     const key = document.getElementById('stats-key-input').value.trim();
-    
+    const btn = document.getElementById('stats-login-btn');
+    const err = document.getElementById('stats-error');
     if (!key) return;
 
-    loginBtn.disabled = true;
-    errorDisplay.style.display = 'none';
-
+    btn.disabled = true;
     try {
       const res = await fetch(LICENSE_SERVER, {
         method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'X-Web-Bypass': 'dariobladez_web' 
-        },
-        body: JSON.stringify({ 
-            license_key: key, 
-            hwid: 'WEB_STATS', 
-            version: '1.0.0' 
-        })
+        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+        body: JSON.stringify({ license_key: key, hwid: 'WEB_STATS', version: '1.0.0' })
       });
-
       const data = await res.json();
       if (data.valid) {
         localStorage.setItem('stats_key', key);
         startStatsSession(key);
-      } else { 
-        errorDisplay.textContent = "Invalid Key";
-        errorDisplay.style.display = 'block'; 
+      } else {
+        err.textContent = "Invalid Key";
+        err.style.display = 'block';
       }
     } catch {
-        errorDisplay.textContent = "Connection Failed";
-        errorDisplay.style.display = 'block';
+      err.textContent = "Connection Failed";
+      err.style.display = 'block';
     } finally {
-        loginBtn.disabled = false;
+      btn.disabled = false;
     }
   }
 
@@ -670,50 +657,57 @@
     try {
       const res = await fetch(`${STATS_API_URL}/api/stats?license_key=${statsKey}`);
       if (!res.ok) throw new Error();
-      
       const data = await res.json();
-      if (data.offline === false) {
-        setBannerState('live');
-        updateStatsUI(data);
-        document.getElementById('stats-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
-        document.getElementById('stats-status-badge').className = 'status-badge online';
-        document.getElementById('stats-status-text').textContent = 'Online';
-      } else { 
-        setBannerState('offline'); 
-      }
-    } catch { 
-      setBannerState('offline'); 
-      document.getElementById('stats-status-badge').className = 'status-badge offline';
-      document.getElementById('stats-status-text').textContent = 'Offline';
+      renderStats(data);
+    } catch {
+      setBannerState('offline');
     }
   }
 
-  function updateStatsUI(data) {
-    // Helper to avoid undefined
-    const n = (val) => val || 0;
+  function renderStats(data) {
+    const t = data.totals || {};
+    const active = data.active_sessions || 0;
 
-    document.getElementById('bs-checked').textContent = n(data.total_checked);
-    document.getElementById('bs-hits').textContent = n(data.total_hits);
-    document.getElementById('bs-cpm').textContent = n(data.cpm);
-    document.getElementById('bs-bad').textContent = n(data.total_bad);
-    
-    document.getElementById('s-bad').textContent = n(data.total_bad);
-    document.getElementById('s-hits').textContent = n(data.total_hits);
-    document.getElementById('s-cpm').textContent = n(data.cpm);
-    document.getElementById('s-twofa').textContent = n(data.two_fa);
-    
-    document.getElementById('s-mc').textContent = n(data.mc_hits);
-    document.getElementById('s-xgpu').textContent = n(data.xgpu_hits);
-    document.getElementById('s-xgp').textContent = n(data.xgp_hits);
-    
-    document.getElementById('s-hyp-ban').textContent = n(data.hyp_ban);
-    document.getElementById('s-hyp-unban').textContent = n(data.hyp_unban);
-    
-    document.getElementById('s-don-ban').textContent = n(data.don_ban);
-    document.getElementById('s-don-unban').textContent = n(data.don_unban);
-    
-    document.getElementById('s-rp').textContent = n(data.rp_hits);
-    document.getElementById('s-bal').textContent = n(data.bal_hits);
+    if (active > 0) {
+      setBannerState('live');
+      document.getElementById('stats-status-badge').className = 'status-badge online';
+      document.getElementById('stats-status-text').textContent = active + ' Active';
+    } else {
+      setBannerState('offline');
+    }
+
+    document.getElementById('bs-checked').textContent = (t.checked || 0).toLocaleString();
+    document.getElementById('bs-hits').textContent = (t.hits || 0).toLocaleString();
+    document.getElementById('bs-cpm').textContent = (t.cpm || 0).toLocaleString();
+    document.getElementById('bs-bad').textContent = (t.bad || 0).toLocaleString();
+
+    document.getElementById('s-bad').textContent = t.bad || 0;
+    document.getElementById('s-hits').textContent = t.hits || 0;
+    document.getElementById('s-twofa').textContent = t.twofa || 0;
+    document.getElementById('s-errors').textContent = t.errors || 0;
+    document.getElementById('s-cpm').textContent = t.cpm || 0;
+    document.getElementById('s-mc').textContent = t.hits || 0;
+    document.getElementById('s-xgpu').textContent = t.xgpu || 0;
+    document.getElementById('s-xgp').textContent = t.xgp || 0;
+    document.getElementById('s-bedrock').textContent = t.bedrock || 0;
+    document.getElementById('s-sfa').textContent = t.sfa || 0;
+    document.getElementById('s-mfa').textContent = t.mfa || 0;
+
+    const sessions = data.sessions || [];
+    const list = document.getElementById('sessions-list');
+    const card = document.getElementById('sessions-card');
+    if (sessions.length > 0) {
+      card.style.display = 'block';
+      list.innerHTML = sessions.slice(0, 5).map(s => `
+        <div class="session-row">
+          <div class="session-top">
+            <span class="session-key">${s.license_key}</span>
+            <span class="session-badge ${s.status === 'running' ? 'running' : 'stopped'}">${s.status}</span>
+          </div>
+          <div class="session-sub">${s.checked || 0} checked · ${s.hits || 0} hits</div>
+        </div>
+      `).join('');
+    }
   }
 
   function setBannerState(state) {
@@ -727,6 +721,10 @@
     clearInterval(statsInterval);
     showScreen('screen-stats-login');
   }
+
+  (function init() {
+    if (sessionStorage.getItem('portal_key')) showScreen('screen-portal');
+  })();
 </script>
 </body>
 </html>
