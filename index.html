@@ -512,4 +512,160 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-card-title">
+        <div class="stat-card-title">Core</div>
+        <div class="stat-row"><span class="stat-row-label">Invalid</span><div class="stat-row-val"><span id="s-bad" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">Valid MS</span><div class="stat-row-val"><span id="s-hits" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">2FA</span><div class="stat-row-val"><span id="s-twofa" class="stat-row-num">0</span><div class="dot" style="background:#ffb020;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">CPM</span><div class="stat-row-num">0</div><div id="s-cpm" class="stat-row-val"></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Hits Detail</div>
+        <div class="stat-row"><span class="stat-row-label">MC Hits</span><div class="stat-row-val"><span id="s-mc" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">XGPU</span><div class="stat-row-val"><span id="s-xgpu" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">XGP</span><div class="stat-row-val"><span id="s-xgp" class="stat-row-num">0</span><div class="dot" style="background:#00e5ff;"></div></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Hypixel</div>
+        <div class="stat-row"><span class="stat-row-label">Banned</span><div class="stat-row-val"><span id="s-hyp-ban" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">Unbanned</span><div class="stat-row-val"><span id="s-hyp-unban" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">DonutSMP</div>
+        <div class="stat-row"><span class="stat-row-label">Banned</span><div class="stat-row-val"><span id="s-don-ban" class="stat-row-num">0</span><div class="dot" style="background:#ff4ecd;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">Unbanned</span><div class="stat-row-val"><span id="s-don-unban" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Rewards</div>
+        <div class="stat-row"><span class="stat-row-label">RP Hits</span><div class="stat-row-val"><span id="s-rp" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+        <div class="stat-row"><span class="stat-row-label">Balance Hits</span><div class="stat-row-val"><span id="s-bal" class="stat-row-num">0</span><div class="dot" style="background:#00ff9c;"></div></div></div>
+      </div>
+    </div>
+    <div class="stats-footer">WardenX Web Stats · Auto-refreshes every 3 seconds</div>
+  </div>
+</div>
+
+<script>
+  const STATS_API_URL = "https://wardenx.dpdns.org";
+  const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
+  let statsInterval = null;
+  let statsKey = '';
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  async function portalLogin() {
+    const key = document.getElementById('portal-key-input').value.trim();
+    if (!key) return;
+    try {
+      const res = await fetch(LICENSE_SERVER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+        body: JSON.stringify({ license_key: key, hwid: 'WEB_PORTAL', version: '1.0.0' })
+      });
+      const data = await res.json();
+      if (data.valid) {
+        sessionStorage.setItem('portal_key', key);
+        showScreen('screen-portal');
+      } else {
+        document.getElementById('portal-error').textContent = data.reason || 'Auth Failed';
+      }
+    } catch { document.getElementById('portal-error').textContent = 'Server Error'; }
+  }
+
+  function portalSignOut() {
+    sessionStorage.removeItem('portal_key');
+    showScreen('screen-login');
+  }
+
+  function goToStats() {
+    const saved = localStorage.getItem('stats_key');
+    if (saved) { startStatsSession(saved); } else { showScreen('screen-stats-login'); }
+  }
+
+  async function statsLogin() {
+    const key = document.getElementById('stats-key-input').value.trim();
+    if (!key) return;
+    try {
+      const res = await fetch(LICENSE_SERVER, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+        body: JSON.stringify({ license_key: key, hwid: 'WEB_STATS', version: '1.0.0' })
+      });
+      const data = await res.json();
+      if (data.valid) {
+        localStorage.setItem('stats_key', key);
+        startStatsSession(key);
+      } else { 
+        document.getElementById('stats-error').textContent = "Invalid Key";
+        document.getElementById('stats-error').style.display = 'block'; 
+      }
+    } catch { }
+  }
+
+  function startStatsSession(key) {
+    statsKey = key;
+    document.getElementById('stats-key-chip').textContent = key.slice(0, 8) + '...';
+    showScreen('screen-stats');
+    setBannerState('loading');
+    fetchStats();
+    if (statsInterval) clearInterval(statsInterval);
+    statsInterval = setInterval(fetchStats, 3000);
+  }
+
+  async function fetchStats() {
+    try {
+      const res = await fetch(`${STATS_API_URL}/api/stats?license_key=${statsKey}`);
+      const data = await res.json();
+      if (data.offline === false) {
+        setBannerState('live');
+        updateStatsUI(data);
+        document.getElementById('stats-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+        document.getElementById('stats-status-badge').className = 'status-badge online';
+        document.getElementById('stats-status-text').textContent = 'Online';
+      } else { setBannerState('offline'); }
+    } catch { setBannerState('offline'); }
+  }
+
+  function updateStatsUI(data) {
+    // Banner
+    document.getElementById('bs-checked').textContent = data.total_checked || 0;
+    document.getElementById('bs-hits').textContent = data.total_hits || 0;
+    document.getElementById('bs-cpm').textContent = data.cpm || 0;
+    document.getElementById('bs-bad').textContent = data.total_bad || 0;
+    
+    // Grid
+    document.getElementById('s-bad').textContent = data.total_bad || 0;
+    document.getElementById('s-hits').textContent = data.total_hits || 0;
+    document.getElementById('s-cpm').textContent = data.cpm || 0;
+    document.getElementById('s-twofa').textContent = data.two_fa || 0;
+    
+    document.getElementById('s-mc').textContent = data.mc_hits || 0;
+    document.getElementById('s-xgpu').textContent = data.xgpu_hits || 0;
+    document.getElementById('s-xgp').textContent = data.xgp_hits || 0;
+    
+    document.getElementById('s-hyp-ban').textContent = data.hyp_ban || 0;
+    document.getElementById('s-hyp-unban').textContent = data.hyp_unban || 0;
+    
+    document.getElementById('s-don-ban').textContent = data.don_ban || 0;
+    document.getElementById('s-don-unban').textContent = data.don_unban || 0;
+    
+    document.getElementById('s-rp').textContent = data.rp_hits || 0;
+    document.getElementById('s-bal').textContent = data.bal_hits || 0;
+  }
+
+  function setBannerState(state) {
+    document.getElementById('banner-loading').style.display = (state === 'loading') ? 'block' : 'none';
+    document.getElementById('banner-live').style.display = (state === 'live') ? 'block' : 'none';
+    document.getElementById('banner-offline').style.display = (state === 'offline') ? 'block' : 'none';
+  }
+
+  function statsLogout() {
+    localStorage.removeItem('stats_key');
+    clearInterval(statsInterval);
+    showScreen('screen-stats-login');
+  }
+</script>
+</body>
+</html>
