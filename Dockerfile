@@ -1,8 +1,9 @@
 FROM nginx:alpine
 
+# Copy your frontend files
 COPY . /usr/share/nginx/html
 
-# This config fixes the redirect loop and routes API traffic
+# Create a config that listens on 30469 and proxies to Orihost
 RUN echo 'server { \
     listen 30469; \
     location / { \
