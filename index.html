@@ -2,652 +2,1183 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
   <title>WardenX | Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & Base ───────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #050505;
-      color: #d1d5db;
-      min-height: 100vh;
+    :root {
+      --bg: #050505;
+      --bg2: #0a0a0f;
+      --bg3: #0f0f1a;
+      --border: #1a1a2e;
+      --border2: #2a2a40;
+      --text: #d1d5db;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+      --blue: #5196ff;
+      --purple: #7c5cff;
+      --green: #34d399;
+      --yellow: #f59e0b;
+      --red: #f87171;
     }
-    .mono { font-family: 'JetBrains Mono', monospace; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: 'Inter', sans-serif; cursor: pointer; }
+    input, textarea { font-family: 'Inter', sans-serif; }
 
-    /* ── Screens ────────────────────────────────── */
-    .screen { display: none; }
-    .screen.active { display: flex; }
+    /* ── PAGES ── */
+    .page { display: none; }
+    .page.active { display: block; }
 
-    /* ── Portal Login ───────────────────────────── */
-    #screen-login {
-      min-height: 100vh;
-      align-items: center;
-      justify-content: center;
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem; border-bottom: 1px solid var(--border);
+      background: rgba(5,5,5,0.97); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
     }
+    .nav-logo { display: flex; align-items: center; gap: .625rem; }
+    .nav-logo img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(81,150,255,.55)); }
+    .nav-logo span { font-weight: 800; font-size: 18px; color: #fff; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { color: var(--muted2); font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .btn-primary {
+      background: var(--blue); color: #000; border: none;
+      padding: .5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 13px;
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: #4085ee; }
+
+    /* ── HERO ── */
+    #home { text-align: center; padding: 6rem 1.5rem 4rem; position: relative; overflow: hidden; }
+    .hero-glow {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(81,150,255,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; }
+    .hero-logo { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 24px rgba(81,150,255,.6)); margin-bottom: 1.5rem; }
+    .hero-title {
+      font-size: clamp(2.5rem,6vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem;
+      background: linear-gradient(135deg,#5196ff 0%,#38bdf8 50%,#818cf8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: .75rem; }
+    .hero-desc { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn-hero { background: linear-gradient(135deg,#5196ff,#3b82f6); color: #fff; border: none; padding: .875rem 2rem; border-radius: 10px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 24px rgba(81,150,255,.3); transition: opacity .2s; }
+    .btn-hero:hover { opacity: .9; }
+    .btn-ghost { background: transparent; color: var(--muted2); border: 1px solid var(--border2); padding: .875rem 2rem; border-radius: 10px; font-weight: 600; font-size: 15px; transition: border-color .2s; }
+    .btn-ghost:hover { border-color: var(--blue); }
+    .hero-stats { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .stat-item { text-align: center; padding: .75rem 1.5rem; }
+    .stat-val { font-size: 28px; font-weight: 800; color: var(--blue); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── BADGE ── */
+    .badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 1rem; }
+    .badge-blue { background: rgba(81,150,255,.1); color: var(--blue); border: 1px solid rgba(81,150,255,.25); }
+    .badge-yellow { background: rgba(245,158,11,.1); color: var(--yellow); border: 1px solid rgba(245,158,11,.25); }
+    .badge-purple { background: rgba(124,92,255,.12); color: #a78bfa; border: 1px solid rgba(124,92,255,.25); }
+
+    /* ── SECTION HEADER ── */
+    .sec-header { text-align: center; margin-bottom: 3rem; }
+    .sec-title { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: .75rem; }
+    .sec-sub { color: var(--muted); font-size: 15px; }
+    section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    /* ── FEATURES ── */
+    .feature-cat { display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+    .feature-cat span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+    .feature-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+      transition: border-color .2s, transform .2s; cursor: default;
+    }
+    .feature-card:hover { border-color: rgba(81,150,255,.35); transform: translateY(-2px); }
+    .feature-icon { width: 40px; height: 40px; background: rgba(81,150,255,.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: .875rem; }
+    .feature-title { color: #fff; font-weight: 700; font-size: 15px; margin-bottom: .5rem; }
+    .feature-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.25rem; }
+    .plan-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; position: relative;
+    }
+    .plan-card.highlight { background: rgba(81,150,255,.06); border-color: rgba(81,150,255,.4); box-shadow: 0 0 40px rgba(81,150,255,.08); }
+    .plan-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--blue); color: #000; font-size: 10px; font-weight: 800;
+      padding: 3px 12px; border-radius: 999px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+    }
+    .plan-name { color: var(--muted2); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .plan-price { display: flex; align-items: baseline; gap: .25rem; margin-bottom: 1.5rem; }
+    .plan-price .amount { font-size: 40px; font-weight: 900; color: #fff; }
+    .plan-price .period { font-size: 13px; color: var(--muted); }
+    .plan-features { list-style: none; margin-bottom: 2rem; }
+    .plan-features li { font-size: 13px; color: var(--muted2); padding: .375rem 0; display: flex; align-items: center; gap: .5rem; }
+    .plan-features li::before { content: "●"; color: var(--blue); }
+    .btn-plan {
+      width: 100%; padding: .75rem; border-radius: 8px; font-weight: 700; font-size: 13px;
+      border: none; transition: opacity .2s;
+    }
+    .btn-plan:hover { opacity: .85; }
+    .btn-plan-fill { background: var(--blue); color: #000; }
+    .btn-plan-outline { background: transparent; color: var(--blue); border: 1px solid rgba(81,150,255,.4) !important; }
+
+    /* ── REVIEWS ── */
+    .rating-summary { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .rating-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 2rem; display: flex; align-items: center; gap: .75rem; }
+    .rating-num { font-size: 26px; font-weight: 800; }
+    .rating-label { color: var(--muted); font-size: 13px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.25rem; }
+    .review-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
+    .review-text { color: var(--text); font-size: 14px; line-height: 1.6; flex: 1; }
+    .review-author { display: flex; align-items: center; gap: .625rem; margin-top: .5rem; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0; }
+    .author-name { color: var(--muted2); font-size: 13px; font-weight: 600; }
+    .stars { display: inline-flex; gap: 4px; }
+    .star { font-size: 14px; line-height: 1; }
+    .star.filled { color: var(--yellow); }
+    .star.empty { color: rgba(255,255,255,.2); }
+    .star.interactive { font-size: 22px; cursor: pointer; transition: color .15s; }
+    .btn-review { background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; padding: .75rem 2rem; border-radius: 10px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-review:hover { opacity: .85; }
+
+    /* ── CONTACT ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; align-items: start; }
+    @media(max-width:768px){ .contact-grid { grid-template-columns: 1fr; } }
+    .contact-form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; }
+    .contact-title { color: #fff; font-weight: 700; font-size: 18px; margin-bottom: .5rem; }
+    .contact-sub { color: var(--muted); font-size: 13px; margin-bottom: 1.5rem; }
+    .contact-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; text-align: center; transition: border-color .2s; }
+    .contact-card:hover { border-color: rgba(81,150,255,.35); }
+    .contact-card-icon { font-size: 24px; margin-bottom: .5rem; }
+    .contact-card-title { color: #fff; font-weight: 700; font-size: 15px; margin-bottom: .25rem; }
+    .contact-card-sub { font-size: 13px; margin-bottom: .25rem; }
+    .contact-card-note { color: var(--muted); font-size: 12px; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; color: var(--muted2); font-size: 12px; margin-bottom: .375rem; }
+    .form-input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+      color: #fff; padding: .75rem 1rem; border-radius: 8px; font-size: 14px; outline: none;
+      transition: border-color .2s; font-family: 'Inter',sans-serif;
+    }
+    .form-input:focus { border-color: var(--blue); }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+    .form-success { background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.25); color: var(--green); padding: .75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 13px; }
+    .btn-send { background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; padding: .75rem 2rem; border-radius: 8px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-send:hover { opacity: .85; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 2rem; }
+    .footer-brand { display: flex; align-items: center; justify-content: center; gap: .5rem; margin-bottom: .75rem; }
+    .footer-brand img { width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(81,150,255,.5)); }
+    .footer-brand span { font-weight: 700; font-size: 14px; color: #fff; }
+    .footer-copy { color: #334155; font-size: 12px; }
+
+    /* ── REVIEW MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2rem; width: 100%; max-width: 440px; position: relative;
+    }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
+    .modal-header { text-align: center; margin-bottom: 1.5rem; }
+    .modal-title { color: #fff; font-weight: 800; font-size: 22px; margin-top: .875rem; }
+    .modal-sub { color: var(--muted); font-size: 13px; margin-top: .375rem; }
+    .char-count { text-align: right; font-size: 11px; color: #475569; margin-top: 2px; }
+    .form-error { color: var(--red); font-size: 12px; margin-bottom: .75rem; }
+    .btn-submit-review { width: 100%; padding: .875rem; background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-submit-review:hover { opacity: .85; }
+
+    /* ── DASHBOARD PAGE ── */
+    #dashboard-page {
+      min-height: 100vh; background: var(--bg);
+      display: none; align-items: center; justify-content: center;
+    }
+    #dashboard-page.active { display: flex; }
+
+    /* Login card */
     .login-card {
-      background: #0a0a0f;
-      border: 1px solid #1a1a2e;
-      border-radius: 12px;
-      box-shadow: 0 0 60px rgba(0,0,0,0.9);
-      width: 100%;
-      max-width: 400px;
-      padding: 2.5rem;
+      background: #0d0d1a; border: 1px solid #1e1e35;
+      border-radius: 16px; box-shadow: 0 0 80px rgba(0,0,0,.95);
+      width: 100%; max-width: 390px; padding: 2.5rem;
       text-align: center;
     }
-    .login-logo {
-      width: 96px;
-      height: 96px;
-      object-fit: contain;
-      filter: drop-shadow(0 0 20px rgba(81,150,255,0.55));
-      margin-bottom: 2rem;
-    }
+    .login-brand { display: flex; align-items: center; justify-content: center; gap: .875rem; margin-bottom: 2rem; }
+    .login-logo { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 0 16px rgba(124,92,255,.7)); }
+    .login-brand-text { text-align: left; }
+    .login-brand-name { color: #fff; font-weight: 800; font-size: 20px; line-height: 1.1; }
+    .login-brand-sub { color: #475569; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-top: 2px; }
+    .login-label { display: block; text-align: left; color: #475569; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-bottom: .5rem; }
     .login-input {
-      background: #0f0f1a;
-      border: 1px solid #2a2a40;
-      color: #fff;
-      width: 100%;
-      padding: 0.875rem 1.25rem;
-      border-radius: 8px;
-      text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      letter-spacing: 0.12em;
-      outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 0.75rem;
+      width: 100%; background: #0a0a16; border: 1px solid #252540;
+      color: #fff; padding: .875rem 1.25rem; border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: .1em;
+      outline: none; margin-bottom: .75rem; transition: border-color .2s; text-align: center;
     }
-    .login-input:focus { border-color: #5196ff; }
-    .login-btn {
-      background: #5196ff;
-      color: #000;
-      width: 100%;
-      padding: 0.875rem;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, opacity 0.2s;
+    .login-input::placeholder { color: #2e3050; letter-spacing: .05em; }
+    .login-input:focus { border-color: #7c5cff; }
+    /* Verifying bar */
+    .verify-bar {
+      display: none; margin-bottom: .75rem;
+      background: #111118; border: 1px solid #252540; border-radius: 8px;
+      padding: .75rem 1rem;
+      align-items: center; justify-content: space-between;
     }
-    .login-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .login-btn:not(:disabled):hover { background: #4085ee; }
-    .error-msg {
-      color: #f87171;
-      font-size: 11px;
-      margin-top: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      min-height: 16px;
+    .verify-bar.show { display: flex; }
+    .verify-left { display: flex; align-items: center; gap: .625rem; }
+    .verify-spinner {
+      width: 18px; height: 18px; border: 2px solid #2e3050;
+      border-top-color: #7c5cff; border-radius: 50%;
+      animation: spin .7s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .verify-text { color: #d1d5db; font-size: 13px; font-weight: 500; }
+    .verify-right { display: flex; align-items: center; gap: .375rem; }
+    .cloudflare-badge { font-size: 9px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .08em; }
+    .cf-logo { font-size: 14px; }
+    .btn-continue {
+      width: 100%; padding: .875rem; background: linear-gradient(135deg,#7c5cff,#5196ff);
+      color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 14px;
+      letter-spacing: .05em; transition: opacity .2s; margin-bottom: .25rem;
+    }
+    .btn-continue:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-continue:not(:disabled):hover { opacity: .88; }
+    .login-error { color: var(--red); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; min-height: 18px; }
+    .no-license { font-size: 12px; color: #2e3050; margin-top: .875rem; transition: color .2s; }
+    .no-license a { color: #3d4070; text-decoration: underline; transition: color .2s; }
+    .no-license a:hover { color: #7c5cff; }
 
-    /* ── Portal Dashboard ───────────────────────── */
-    #screen-portal {
-      min-height: 100vh;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 1.5rem 1rem;
-    }
-    .portal-card {
-      background: #0a0a0f;
-      border: 1px solid #1a1a2e;
-      border-radius: 8px;
-      box-shadow: 0 0 40px rgba(0,0,0,0.8);
-      width: 100%;
-      max-width: 1000px;
-    }
-    .portal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 2rem;
-      border-bottom: 1px solid #1a1a2e;
-    }
-    .portal-logo { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(81,150,255,0.4)); }
-    .portal-logo-wrap { display: flex; align-items: center; gap: 0.75rem; }
-    .portal-label { color: #334155; font-size: 13px; font-weight: 600; }
-    .portal-actions { display: flex; gap: 0.75rem; align-items: center; }
+    /* Authed portal */
+    .portal-wrap { width: 100%; max-width: 1000px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,.8); }
+    .portal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
+    .portal-header-left { display: flex; align-items: center; gap: .75rem; }
+    .portal-header-left img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(81,150,255,.4)); }
+    .portal-header-left span { color: #334155; font-size: 13px; font-weight: 600; }
+    .portal-header-right { display: flex; gap: .75rem; align-items: center; }
     .btn-stats {
-      background: rgba(81,150,255,0.12);
-      color: #5196ff;
-      border: 1px solid rgba(81,150,255,0.25);
-      padding: 0.375rem 1rem;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: rgba(81,150,255,.12); color: var(--blue);
+      border: 1px solid rgba(81,150,255,.25); padding: .375rem 1rem; border-radius: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      transition: background .2s;
     }
-    .btn-stats:hover { background: rgba(81,150,255,0.22); }
-    .btn-signout {
-      color: #ef4444;
-      border: 1px solid rgba(239,68,68,0.2);
-      padding: 0.375rem 1rem;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      background: transparent;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-signout:hover { background: rgba(239,68,68,0.1); }
+    .btn-stats:hover { background: rgba(81,150,255,.22); }
+    .btn-signout { color: #ef4444; border: 1px solid rgba(239,68,68,.2); padding: .375rem 1rem; border-radius: 6px; font-size: 11px; font-weight: 600; background: transparent; transition: background .2s; }
+    .btn-signout:hover { background: rgba(239,68,68,.1); }
     .portal-body { padding: 3rem; }
-    .release-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-    .version-badge {
-      background: rgba(59,130,246,0.1);
-      color: #60a5fa;
-      font-size: 9px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border: 1px solid rgba(59,130,246,0.2);
-    }
-    .download-btn {
-      margin-left: auto;
-      background: #5196ff;
-      color: #000;
-      padding: 0.625rem 2rem;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      text-decoration: none;
-      box-shadow: 0 4px 20px rgba(81,150,255,0.15);
-      display: inline-block;
-    }
-    .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
-    .feature-heading {
-      color: #5196ff;
-      font-weight: 700;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      margin-bottom: 1.5rem;
-    }
-    .feature-list { list-style: none; }
-    .feature-list li { font-size: 11px; line-height: 1.8; color: #94a3b8; font-family: 'JetBrains Mono', monospace; }
-    .feature-list li::before { content: "●"; color: #5196ff; margin-right: 8px; }
-
-    /* ── Stats Login ────────────────────────────── */
-    #screen-stats-login {
-      min-height: 100vh;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #050507 0%, #0a0a0f 50%, #11111a 100%);
-    }
-    .stats-login-inner { width: 100%; max-width: 380px; padding: 0 1.5rem; }
-    .stats-login-logo { text-align: center; margin-bottom: 2rem; }
-    .stats-logo-img { width: 72px; height: 72px; object-fit: contain; filter: drop-shadow(0 0 16px rgba(124,92,255,0.5)); margin-bottom: 0.75rem; }
-    .stats-logo-title {
-      font-size: 26px;
-      font-weight: 800;
-      background: linear-gradient(90deg,#7c5cff,#00f0ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      display: block;
-    }
-    .stats-logo-sub { color: rgba(255,255,255,0.3); font-size: 13px; margin-top: 0.25rem; }
-    .stats-login-card {
-      background: rgba(255,255,255,0.035);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 16px;
-      padding: 1.5rem;
-      backdrop-filter: blur(12px);
-    }
-    .stats-input-label { display: block; color: rgba(255,255,255,0.6); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
-    .stats-input {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
-      color: #fff;
-      font-size: 14px;
-      font-family: 'JetBrains Mono', monospace;
-      outline: none;
-      transition: border-color 0.2s;
-      margin-bottom: 1rem;
-    }
-    .stats-input:focus { border-color: rgba(124,92,255,0.6); }
-    .stats-unlock-btn {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 14px;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(90deg,#7c5cff,#00f0ff);
-      color: #fff;
-      transition: opacity 0.2s;
-    }
-    .stats-unlock-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .stats-error {
-      margin-top: 0.75rem;
-      padding: 0.625rem 0.75rem;
-      border-radius: 10px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.2);
-      color: #f87171;
-      font-size: 13px;
-    }
-    .back-link {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 12px;
-      color: rgba(255,255,255,0.3);
-      cursor: pointer;
-    }
-    .back-link:hover { color: rgba(255,255,255,0.6); }
-
-    /* ── Stats Dashboard ────────────────────────── */
-    #screen-stats {
-      min-height: 100vh;
-      align-items: flex-start;
-      justify-content: center;
-      background: linear-gradient(135deg, #050507 0%, #0a0a0f 50%, #11111a 100%);
-    }
-    .stats-wrap { width: 100%; max-width: 1300px; padding: 2rem 1.5rem; }
-    .stats-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
-    .stats-header-left { display: flex; align-items: center; gap: 0.75rem; }
-    .stats-title-img { width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(124,92,255,0.5)); }
-    .stats-title-text {
-      font-size: 18px;
-      font-weight: 800;
-      background: linear-gradient(90deg,#7c5cff,#00f0ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .stats-sub { color: rgba(255,255,255,0.2); font-size: 13px; }
-    .stats-header-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-    .status-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.375rem 0.75rem;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 500;
-      border: 1px solid;
-    }
-    .status-badge.online { border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.1); color: #34d399; }
-    .status-badge.offline { border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.1); color: #f87171; }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .status-dot.online { background: #34d399; animation: pulse 2s infinite; }
-    .status-dot.offline { background: #f87171; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    .key-chip {
-      padding: 0.375rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.03);
-      color: rgba(255,255,255,0.4);
-      font-size: 11px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .btn-logout {
-      padding: 0.375rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.03);
-      color: rgba(255,255,255,0.4);
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .btn-back-portal {
-      padding: 0.375rem 0.75rem;
-      border-radius: 999px;
-      border: 1px solid rgba(81,150,255,0.2);
-      background: rgba(81,150,255,0.08);
-      color: #5196ff;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    /* Stats Banner */
-    .stats-banner {
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.03);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .stats-live-text {
-      font-size: 1.75rem;
-      font-weight: 800;
-      background: linear-gradient(90deg,#00ff9c,#00f0ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .big-stats-row { display: flex; justify-content: center; gap: 2.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
-    .big-stat-val { font-size: 1.75rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
-    .big-stat-label { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-top: 0.25rem; }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      gap: 1.25rem;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    }
-    .stat-card {
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.07);
-      background: rgba(255,255,255,0.035);
-      padding: 1.25rem;
-      backdrop-filter: blur(8px);
-    }
-    .stat-card-title { color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
-    .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 0.375rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .stat-row:last-child { border-bottom: none; }
-    .stat-row-label { color: rgba(255,255,255,0.6); font-size: 13px; }
-    .stat-row-num { color: #fff; font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; }
-
-    .session-row { padding: 0.375rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-    .session-badge.running { color: #34d399; }
-    .session-badge.stopped { color: #f87171; }
+    .portal-version { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+    .portal-v { color: #fff; font-weight: 700; font-size: 24px; }
+    .release-badge { background: rgba(59,130,246,.1); color: #60a5fa; font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; border: 1px solid rgba(59,130,246,.2); }
+    .dl-btn { margin-left: auto; background: var(--blue); color: #000; padding: .625rem 2rem; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; text-decoration: none; display: inline-block; }
+    .portal-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #475569; margin-bottom: 2.5rem; }
+    .portal-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .portal-feat-label { color: var(--blue); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; margin-bottom: 1.5rem; }
+    .portal-feat-list { list-style: none; }
+    .portal-feat-list li { font-size: 11px; line-height: 1.8; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+    .portal-feat-list li::before { content: "● "; color: var(--blue); }
+    .back-home { display: inline-block; margin-top: 1.5rem; font-size: 12px; color: #334155; cursor: pointer; transition: color .2s; background: none; border: none; }
+    .back-home:hover { color: var(--muted); }
+    .stat-row { display:flex; justify-content:space-between; align-items:center; padding:.375rem 0; border-bottom:1px solid rgba(255,255,255,.05); }
+    .stat-row span:first-child { color:rgba(255,255,255,.6); font-size:13px; }
+    .stat-row span:last-child { color:#fff; font-weight:500; font-size:13px; font-variant-numeric:tabular-nums; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
   </style>
 </head>
 <body>
 
-<div id="screen-login" class="screen active">
-  <div class="login-card">
-    <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo" />
-    <input id="portal-key-input" class="login-input mono" type="text" placeholder="Enter License Key" autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter') portalLogin()" />
-    <button id="portal-login-btn" class="login-btn" onclick="portalLogin()">Login</button>
-    <p id="portal-error" class="error-msg"></p>
-  </div>
-</div>
+  <!-- ══════════════════════════════════
+       MAIN LANDING PAGE
+  ══════════════════════════════════ -->
+  <div id="home-page" class="page active">
 
-<div id="screen-portal" class="screen">
-  <div class="portal-card">
-    <header class="portal-header">
-      <div class="portal-logo-wrap">
-        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="portal-logo" />
-        <span class="portal-label">Portal</span>
+    <!-- Nav -->
+    <nav>
+      <div class="nav-logo">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+        <span>WardenX</span>
       </div>
-      <div class="portal-actions">
-        <button class="btn-stats" onclick="goToStats()">📡 Web Stats</button>
-        <button class="btn-signout" onclick="portalSignOut()">Sign Out</button>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
       </div>
-    </header>
+      <button class="btn-primary" onclick="showDashboard()">Dashboard</button>
+    </nav>
 
-    <div class="portal-body">
-      <div class="release-row">
-        <h2 style="color:#fff;font-weight:700;font-size:24px;">v1.0.0</h2>
-        <span class="version-badge">Release</span>
-        <a href="WardenX_v1.0.0.zip" download class="download-btn">Download Now</a>
-      </div>
-      <p class="mono" style="font-size:10px;color:#475569;margin-bottom:2.5rem;">Released: 2024-03-15</p>
-
-      <div class="features-grid">
-        <section>
-          <p class="feature-heading">⚡ Core Features</p>
-          <ul class="feature-list">
-            <li>Hypixel Ban & Rank checker</li>
-            <li>DonutSMP Ban & Stats Checker</li>
-            <li>Microsoft Reward Points Fetcher</li>
-            <li>Xbox Game Pass detection</li>
-            <li>Xbox Codes & Nitro Promo Fetcher</li>
-            <li>High-speed multi-threading</li>
-          </ul>
-        </section>
-        <section>
-          <p class="feature-heading">🔐 Advanced Technology</p>
-          <ul class="feature-list">
-            <li>TLS fingerprinting for stable sessions</li>
-            <li>HWID-locked licensing</li>
-            <li>Multi-channel webhooks (Hypixel, Donut, Xbox)</li>
-            <li>Minecraft skin previews</li>
-          </ul>
-        </section>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div id="screen-stats-login" class="screen">
-  <div class="stats-login-inner">
-    <div class="stats-login-logo">
-      <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" class="stats-logo-img" />
-      <span class="stats-logo-title">WardenX</span>
-      <p class="stats-logo-sub">Web Stats · License Required</p>
-    </div>
-    <div class="stats-login-card">
-      <label class="stats-input-label">License Key</label>
-      <input id="stats-key-input" class="stats-input mono" type="text" placeholder="WardenX-XXXX-XXXX-XXXX" onkeydown="if(event.key==='Enter') statsLogin()" />
-      <div id="stats-error" class="stats-error" style="display:none;"></div>
-      <button id="stats-login-btn" class="stats-unlock-btn" onclick="statsLogin()">Unlock Dashboard</button>
-    </div>
-    <p class="back-link" onclick="showScreen('screen-portal')">← Back to Portal</p>
-  </div>
-</div>
-
-<div id="screen-stats" class="screen">
-  <div class="stats-wrap">
-    <div class="stats-header">
-      <div class="stats-header-left">
-        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" class="stats-title-img" />
-        <span class="stats-title-text">WardenX</span>
-        <span class="stats-sub">Web Stats</span>
-      </div>
-      <div class="stats-header-right">
-        <div id="stats-status-badge" class="status-badge offline">
-          <span class="status-dot offline"></span>
-          <span id="stats-status-text">Offline</span>
+    <!-- Hero -->
+    <section id="home" style="text-align:center;padding:6rem 1.5rem 4rem;position:relative;overflow:hidden;">
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="hero-logo">
+        <h1 class="hero-title">WardenX</h1>
+        <p class="hero-sub">High-Performance Credential Validation Tool</p>
+        <p class="hero-desc">Bulk authentication testing at up to 5,000+ CPM with full multi-threading support. Built from the ground up for maximum throughput and reliability.</p>
+        <div class="hero-btns">
+          <button class="btn-hero" onclick="showDashboard()">⚡ Get Started</button>
+          <a href="#contact" class="btn-ghost" style="display:inline-flex;align-items:center;padding:.875rem 2rem;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--border2);color:var(--muted2);transition:border-color .2s;">Contact Us</a>
         </div>
-        <span id="stats-key-chip" class="key-chip"></span>
-        <button class="btn-logout" onclick="statsLogout()">Logout</button>
-        <button class="btn-back-portal" onclick="showScreen('screen-portal')">← Portal</button>
-      </div>
-    </div>
-
-    <div class="stats-banner">
-      <div id="banner-live" style="display:none;">
-        <div class="stats-live-text">LIVE SESSION active</div>
-        <div class="big-stats-row">
-          <div class="big-stat"><div id="bs-checked" class="big-stat-val">0</div><div class="big-stat-label">Checked</div></div>
-          <div class="big-stat"><div id="bs-hits" class="big-stat-val">0</div><div class="big-stat-label">Hits</div></div>
-          <div class="big-stat"><div id="bs-cpm" class="big-stat-val">0</div><div class="big-stat-label">CPM</div></div>
-          <div class="big-stat"><div id="bs-bad" class="big-stat-val">0</div><div class="big-stat-label">Bad</div></div>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-val">5,000+</div><div class="stat-label">Checks Per Minute</div></div>
+          <div class="stat-item"><div class="stat-val">15+</div><div class="stat-label">Check Modules</div></div>
+          <div class="stat-item"><div class="stat-val">99.9%</div><div class="stat-label">Uptime</div></div>
         </div>
       </div>
-      <div id="banner-offline">
-        <div style="font-size:1.75rem;font-weight:800;color:#f87171;">OFFLINE</div>
-        <p style="color:rgba(255,255,255,0.4)">Waiting for checker session updates...</p>
-      </div>
-    </div>
+    </section>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-card-title">Core Performance</div>
-        <div class="stat-row"><span class="stat-row-label">Invalid Accounts</span><span id="s-bad" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Valid MS Hits</span><span id="s-hits" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">2FA Locked</span><span id="s-twofa" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">CPM</span><span id="s-cpm" class="stat-row-num">0</span></div>
+    <!-- Features -->
+    <section id="features">
+      <div class="sec-header">
+        <span class="badge badge-blue">Features</span>
+        <h2 class="sec-title">Everything You Need in One Tool</h2>
+        <p class="sec-sub">Full-featured credential validation with deep account analysis modules.</p>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-card-title">DonutSMP Details</div>
-        <div class="stat-row"><span class="stat-row-label">Donut Banned</span><span id="s-don-ban" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Donut Unbanned</span><span id="s-don-unban" class="stat-row-num">0</span></div>
+      <div class="feature-cat"><span style="color:#5196ff;">⚙ CORE ENGINE</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">⚡</div><p class="feature-title">Extreme Throughput</p><p class="feature-desc">Up to 5,000+ CPM via aggressive multi-threading. Auto or manual thread control. Built in Go.</p></div>
+        <div class="feature-card"><div class="feature-icon">🌐</div><p class="feature-title">Proxy Engine</p><p class="feature-desc">HTTP/HTTPS proxy rotation with rate limit retry handling and configurable smart retry delays.</p></div>
+        <div class="feature-card"><div class="feature-icon">📊</div><p class="feature-title">Live Dashboard</p><p class="feature-desc">Real-time colored terminal showing CPM, valid results, progress and thread status as it runs.</p></div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-card-title">Microsoft & Rewards</div>
-        <div class="stat-row"><span class="stat-row-label">MS Rewards Hits</span><span id="s-rp" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">MS Balance Found</span><span id="s-bal" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Nitro Promos</span><span id="s-nitro" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Xbox Codes</span><span id="s-xbox" class="stat-row-num">0</span></div>
+      <div class="feature-cat"><span style="color:#f59e0b;">⚙ HYPIXEL</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">🖥️</div><p class="feature-title">Hypixel Profile Scan</p><p class="feature-desc">Network level, Bedwars stars, first/last login, ban status — all pulled in a single pass.</p></div>
+        <div class="feature-card"><div class="feature-icon">⭐</div><p class="feature-title">Rank Detection</p><p class="feature-desc">Detects YOUTUBE, MVP++, MVP+, MVP, VIP+, VIP ranks and flags them separately in results.</p></div>
+        <div class="feature-card"><div class="feature-icon">🚫</div><p class="feature-title">Hypixel Ban Checker</p><p class="feature-desc">Instantly detects whether an account is banned or unbanned on Hypixel and sorts into separate result files.</p></div>
       </div>
 
-      <div class="stat-card">
-        <div class="stat-card-title">Hypixel Details</div>
-        <div class="stat-row"><span class="stat-row-label">Hypixel Banned</span><span id="s-hyp-ban" class="stat-row-num">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Hypixel Unbanned</span><span id="s-hyp-unban" class="stat-row-num">0</span></div>
+      <div class="feature-cat"><span style="color:#34d399;">⚙ MICROSOFT &amp; REWARDS</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">💰</div><p class="feature-title">Reward Points Fetcher</p><p class="feature-desc">Fetches Microsoft Rewards points balance and flags accounts with high RP for easy farming.</p></div>
+        <div class="feature-card"><div class="feature-icon">🎁</div><p class="feature-title">Nitro &amp; Xbox Codes</p><p class="feature-desc">Extracts Discord Nitro promo codes and Xbox reward codes from Microsoft accounts automatically.</p></div>
+        <div class="feature-card"><div class="feature-icon">🔒</div><p class="feature-title">HWID Lock &amp; TLS</p><p class="feature-desc">HWID-locked licensing with TLS fingerprinting ensures stable sessions and prevents account sharing.</p></div>
       </div>
-      
-      <div class="stat-card" id="sessions-card" style="display:none;">
-        <div class="stat-card-title">Active Sessions</div>
-        <div id="sessions-list"></div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing">
+      <div class="sec-header">
+        <span class="badge badge-blue">Pricing</span>
+        <h2 class="sec-title">Simple, Transparent Pricing</h2>
+        <p class="sec-sub">Start with a trial, scale to lifetime — all features included in every plan.</p>
       </div>
-    </div>
-  </div>
-</div>
+      <div class="pricing-grid">
+        <!-- Trial -->
+        <div class="plan-card">
+          <p class="plan-name">Trial</p>
+          <div class="plan-price"><span class="amount">$1</span><span class="period"> / 3 days</span></div>
+          <ul class="plan-features">
+            <li>3-Day Trial License Key</li>
+            <li>All Features Included</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Email Support</li>
+          </ul>
+          <button class="btn-plan btn-plan-outline" onclick="showDashboard()">Get Started</button>
+        </div>
+        <!-- Monthly -->
+        <div class="plan-card highlight">
+          <div class="plan-badge">Most Popular</div>
+          <p class="plan-name">Monthly</p>
+          <div class="plan-price"><span class="amount">$5</span><span class="period"> / month</span></div>
+          <ul class="plan-features">
+            <li>1 Month Access License Key</li>
+            <li>All Features Included</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Priority Support</li>
+            <li>Early Access</li>
+          </ul>
+          <button class="btn-plan btn-plan-fill" onclick="showDashboard()">Get Started</button>
+        </div>
+        <!-- Lifetime -->
+        <div class="plan-card">
+          <p class="plan-name">Lifetime</p>
+          <div class="plan-price"><span class="amount">$20</span><span class="period"> one-time</span></div>
+          <ul class="plan-features">
+            <li>Lifetime Access License Key</li>
+            <li>All Future Updates</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Priority Support</li>
+          </ul>
+          <button class="btn-plan btn-plan-outline" onclick="showDashboard()">Get Started</button>
+        </div>
+      </div>
+    </section>
 
-<script>
-  const STATS_API_URL = "https://wardenx.dpdns.org"; 
-  const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
-  
-  let statsInterval = null;
-  let statsKey = '';
+    <!-- Reviews -->
+    <section id="reviews">
+      <div class="sec-header">
+        <span class="badge badge-yellow">☆ User Reviews</span>
+        <h2 class="sec-title">What our users are saying about WardenX</h2>
+        <p class="sec-sub" style="margin-bottom:1.5rem;">Trusted by account checkers worldwide</p>
+        <button class="btn-review" onclick="openReviewModal()">Write a Review</button>
+      </div>
 
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-  }
+      <div class="rating-summary">
+        <div class="rating-box">
+          <span style="font-size:20px;color:var(--yellow);">★</span>
+          <span class="rating-num" style="color:var(--yellow);" id="avg-rating">4.8</span>
+          <span class="rating-label">Average Rating</span>
+        </div>
+        <div class="rating-box">
+          <span style="font-size:20px;color:var(--blue);">💬</span>
+          <span class="rating-num" style="color:#fff;" id="review-count">6</span>
+          <span class="rating-label">Total Reviews</span>
+        </div>
+      </div>
 
-  async function portalLogin() {
-    const key = document.getElementById('portal-key-input').value.trim();
-    if (!key) return;
-    try {
-      const res = await fetch(LICENSE_SERVER, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
-        body: JSON.stringify({ license_key: key, hwid: 'WEB_PORTAL', version: '1.0.0' })
-      });
-      const data = await res.json();
-      if (data.valid) {
-        sessionStorage.setItem('portal_key', key);
-        showScreen('screen-portal');
-      } else {
-        document.getElementById('portal-error').textContent = data.reason || 'Invalid Key';
-      }
-    } catch { document.getElementById('portal-error').textContent = 'Server Error'; }
-  }
+      <div class="reviews-grid" id="reviews-grid"></div>
+    </section>
 
-  function goToStats() {
-    const saved = localStorage.getItem('stats_key');
-    if (saved) { startStatsSession(saved); } 
-    else { showScreen('screen-stats-login'); }
-  }
-
-  async function statsLogin() {
-    const key = document.getElementById('stats-key-input').value.trim();
-    if (!key) return;
-    try {
-      const res = await fetch(LICENSE_SERVER, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
-        body: JSON.stringify({ license_key: key, hwid: 'WEB_STATS', version: '1.0.0' })
-      });
-      const data = await res.json();
-      if (data.valid) {
-        localStorage.setItem('stats_key', key);
-        startStatsSession(key);
-      } else {
-        document.getElementById('stats-error').style.display = 'block';
-        document.getElementById('stats-error').textContent = "Invalid Key";
-      }
-    } catch { }
-  }
-
-  function startStatsSession(key) {
-    statsKey = key;
-    document.getElementById('stats-key-chip').textContent = key.slice(0, 8) + '...';
-    showScreen('screen-stats');
-    fetchStats();
-    if (statsInterval) clearInterval(statsInterval);
-    statsInterval = setInterval(fetchStats, 3000);
-  }
-
-  async function fetchStats() {
-    try {
-      const res = await fetch(`${STATS_API_URL}/api/stats?license_key=${statsKey}`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      renderStats(data);
-    } catch { setOffline(); }
-  }
-
-  function renderStats(data) {
-    const t = data.totals || {};
-    const active = data.active_sessions || 0;
-    const n = (v) => (v || 0).toLocaleString();
-
-    if (active > 0) {
-      document.getElementById('banner-live').style.display = 'block';
-      document.getElementById('banner-offline').style.display = 'none';
-      document.getElementById('stats-status-badge').className = 'status-badge online';
-      document.getElementById('stats-status-text').textContent = active + ' Active';
-    } else { setOffline(); }
-
-    document.getElementById('bs-checked').textContent = n(t.checked);
-    document.getElementById('bs-hits').textContent = n(t.hits);
-    document.getElementById('bs-cpm').textContent = n(t.cpm);
-    document.getElementById('bs-bad').textContent = n(t.bad);
-
-    document.getElementById('s-bad').textContent = n(t.bad);
-    document.getElementById('s-hits').textContent = n(t.hits);
-    document.getElementById('s-twofa').textContent = n(t.twofa);
-    document.getElementById('s-cpm').textContent = n(t.cpm);
-
-    document.getElementById('s-don-ban').textContent = n(t.don_ban);
-    document.getElementById('s-don-unban').textContent = n(t.don_unban);
-
-    document.getElementById('s-rp').textContent = n(t.rp_hits);
-    document.getElementById('s-bal').textContent = n(t.bal_hits);
-    document.getElementById('s-nitro').textContent = n(t.nitro_promos);
-    document.getElementById('s-xbox').textContent = n(t.xbox_codes);
-
-    document.getElementById('s-hyp-ban').textContent = n(t.hyp_ban);
-    document.getElementById('s-hyp-unban').textContent = n(t.hyp_unban);
-
-    const sessions = data.sessions || [];
-    if (sessions.length > 0) {
-      document.getElementById('sessions-card').style.display = 'block';
-      document.getElementById('sessions-list').innerHTML = sessions.slice(0, 5).map(s => `
-        <div class="session-row">
-          <div style="display:flex; justify-content:space-between">
-            <span class="mono" style="font-size:11px; color:rgba(255,255,255,0.4)">${s.license_key.slice(0,12)}...</span>
-            <span class="session-badge ${s.status}">${s.status}</span>
+    <!-- Contact -->
+    <section id="contact">
+      <div class="sec-header">
+        <span class="badge badge-blue">🔔 Get in Touch</span>
+        <h2 class="sec-title">Contact Us</h2>
+        <p class="sec-sub">Have a question or feedback? We'd love to hear from you!</p>
+      </div>
+      <div class="contact-grid">
+        <!-- Form -->
+        <div class="contact-form-card">
+          <p class="contact-title">Send us a Message</p>
+          <p class="contact-sub">Fill out the form below and we'll get back to you as soon as possible.</p>
+          <div id="contact-success" class="form-success" style="display:none;">✓ Message sent! We'll get back to you soon.</div>
+          <form id="contact-form" onsubmit="submitContact(event)">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" class="form-input" placeholder="John Doe" id="cf-name" required>
+            </div>
+            <div class="form-group">
+              <label>License Key</label>
+              <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="cf-licensekey" required
+                style="font-family:'JetBrains Mono',monospace;letter-spacing:.06em;"
+                oninput="validateLicenseFormat(this)">
+              <div id="cf-key-error" style="color:var(--red);font-size:11px;margin-top:4px;display:none;">
+                Format must be: WardenX-XXXX-XXXX-XXXX
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <input type="text" class="form-input" placeholder="How can we help?" id="cf-subject" required>
+            </div>
+            <div class="form-group" style="margin-bottom:1.5rem;">
+              <label>Message</label>
+              <textarea class="form-input" placeholder="Tell us more about your inquiry..." id="cf-message" required rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn-send">Send Message</button>
+          </form>
+        </div>
+        <!-- Sidebar -->
+        <div class="contact-sidebar">
+          <div class="contact-card">
+            <div class="contact-card-icon">💬</div>
+            <p class="contact-card-title">Community</p>
+            <p class="contact-card-sub">
+              Join our <a href="https://discord.gg/PA6xtWpzNz" target="_blank" style="color:var(--blue);">Discord Server</a>
+            </p>
+            <p class="contact-card-note">Get instant help from the community</p>
           </div>
-          <div style="font-size:11px; color:rgba(255,255,255,0.2)">${s.checked || 0} checked · ${s.hits || 0} hits</div>
-        </div>`).join('');
+          <div class="contact-card">
+            <div class="contact-card-icon">🐛</div>
+            <p class="contact-card-title">Bug Reports</p>
+            <p class="contact-card-sub" style="color:var(--muted2);">Use the Contact Form</p>
+            <p class="contact-card-note">Report bugs and request features</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">📖</div>
+            <p class="contact-card-title">Documentation</p>
+            <p class="contact-card-sub" style="color:var(--muted2);">Read our guides</p>
+            <p class="contact-card-note">Learn how to use WardenX</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-brand">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+        <span>WardenX</span>
+      </div>
+      <p class="footer-copy">© 2025 WardenX. All rights reserved.</p>
+    </footer>
+  </div><!-- /home-page -->
+
+  <!-- ══════════════════════════════════
+       REVIEW MODAL
+  ══════════════════════════════════ -->
+  <div class="modal-overlay" id="review-modal" onclick="closeReviewModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeReviewModal()">×</button>
+      <div class="modal-header">
+        <span class="badge badge-purple">✦ Share Your Experience</span>
+        <h3 class="modal-title">Add Your Review</h3>
+        <p class="modal-sub">Help others by sharing your experience with WardenX</p>
+      </div>
+      <form id="review-form" onsubmit="submitReview(event)">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" class="form-input" id="rf-name" required>
+        </div>
+        <div class="form-group">
+          <label>License Key *</label>
+          <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="rf-key" required style="font-family:'JetBrains Mono',monospace;letter-spacing:.08em;">
+        </div>
+        <div class="form-group">
+          <label>Rating *</label>
+          <div class="stars" id="star-input" style="gap:6px;"></div>
+        </div>
+        <div class="form-group">
+          <label>Your Review *</label>
+          <textarea class="form-input" placeholder="Share your experience with WardenX..." id="rf-text" rows="4" maxlength="1000" oninput="updateCharCount(this)"></textarea>
+          <div class="char-count" id="char-count">0/1000</div>
+        </div>
+        <div class="form-error" id="review-error"></div>
+        <button type="submit" class="btn-submit-review">Submit Review</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       DASHBOARD PAGE
+  ══════════════════════════════════ -->
+  <div id="dashboard-page">
+
+    <!-- Login state -->
+    <div id="login-view">
+      <div class="login-card">
+        <div class="login-brand">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo">
+          <div class="login-brand-text">
+            <div class="login-brand-name">WardenX</div>
+            <div class="login-brand-sub">Member Portal</div>
+          </div>
+        </div>
+
+        <label class="login-label">License Key</label>
+        <input type="text" class="login-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="license-input"
+          autocomplete="off" spellcheck="false"
+          oninput="clearLoginError()"
+          onkeydown="if(event.key==='Enter') doLogin()">
+
+        <div class="verify-bar" id="verify-bar">
+          <div class="verify-left">
+            <div class="verify-spinner"></div>
+            <span class="verify-text">Verifying...</span>
+          </div>
+          <div class="verify-right">
+            <span class="cf-logo">🟠</span>
+            <div>
+              <div class="cloudflare-badge">Cloudflare</div>
+              <div style="font-size:8px;color:#2e3050;">Privacy · Help</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="login-error" id="login-error"></div>
+
+        <button class="btn-continue" id="login-btn" onclick="doLogin()">Continue →</button>
+
+        <p class="no-license">No license? <a href="https://discord.gg/PA6xtWpzNz" target="_blank">Get one here</a></p>
+        <button class="back-home" onclick="hideDashboard()">← Back to Home</button>
+      </div>
+    </div>
+
+    <!-- Authed portal -->
+    <div id="portal-view" style="display:none;width:100%;max-width:1060px;padding:1.5rem 1rem;">
+      <div class="portal-wrap">
+        <header class="portal-header">
+          <div class="portal-header-left">
+            <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+            <span>Portal</span>
+          </div>
+          <div class="portal-header-right">
+            <button class="btn-stats" onclick="showStats()">📡 Web Stats</button>
+            <button class="btn-signout" onclick="doSignOut()">Sign Out</button>
+          </div>
+        </header>
+        <div class="portal-body">
+          <div class="portal-version">
+            <span class="portal-v">v1.0.0</span>
+            <span class="release-badge">Release</span>
+            <a href="WardenX_v1.0.0.zip" download class="dl-btn">Download Now</a>
+          </div>
+          <p class="portal-date">Released: 2025-04-01</p>
+          <div class="portal-feats">
+            <section style="padding:0;">
+              <p class="portal-feat-label">⚡ Core Features</p>
+              <ul class="portal-feat-list">
+                <li>Hypixel Ban &amp; Rank checker</li>
+                <li>DonutSMP Ban &amp; Stats Checker</li>
+                <li>Microsoft Reward Points Fetcher</li>
+                <li>Xbox Game Pass detection</li>
+                <li>Xbox Codes &amp; Nitro Promo Fetcher</li>
+                <li>High-speed multi-threading</li>
+              </ul>
+            </section>
+            <section style="padding:0;">
+              <p class="portal-feat-label">🔐 Advanced Technology</p>
+              <ul class="portal-feat-list">
+                <li>TLS fingerprinting for stable sessions</li>
+                <li>HWID-locked licensing</li>
+                <li>Multi-channel webhooks (Hypixel, Donut, XboxPerks)</li>
+                <li>Minecraft skin previews</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dashboard-page -->
+
+  <!-- ══════════════════════════════════
+       STATS PAGE
+  ══════════════════════════════════ -->
+  <div id="stats-page" style="display:none;min-height:100vh;background:linear-gradient(135deg,#050507 0%,#0a0a0f 50%,#11111a 100%);color:#d1d5db;align-items:flex-start;justify-content:center;">
+
+    <!-- Stats Login -->
+    <div id="stats-login-view" style="display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;padding:2rem;">
+      <div style="width:100%;max-width:380px;">
+        <div style="text-align:center;margin-bottom:2rem;">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX"
+            style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(124,92,255,.5));margin-bottom:.75rem;display:block;margin-left:auto;margin-right:auto;">
+          <span style="display:block;font-size:26px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">WardenX</span>
+          <p style="color:rgba(255,255,255,.3);font-size:13px;margin-top:.25rem;">Web Stats · License Required</p>
+        </div>
+        <div style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.5rem;backdrop-filter:blur(12px);">
+          <label style="display:block;color:rgba(255,255,255,.6);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;">License Key</label>
+          <input type="text" id="stats-key-input" placeholder="WardenX-XXXX-XXXX-XXXX"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.75rem 1rem;color:#fff;font-size:14px;font-family:'JetBrains Mono',monospace;outline:none;margin-bottom:1rem;transition:border-color .2s;"
+            onkeydown="if(event.key==='Enter') statsLogin()"
+            onfocus="this.style.borderColor='rgba(124,92,255,.6)'"
+            onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+          <div id="stats-login-error" style="display:none;margin-bottom:.75rem;padding:.625rem .75rem;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:13px;"></div>
+          <button onclick="statsLogin()" id="stats-login-btn"
+            style="width:100%;padding:.75rem;border-radius:12px;font-weight:600;font-size:14px;border:none;cursor:pointer;background:linear-gradient(90deg,#7c5cff,#00f0ff);color:#fff;transition:opacity .2s;">
+            Login & Continue
+          </button>
+        </div>
+        <button onclick="backToPortal()"
+          style="display:block;margin:.75rem auto 0;background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;transition:color .2s;"
+          onmouseover="this.style.color='rgba(255,255,255,.6)'"
+          onmouseout="this.style.color='rgba(255,255,255,.3)'">
+          ← Back to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Dashboard -->
+    <div id="stats-dash-view" style="display:none;width:100%;max-width:1300px;padding:2rem 1.5rem;margin:0 auto;">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(124,92,255,.5));">
+          <span style="font-size:18px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">WardenX</span>
+          <span style="color:rgba(255,255,255,.2);font-size:13px;">Web Stats</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+          <div id="stats-status-pill"
+            style="display:flex;align-items:center;gap:.5rem;padding:.375rem .75rem;border-radius:999px;font-size:13px;font-weight:500;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.1);color:#f87171;">
+            <span id="stats-dot" style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;"></span>
+            <span id="stats-status-text">Offline</span>
+          </div>
+          <span id="stats-key-display"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:11px;font-family:'JetBrains Mono',monospace;">
+          </span>
+          <button onclick="statsLogout()"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;">
+            Logout
+          </button>
+          <button onclick="backToPortal()"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(81,150,255,.2);background:rgba(81,150,255,.08);color:#5196ff;font-size:12px;cursor:pointer;">
+            ← Portal
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner -->
+      <div id="stats-banner"
+        style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:2rem;margin-bottom:2rem;text-align:center;">
+        <div id="stats-banner-title" style="font-size:1.75rem;font-weight:800;color:#f87171;">OFFLINE</div>
+        <p id="stats-banner-sub" style="color:rgba(255,255,255,.4);margin-top:.5rem;">Waiting for checker session updates...</p>
+        <div id="stats-live-nums" style="display:none;justify-content:center;gap:2.5rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <div style="text-align:center;"><div id="sl-checked" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Checked</div></div>
+          <div style="text-align:center;"><div id="sl-hits" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Hits</div></div>
+          <div style="text-align:center;"><div id="sl-cpm" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">CPM</div></div>
+          <div style="text-align:center;"><div id="sl-bad" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Bad</div></div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+        <!-- Core Performance -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Core Performance</div>
+          <div class="stat-row"><span>Invalid</span><span id="s-bad">0</span></div>
+          <div class="stat-row"><span>MC Hits</span><span id="s-hits">0</span></div>
+          <div class="stat-row"><span>2FA Locked</span><span id="s-twofa">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>CPM</span><span id="s-cpm">0</span></div>
+        </div>
+        <!-- DonutSMP -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">DonutSMP Details</div>
+          <div class="stat-row"><span>Donut Banned</span><span id="s-donut_banned">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Donut Unbanned</span><span id="s-donut_unbanned">0</span></div>
+        </div>
+        <!-- Microsoft & Rewards -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Microsoft &amp; Rewards</div>
+          <div class="stat-row"><span>MS Rewards</span><span id="s-ms_rewards_found">0</span></div>
+          <div class="stat-row"><span>MS Balance</span><span id="s-ms_balance_found">0</span></div>
+          <div class="stat-row"><span>Valid MS</span><span id="s-vm">0</span></div>
+          <div class="stat-row"><span>Nitro Promos</span><span id="s-nitro_found">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Xbox Codes</span><span id="s-xbox_codes_found">0</span></div>
+        </div>
+        <!-- Hypixel -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Hypixel Details</div>
+          <div class="stat-row"><span>Hypixel Banned</span><span id="s-hypixel_banned">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Hypixel Unbanned</span><span id="s-hypixel_unbanned">0</span></div>
+        </div>
+        <!-- Sessions -->
+        <div id="sessions-card" style="display:none;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Active Sessions</div>
+          <div id="sessions-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /stats-page -->
+
+  <script>
+    const LOGO = "https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png";
+    const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
+
+    // ─── Reviews data ───
+    let reviews = [
+      { name: "1XDarkSlayer",  rating: 5, text: "ngl this is the best checker till now It has many good result best hits captures least hit skipping No complaint, just appreciation!" },
+      { name: "Monit0",        rating: 5, text: "Best checker off al times, many good results, rp codes and more op things!" },
+      { name: "CryptoHunterr",  rating: 4, text: "Great checker, close to no misses, AML and sniper is good asf, though the speed is slower compared to popular checkers out there but I believe this can be improved" },
+      { name: "ProxyKing69",   rating: 5, text: "Absolutely insane tool. The Hypixel ban checker and DonutSMP stats are accurate and fast. Worth every penny." },
+      { name: "NitroFarm",   rating: 5, text: "Xbox Nitro promo fetcher works like a charm. HWID lock is solid. No complaints at all!" },
+      { name: "ShadowAccs",     rating: 4, text: "Multi-threading is top notch. Would love to see even more webhook options but overall a fantastic tool." },
+    ];
+
+    let selectedRating = 0;
+
+    const AVATAR_COLORS = ["#5196ff","#7c5cff","#34d399","#f59e0b","#f87171","#a78bfa"];
+    function avatarColor(name) { return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length]; }
+
+    function starsHTML(rating, interactive = false) {
+      let html = '<span class="stars">';
+      for (let i = 1; i <= 5; i++) {
+        const cls = "star" + (interactive ? " interactive" : "") + (i <= rating ? " filled" : " empty");
+        html += `<span class="${cls}"${interactive ? ` onclick="setRating(${i})" onmouseenter="hoverRating(${i})" onmouseleave="unhoverRating()"` : ""}>★</span>`;
+      }
+      html += '</span>';
+      return html;
     }
-  }
 
-  function setOffline() {
-    document.getElementById('banner-live').style.display = 'none';
-    document.getElementById('banner-offline').style.display = 'block';
-    document.getElementById('stats-status-badge').className = 'status-badge offline';
-    document.getElementById('stats-status-text').textContent = 'Offline';
-  }
+    function renderReviews() {
+      const grid = document.getElementById('reviews-grid');
+      grid.innerHTML = reviews.map(r => `
+        <div class="review-card">
+          ${starsHTML(r.rating)}
+          <p class="review-text">"${r.text}"</p>
+          <div class="review-author">
+            <div class="avatar" style="background:${avatarColor(r.name)}">${r.name[0].toUpperCase()}</div>
+            <span class="author-name">${r.name}</span>
+          </div>
+        </div>
+      `).join('');
+      const avg = (reviews.reduce((a,r)=>a+r.rating,0)/reviews.length).toFixed(1);
+      document.getElementById('avg-rating').textContent = avg;
+      document.getElementById('review-count').textContent = reviews.length;
+    }
 
-  function statsLogout() {
-    localStorage.removeItem('stats_key');
-    clearInterval(statsInterval);
-    showScreen('screen-stats-login');
-  }
+    function renderStarInput() {
+      const wrap = document.getElementById('star-input');
+      wrap.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const s = document.createElement('span');
+        s.className = 'star interactive' + (i <= selectedRating ? ' filled' : ' empty');
+        s.textContent = '★';
+        s.onclick = () => setRating(i);
+        s.onmouseenter = () => hoverRating(i);
+        s.onmouseleave = () => unhoverRating();
+        wrap.appendChild(s);
+      }
+    }
 
-  function portalSignOut() {
-    sessionStorage.removeItem('portal_key');
-    showScreen('screen-login');
-  }
+    function setRating(r) { selectedRating = r; renderStarInput(); }
+    function hoverRating(r) {
+      const stars = document.querySelectorAll('#star-input .star');
+      stars.forEach((s,i) => { s.style.color = i < r ? '#f59e0b' : 'rgba(255,255,255,.2)'; });
+    }
+    function unhoverRating() {
+      const stars = document.querySelectorAll('#star-input .star');
+      stars.forEach((s,i) => { s.style.color = i < selectedRating ? '#f59e0b' : 'rgba(255,255,255,.2)'; });
+    }
 
-  (function init() {
-    if (sessionStorage.getItem('portal_key')) showScreen('screen-portal');
-  })();
-</script>
+    function openReviewModal() {
+      selectedRating = 0;
+      document.getElementById('review-form').reset();
+      document.getElementById('char-count').textContent = '0/1000';
+      document.getElementById('review-error').textContent = '';
+      renderStarInput();
+      document.getElementById('review-modal').classList.add('open');
+    }
+    function closeReviewModal() { document.getElementById('review-modal').classList.remove('open'); }
+    function closeReviewModalOutside(e) { if (e.target === e.currentTarget) closeReviewModal(); }
+    function updateCharCount(el) { document.getElementById('char-count').textContent = el.value.length + '/1000'; }
+
+    function submitReview(e) {
+      e.preventDefault();
+      const name = document.getElementById('rf-name').value.trim();
+      const key  = document.getElementById('rf-key').value.trim();
+      const text = document.getElementById('rf-text').value.trim();
+      const errEl = document.getElementById('review-error');
+      if (!name || !key || !selectedRating || !text) {
+        errEl.textContent = 'Please fill in all fields and select a rating.';
+        return;
+      }
+      reviews.unshift({ name, rating: selectedRating, text });
+      renderReviews();
+      closeReviewModal();
+    }
+
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1490300619972411453/5rfAqfBMt7LU1Hs2jbMuPMZxpz-H-z_6ZiauoH9jcYNwpuEsjHIbXj161T-s7fIuhDYl";
+    const LICENSE_FORMAT  = /^WardenX-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
+
+    function validateLicenseFormat(input) {
+      const errEl = document.getElementById('cf-key-error');
+      if (input.value && !LICENSE_FORMAT.test(input.value)) {
+        errEl.style.display = 'block';
+        input.style.borderColor = 'var(--red)';
+      } else {
+        errEl.style.display = 'none';
+        input.style.borderColor = input.value ? 'var(--green)' : 'var(--border2)';
+      }
+    }
+
+    async function submitContact(e) {
+      e.preventDefault();
+      const name    = document.getElementById('cf-name').value.trim();
+      const lickey  = document.getElementById('cf-licensekey').value.trim();
+      const subject = document.getElementById('cf-subject').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
+      const errEl   = document.getElementById('cf-key-error');
+      const btn     = e.target.querySelector('button[type="submit"]');
+
+      if (!LICENSE_FORMAT.test(lickey)) {
+        errEl.style.display = 'block';
+        document.getElementById('cf-licensekey').style.borderColor = 'var(--red)';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const embed = {
+        username: "WardenX Contact",
+        avatar_url: "https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png",
+        embeds: [{
+          title: "📬 New Contact Message",
+          color: 0x5196ff,
+          fields: [
+            { name: "👤 Name",        value: name,    inline: true },
+            { name: "🔑 License Key", value: `\`${lickey}\``, inline: true },
+            { name: "📋 Subject",     value: subject, inline: false },
+            { name: "💬 Message",     value: message, inline: false },
+          ],
+          timestamp: new Date().toISOString(),
+          footer: { text: "WardenX Portal" },
+        }],
+      };
+
+      try {
+        await fetch(DISCORD_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(embed),
+        });
+        document.getElementById('contact-success').style.display = 'block';
+        document.getElementById('contact-form').reset();
+        document.getElementById('cf-licensekey').style.borderColor = 'var(--border2)';
+        errEl.style.display = 'none';
+        setTimeout(() => { document.getElementById('contact-success').style.display = 'none'; }, 5000);
+      } catch {
+        alert("Failed to send message. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    }
+
+    // ─── Dashboard ───
+    function showDashboard() {
+      document.getElementById('home-page').classList.remove('active');
+      document.getElementById('dashboard-page').classList.add('active');
+      document.getElementById('dashboard-page').style.display = 'flex';
+      // Check session
+      if (sessionStorage.getItem('portal_key')) {
+        showPortal();
+      } else {
+        document.getElementById('login-view').style.display = 'flex';
+        document.getElementById('login-view').style.justifyContent = 'center';
+        document.getElementById('portal-view').style.display = 'none';
+      }
+    }
+
+    function hideDashboard() {
+      document.getElementById('dashboard-page').classList.remove('active');
+      document.getElementById('dashboard-page').style.display = 'none';
+      document.getElementById('home-page').classList.add('active');
+    }
+
+    function showPortal() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('portal-view').style.display = 'block';
+    }
+
+    function doSignOut() {
+      sessionStorage.removeItem('portal_key');
+      document.getElementById('license-input').value = '';
+      document.getElementById('login-error').textContent = '';
+      document.getElementById('portal-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'flex';
+      document.getElementById('login-view').style.justifyContent = 'center';
+    }
+
+    function clearLoginError() { document.getElementById('login-error').textContent = ''; }
+
+    async function doLogin() {
+      const key = document.getElementById('license-input').value.trim();
+      if (!key) return;
+      const btn = document.getElementById('login-btn');
+      const bar = document.getElementById('verify-bar');
+      const errEl = document.getElementById('login-error');
+
+      btn.disabled = true;
+      bar.classList.add('show');
+      errEl.textContent = '';
+
+      try {
+        const res = await fetch(LICENSE_SERVER, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+          body: JSON.stringify({ license_key: key, hwid: 'WEB_PORTAL', version: '1.0.0' }),
+        });
+        const data = await res.json();
+        if (data.valid) {
+          sessionStorage.setItem('portal_key', key);
+          bar.classList.remove('show');
+          showPortal();
+        } else {
+          bar.classList.remove('show');
+          errEl.textContent = data.reason || 'Invalid License Key';
+        }
+      } catch {
+        bar.classList.remove('show');
+        errEl.textContent = 'Server Error — Please Try Again';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // ─── Stats page ───
+    const STATS_API = "https://wardenx.dpdns.org";
+    let statsInterval = null;
+    let statsActiveKey = "";
+
+    function showStats() {
+      document.getElementById('dashboard-page').style.display = 'none';
+      document.getElementById('dashboard-page').classList.remove('active');
+      const sp = document.getElementById('stats-page');
+      sp.style.display = 'block';
+      const saved = localStorage.getItem('stats_key');
+      if (saved) {
+        statsStartSession(saved);
+      } else {
+        document.getElementById('stats-login-view').style.display = 'flex';
+        document.getElementById('stats-dash-view').style.display = 'none';
+      }
+    }
+
+    function backToPortal() {
+      if (statsInterval) { clearInterval(statsInterval); statsInterval = null; }
+      document.getElementById('stats-page').style.display = 'none';
+      document.getElementById('dashboard-page').style.display = 'flex';
+      document.getElementById('dashboard-page').classList.add('active');
+      showPortal();
+    }
+
+    async function statsLogin() {
+      const key = document.getElementById('stats-key-input').value.trim();
+      if (!key) return;
+      const btn = document.getElementById('stats-login-btn');
+      const errEl = document.getElementById('stats-login-error');
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+      errEl.style.display = 'none';
+      try {
+        const res = await fetch(LICENSE_SERVER, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+          body: JSON.stringify({ license_key: key, hwid: 'WEB_STATS', version: '1.0.0' }),
+        });
+        const d = await res.json();
+        if (d.valid) {
+          localStorage.setItem('stats_key', key);
+          statsStartSession(key);
+        } else {
+          errEl.textContent = 'Invalid License Key';
+          errEl.style.display = 'block';
+        }
+      } catch {
+        errEl.textContent = 'Server Error — Please Try Again';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Unlock Dashboard';
+      }
+    }
+
+    function statsStartSession(key) {
+      statsActiveKey = key;
+      document.getElementById('stats-key-display').textContent = key.slice(0, 12) + '...';
+      document.getElementById('stats-login-view').style.display = 'none';
+      document.getElementById('stats-dash-view').style.display = 'block';
+      statsDoFetch(key);
+      if (statsInterval) clearInterval(statsInterval);
+      statsInterval = setInterval(() => statsDoFetch(key), 3000);
+    }
+
+    async function statsDoFetch(key) {
+      try {
+        const res = await fetch(`${STATS_API}/api/stats?license_key=${encodeURIComponent(key)}`);
+        if (!res.ok) throw new Error();
+        const d = await res.json();
+        statsRender(d);
+      } catch {
+        statsSetOffline();
+      }
+    }
+
+    function n(v) { return (v || 0).toLocaleString(); }
+
+    function statsRender(d) {
+      const t = d;
+      const online = d.offline === false;
+
+      // Status pill
+      const pill = document.getElementById('stats-status-pill');
+      const dot  = document.getElementById('stats-dot');
+      const stxt = document.getElementById('stats-status-text');
+      if (online) {
+        pill.style.cssText = pill.style.cssText.replace(/border:[^;]+/,'border:1px solid rgba(52,211,153,.3)');
+        pill.style.background = 'rgba(52,211,153,.1)'; pill.style.color = '#34d399';
+        dot.style.background = '#34d399'; dot.style.animation = 'pulse-dot 2s infinite';
+        stxt.textContent = 'Online';
+      } else { statsSetOffline(); }
+
+      // Banner
+      const bannerTitle = document.getElementById('stats-banner-title');
+      const bannerSub   = document.getElementById('stats-banner-sub');
+      const liveNums    = document.getElementById('stats-live-nums');
+      if (online) {
+        bannerTitle.style.cssText = 'font-size:1.75rem;font-weight:800;background:linear-gradient(90deg,#00ff9c,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;';
+        bannerTitle.textContent = 'LIVE SESSION active';
+        bannerSub.style.display = 'none';
+        liveNums.style.display = 'flex';
+        document.getElementById('sl-checked').textContent = n(t.total_checked);
+        document.getElementById('sl-hits').textContent    = n(t.mc_hits);
+        document.getElementById('sl-cpm').textContent     = n(t.cpm);
+        document.getElementById('sl-bad').textContent     = n(t.total_bad);
+      } else {
+        bannerTitle.style.cssText = 'font-size:1.75rem;font-weight:800;color:#f87171;';
+        bannerTitle.textContent = 'OFFLINE';
+        bannerSub.style.display = 'block';
+        liveNums.style.display = 'none';
+      }
+
+      // Stat cards
+      document.getElementById('s-bad').textContent    = n(t.total_bad);
+      document.getElementById('s-hits').textContent   = n(t.mc_hits);
+      document.getElementById('s-twofa').textContent  = n(t.twofa);
+      document.getElementById('s-cpm').textContent    = n(t.cpm);
+      document.getElementById('s-donut_banned').textContent   = n(t.donut_banned);
+      document.getElementById('s-donut_unbanned').textContent = n(t.donut_unbanned);
+      document.getElementById('s-ms_rewards_found').textContent     = n(t.ms_rewards_found);
+      document.getElementById('s-ms_balance_found').textContent    = n(t.ms_balance_found);
+      document.getElementById('s-nitro_found').textContent  = n(t.nitro_found);
+      document.getElementById('s-xbox_codes_found').textContent   = n(t.xbox_codes_found);
+      document.getElementById('s-hypixel_banned').textContent   = n(t.hypixel_banned);
+      document.getElementById('s-hypixel_unbanned').textContent = n(t.hypixel_unbanned);
+
+      // Sessions card
+      const sessCard = document.getElementById('sessions-card');
+      const sessList = document.getElementById('sessions-list');
+      if (d.sessions && d.sessions.length > 0) {
+        sessCard.style.display = 'block';
+        sessList.innerHTML = d.sessions.slice(0, 5).map(s => `
+          <div style="padding:.375rem 0;border-bottom:1px solid rgba(255,255,255,.05);">
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);">${s.license_key.slice(0,12)}...</span>
+              <span style="color:${s.status==='running'?'#34d399':'#f87171'};font-size:12px;">${s.status}</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.2);">${s.checked||0} checked · ${s.hits||0} hits</div>
+          </div>`).join('');
+      } else { sessCard.style.display = 'none'; }
+    }
+
+    function statsSetOffline() {
+      const pill = document.getElementById('stats-status-pill');
+      pill.style.border = '1px solid rgba(248,113,113,.3)';
+      pill.style.background = 'rgba(248,113,113,.1)'; pill.style.color = '#f87171';
+      const dot = document.getElementById('stats-dot');
+      dot.style.background = '#f87171'; dot.style.animation = 'none';
+      document.getElementById('stats-status-text').textContent = 'Offline';
+    }
+
+    function statsLogout() {
+      if (statsInterval) { clearInterval(statsInterval); statsInterval = null; }
+      localStorage.removeItem('stats_key');
+      statsActiveKey = '';
+      document.getElementById('stats-dash-view').style.display = 'none';
+      document.getElementById('stats-login-view').style.display = 'flex';
+      document.getElementById('stats-key-input').value = '';
+      document.getElementById('stats-login-error').style.display = 'none';
+    }
+
+    // ─── Init ───
+    renderReviews();
+
+    // Style dashboard page properly
+    document.getElementById('dashboard-page').style.cssText =
+      'min-height:100vh;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;';
+
+    document.getElementById('login-view').style.cssText =
+      'display:flex;align-items:center;justify-content:center;width:100%;padding:2rem;';
+  </script>
 </body>
 </html>
