@@ -11,13 +11,31 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #050505; --bg2: #0a0a0f; --bg3: #0f0f1a;
-      --border: #1a1a2e; --border2: #2a2a40;
-      --text: #d1d5db; --muted: #64748b; --muted2: #94a3b8;
-      --blue: #5196ff; --purple: #7c5cff; --green: #34d399; --red: #f87171; --yellow: #f59e0b;
+      --bg: #050505;
+      --bg2: #0a0a0f;
+      --bg3: #0f0f1a;
+      --border: #1a1a2e;
+      --border2: #2a2a40;
+      --text: #d1d5db;
+      --muted: #64748b;
+      --muted2: #94a3b8;
+      --blue: #5196ff;
+      --purple: #7c5cff;
+      --green: #34d399;
+      --yellow: #f59e0b;
+      --red: #f87171;
     }
+    html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
+    button { font-family: 'Inter', sans-serif; cursor: pointer; }
+    input, textarea { font-family: 'Inter', sans-serif; }
+
+    /* ── PAGES ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── NAV ── */
     nav {
       display: flex; align-items: center; justify-content: space-between;
       padding: 1rem 2.5rem; border-bottom: 1px solid var(--border);
@@ -25,156 +43,727 @@
       position: sticky; top: 0; z-index: 100;
     }
     .nav-logo { display: flex; align-items: center; gap: .625rem; }
-    .nav-logo img { width: 32px; height: 32px; filter: drop-shadow(0 0 8px rgba(81,150,255,.55)); }
+    .nav-logo img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(81,150,255,.55)); }
     .nav-logo span { font-weight: 800; font-size: 18px; color: #fff; }
     .nav-links { display: flex; gap: 2rem; align-items: center; }
     .nav-links a { color: var(--muted2); font-size: 14px; font-weight: 500; transition: color .2s; }
     .nav-links a:hover { color: var(--blue); }
-    .page { display: none; padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
-    .page.active { display: block; }
-    .btn-primary { background: var(--blue); color: #000; border: none; padding: .6rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 13px; transition: .2s; cursor: pointer; }
+    .btn-primary {
+      background: var(--blue); color: #000; border: none;
+      padding: .5rem 1.25rem; border-radius: 8px; font-weight: 700; font-size: 13px;
+      transition: background .2s;
+    }
     .btn-primary:hover { background: #4085ee; }
-    .btn-ghost { background: transparent; color: var(--muted2); border: 1px solid var(--border2); padding: .6rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: .2s; }
+
+    /* ── HERO ── */
+    #home { text-align: center; padding: 6rem 1.5rem 4rem; position: relative; overflow: hidden; }
+    .hero-glow {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 700px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(81,150,255,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; }
+    .hero-logo { width: 80px; height: 80px; object-fit: contain; filter: drop-shadow(0 0 24px rgba(81,150,255,.6)); margin-bottom: 1.5rem; }
+    .hero-title {
+      font-size: clamp(2.5rem,6vw,4rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem;
+      background: linear-gradient(135deg,#5196ff 0%,#38bdf8 50%,#818cf8 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub { font-size: 22px; font-weight: 600; color: #fff; margin-bottom: .75rem; }
+    .hero-desc { color: var(--muted); font-size: 15px; max-width: 560px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+    .btn-hero { background: linear-gradient(135deg,#5196ff,#3b82f6); color: #fff; border: none; padding: .875rem 2rem; border-radius: 10px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 24px rgba(81,150,255,.3); transition: opacity .2s; }
+    .btn-hero:hover { opacity: .9; }
+    .btn-ghost { background: transparent; color: var(--muted2); border: 1px solid var(--border2); padding: .875rem 2rem; border-radius: 10px; font-weight: 600; font-size: 15px; transition: border-color .2s; }
     .btn-ghost:hover { border-color: var(--blue); }
-    .form-input { width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: #fff; padding: .75rem 1rem; border-radius: 8px; outline: none; transition: .2s; }
+    .hero-stats { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .stat-item { text-align: center; padding: .75rem 1.5rem; }
+    .stat-val { font-size: 28px; font-weight: 800; color: var(--blue); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ── BADGE ── */
+    .badge { display: inline-block; padding: 4px 14px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 1rem; }
+    .badge-blue { background: rgba(81,150,255,.1); color: var(--blue); border: 1px solid rgba(81,150,255,.25); }
+    .badge-yellow { background: rgba(245,158,11,.1); color: var(--yellow); border: 1px solid rgba(245,158,11,.25); }
+    .badge-purple { background: rgba(124,92,255,.12); color: #a78bfa; border: 1px solid rgba(124,92,255,.25); }
+
+    /* ── SECTION HEADER ── */
+    .sec-header { text-align: center; margin-bottom: 3rem; }
+    .sec-title { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: .75rem; }
+    .sec-sub { color: var(--muted); font-size: 15px; }
+    section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+
+    /* ── FEATURES ── */
+    .feature-cat { display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+    .feature-cat span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+    .feature-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+      transition: border-color .2s, transform .2s; cursor: default;
+    }
+    .feature-card:hover { border-color: rgba(81,150,255,.35); transform: translateY(-2px); }
+    .feature-icon { width: 40px; height: 40px; background: rgba(81,150,255,.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: .875rem; }
+    .feature-title { color: #fff; font-weight: 700; font-size: 15px; margin-bottom: .5rem; }
+    .feature-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 1.25rem; }
+    .plan-card {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; position: relative;
+    }
+    .plan-card.highlight { background: rgba(81,150,255,.06); border-color: rgba(81,150,255,.4); box-shadow: 0 0 40px rgba(81,150,255,.08); }
+    .plan-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--blue); color: #000; font-size: 10px; font-weight: 800;
+      padding: 3px 12px; border-radius: 999px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+    }
+    .plan-name { color: var(--muted2); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .plan-price { display: flex; align-items: baseline; gap: .25rem; margin-bottom: 1.5rem; }
+    .plan-price .amount { font-size: 40px; font-weight: 900; color: #fff; }
+    .plan-price .period { font-size: 13px; color: var(--muted); }
+    .plan-features { list-style: none; margin-bottom: 2rem; }
+    .plan-features li { font-size: 13px; color: var(--muted2); padding: .375rem 0; display: flex; align-items: center; gap: .5rem; }
+    .plan-features li::before { content: "●"; color: var(--blue); }
+    .btn-plan {
+      width: 100%; padding: .75rem; border-radius: 8px; font-weight: 700; font-size: 13px;
+      border: none; transition: opacity .2s;
+    }
+    .btn-plan:hover { opacity: .85; }
+    .btn-plan-fill { background: var(--blue); color: #000; }
+    .btn-plan-outline { background: transparent; color: var(--blue); border: 1px solid rgba(81,150,255,.4) !important; }
+
+    /* ── REVIEWS ── */
+    .rating-summary { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+    .rating-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 2rem; display: flex; align-items: center; gap: .75rem; }
+    .rating-num { font-size: 26px; font-weight: 800; }
+    .rating-label { color: var(--muted); font-size: 13px; }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.25rem; }
+    .review-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; display: flex; flex-direction: column; gap: .75rem; }
+    .review-text { color: var(--text); font-size: 14px; line-height: 1.6; flex: 1; }
+    .review-author { display: flex; align-items: center; gap: .625rem; margin-top: .5rem; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; flex-shrink: 0; }
+    .author-name { color: var(--muted2); font-size: 13px; font-weight: 600; }
+    .stars { display: inline-flex; gap: 4px; }
+    .star { font-size: 14px; line-height: 1; }
+    .star.filled { color: var(--yellow); }
+    .star.empty { color: rgba(255,255,255,.2); }
+    .star.interactive { font-size: 22px; cursor: pointer; transition: color .15s; }
+    .btn-review { background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; padding: .75rem 2rem; border-radius: 10px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-review:hover { opacity: .85; }
+
+    /* ── CONTACT ── */
+    .contact-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; align-items: start; }
+    @media(max-width:768px){ .contact-grid { grid-template-columns: 1fr; } }
+    .contact-form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; }
+    .contact-title { color: #fff; font-weight: 700; font-size: 18px; margin-bottom: .5rem; }
+    .contact-sub { color: var(--muted); font-size: 13px; margin-bottom: 1.5rem; }
+    .contact-sidebar { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; text-align: center; transition: border-color .2s; }
+    .contact-card:hover { border-color: rgba(81,150,255,.35); }
+    .contact-card-icon { font-size: 24px; margin-bottom: .5rem; }
+    .contact-card-title { color: #fff; font-weight: 700; font-size: 15px; margin-bottom: .25rem; }
+    .contact-card-sub { font-size: 13px; margin-bottom: .25rem; }
+    .contact-card-note { color: var(--muted); font-size: 12px; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; color: var(--muted2); font-size: 12px; margin-bottom: .375rem; }
+    .form-input {
+      width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+      color: #fff; padding: .75rem 1rem; border-radius: 8px; font-size: 14px; outline: none;
+      transition: border-color .2s; font-family: 'Inter',sans-serif;
+    }
     .form-input:focus { border-color: var(--blue); }
-    .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
-    .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
-    .sc-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; margin-bottom: .5rem; }
-    .sc-val { font-size: 24px; font-weight: 800; color: #fff; }
-    .status-pill { display: flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1); color: var(--green); }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 10px var(--green); }
-    .session-item { display: flex; justify-content: space-between; padding: .75rem 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 13px; }
+    textarea.form-input { resize: vertical; min-height: 120px; }
+    .form-success { background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.25); color: var(--green); padding: .75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 13px; }
+    .btn-send { background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; padding: .75rem 2rem; border-radius: 8px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-send:hover { opacity: .85; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; margin-top: 2rem; }
+    .footer-brand { display: flex; align-items: center; justify-content: center; gap: .5rem; margin-bottom: .75rem; }
+    .footer-brand img { width: 20px; height: 20px; object-fit: contain; filter: drop-shadow(0 0 6px rgba(81,150,255,.5)); }
+    .footer-brand span { font-weight: 700; font-size: 14px; color: #fff; }
+    .footer-copy { color: #334155; font-size: 12px; }
+
+    /* ── REVIEW MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--bg2); border: 1px solid var(--border); border-radius: 16px;
+      padding: 2rem; width: 100%; max-width: 440px; position: relative;
+    }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; }
+    .modal-header { text-align: center; margin-bottom: 1.5rem; }
+    .modal-title { color: #fff; font-weight: 800; font-size: 22px; margin-top: .875rem; }
+    .modal-sub { color: var(--muted); font-size: 13px; margin-top: .375rem; }
+    .char-count { text-align: right; font-size: 11px; color: #475569; margin-top: 2px; }
+    .form-error { color: var(--red); font-size: 12px; margin-bottom: .75rem; }
+    .btn-submit-review { width: 100%; padding: .875rem; background: linear-gradient(135deg,#7c5cff,#5196ff); color: #fff; border: none; border-radius: 10px; font-weight: 700; font-size: 14px; transition: opacity .2s; }
+    .btn-submit-review:hover { opacity: .85; }
+
+    /* ── DASHBOARD PAGE ── */
+    #dashboard-page {
+      min-height: 100vh; background: var(--bg);
+      display: none; align-items: center; justify-content: center;
+    }
+    #dashboard-page.active { display: flex; }
+
+    /* Login card */
+    .login-card {
+      background: #0d0d1a; border: 1px solid #1e1e35;
+      border-radius: 16px; box-shadow: 0 0 80px rgba(0,0,0,.95);
+      width: 100%; max-width: 390px; padding: 2.5rem;
+      text-align: center;
+    }
+    .login-brand { display: flex; align-items: center; justify-content: center; gap: .875rem; margin-bottom: 2rem; }
+    .login-logo { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 0 16px rgba(124,92,255,.7)); }
+    .login-brand-text { text-align: left; }
+    .login-brand-name { color: #fff; font-weight: 800; font-size: 20px; line-height: 1.1; }
+    .login-brand-sub { color: #475569; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-top: 2px; }
+    .login-label { display: block; text-align: left; color: #475569; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-bottom: .5rem; }
+    .login-input {
+      width: 100%; background: #0a0a16; border: 1px solid #252540;
+      color: #fff; padding: .875rem 1.25rem; border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: .1em;
+      outline: none; margin-bottom: .75rem; transition: border-color .2s; text-align: center;
+    }
+    .login-input::placeholder { color: #2e3050; letter-spacing: .05em; }
+    .login-input:focus { border-color: #7c5cff; }
+    /* Verifying bar */
+    .verify-bar {
+      display: none; margin-bottom: .75rem;
+      background: #111118; border: 1px solid #252540; border-radius: 8px;
+      padding: .75rem 1rem;
+      align-items: center; justify-content: space-between;
+    }
+    .verify-bar.show { display: flex; }
+    .verify-left { display: flex; align-items: center; gap: .625rem; }
+    .verify-spinner {
+      width: 18px; height: 18px; border: 2px solid #2e3050;
+      border-top-color: #7c5cff; border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .verify-text { color: #d1d5db; font-size: 13px; font-weight: 500; }
+    .verify-right { display: flex; align-items: center; gap: .375rem; }
+    .cloudflare-badge { font-size: 9px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: .08em; }
+    .cf-logo { font-size: 14px; }
+    .btn-continue {
+      width: 100%; padding: .875rem; background: linear-gradient(135deg,#7c5cff,#5196ff);
+      color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 14px;
+      letter-spacing: .05em; transition: opacity .2s; margin-bottom: .25rem;
+    }
+    .btn-continue:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-continue:not(:disabled):hover { opacity: .88; }
+    .login-error { color: var(--red); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .5rem; min-height: 18px; }
+    .no-license { font-size: 12px; color: #2e3050; margin-top: .875rem; transition: color .2s; }
+    .no-license a { color: #3d4070; text-decoration: underline; transition: color .2s; }
+    .no-license a:hover { color: #7c5cff; }
+
+    /* Authed portal */
+    .portal-wrap { width: 100%; max-width: 1000px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,.8); }
+    .portal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); }
+    .portal-header-left { display: flex; align-items: center; gap: .75rem; }
+    .portal-header-left img { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 8px rgba(81,150,255,.4)); }
+    .portal-header-left span { color: #334155; font-size: 13px; font-weight: 600; }
+    .portal-header-right { display: flex; gap: .75rem; align-items: center; }
+    .btn-stats {
+      background: rgba(81,150,255,.12); color: var(--blue);
+      border: 1px solid rgba(81,150,255,.25); padding: .375rem 1rem; border-radius: 6px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+      transition: background .2s;
+    }
+    .btn-stats:hover { background: rgba(81,150,255,.22); }
+    .btn-signout { color: #ef4444; border: 1px solid rgba(239,68,68,.2); padding: .375rem 1rem; border-radius: 6px; font-size: 11px; font-weight: 600; background: transparent; transition: background .2s; }
+    .btn-signout:hover { background: rgba(239,68,68,.1); }
+    .portal-body { padding: 3rem; }
+    .portal-version { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+    .portal-v { color: #fff; font-weight: 700; font-size: 24px; }
+    .release-badge { background: rgba(59,130,246,.1); color: #60a5fa; font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; border: 1px solid rgba(59,130,246,.2); }
+    .dl-btn { margin-left: auto; background: var(--blue); color: #000; padding: .625rem 2rem; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; text-decoration: none; display: inline-block; }
+    .portal-date { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #475569; margin-bottom: 2.5rem; }
+    .portal-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .portal-feat-label { color: var(--blue); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .15em; margin-bottom: 1.5rem; }
+    .portal-feat-list { list-style: none; }
+    .portal-feat-list li { font-size: 11px; line-height: 1.8; color: var(--muted2); font-family: 'JetBrains Mono', monospace; }
+    .portal-feat-list li::before { content: "● "; color: var(--blue); }
+    .back-home { display: inline-block; margin-top: 1.5rem; font-size: 12px; color: #334155; cursor: pointer; transition: color .2s; background: none; border: none; }
+    .back-home:hover { color: var(--muted); }
+    .stat-row { display:flex; justify-content:space-between; align-items:center; padding:.375rem 0; border-bottom:1px solid rgba(255,255,255,.05); }
+    .stat-row span:first-child { color:rgba(255,255,255,.6); font-size:13px; }
+    .stat-row span:last-child { color:#fff; font-weight:500; font-size:13px; font-variant-numeric:tabular-nums; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-logo">
-      <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" />
-      <span>WardenX</span>
-    </div>
-    <div class="nav-links">
-      <a href="javascript:showPage('home-page')">Home</a>
-      <a href="javascript:showPage('dashboard-page')">Stats</a>
-      <button class="btn-primary" onclick="window.open('https://discord.gg/nBrEpMJ9hg')">Purchase</button>
-    </div>
-  </nav>
+  <div id="home-page" class="page active">
 
-  <div id="home-page" class="page active" style="text-align: center;">
-    <h1 style="font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; background: linear-gradient(135deg,#5196ff,#818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">WardenX v1.0.1</h1>
-    <p style="color: var(--muted); margin-bottom: 2rem;">The professional standard for account monitoring and verification.</p>
-    <button class="btn-primary" onclick="showPage('dashboard-page')">Enter Dashboard</button>
+    <nav>
+      <div class="nav-logo">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+        <span>WardenX</span>
+      </div>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="btn-primary" onclick="showDashboard()">Dashboard</button>
+    </nav>
+
+    <section id="home" style="text-align:center;padding:6rem 1.5rem 4rem;position:relative;overflow:hidden;">
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="hero-logo">
+        <h1 class="hero-title">WardenX</h1>
+        <p class="hero-sub">High-Performance Credential Validation Tool</p>
+        <p class="hero-desc">Bulk authentication testing at up to 5,000+ CPM with full multi-threading support. Built from the ground up for maximum throughput and reliability.</p>
+        <div class="hero-btns">
+          <button class="btn-hero" onclick="showDashboard()">⚡ Get Started</button>
+          <a href="#contact" class="btn-ghost" style="display:inline-flex;align-items:center;padding:.875rem 2rem;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--border2);color:var(--muted2);transition:border-color .2s;">Contact Us</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-val">5,000+</div><div class="stat-label">Checks Per Minute</div></div>
+          <div class="stat-item"><div class="stat-val">20+</div><div class="stat-label">Check Modules</div></div>
+          <div class="stat-item"><div class="stat-val">99.9%</div><div class="stat-label">Uptime</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="sec-header">
+        <span class="badge badge-blue">Features</span>
+        <h2 class="sec-title">Everything You Need in One Tool</h2>
+        <p class="sec-sub">Full-featured credential validation with deep account analysis modules.</p>
+      </div>
+
+      <div class="feature-cat"><span style="color:#5196ff;">⚙ CORE ENGINE</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">⚡</div><p class="feature-title">Insane CPM Boost</p><p class="feature-desc">Optimized threading engine for extreme throughput. High-speed validation with minimal overhead.</p></div>
+        <div class="feature-card"><div class="feature-icon">🌐</div><p class="feature-title">Proxy Engine</p><p class="feature-desc">HTTP/HTTPS proxy rotation with rate limit retry handling and configurable smart retry delays.</p></div>
+        <div class="feature-card"><div class="feature-icon">📊</div><p class="feature-title">Live Dashboard</p><p class="feature-desc">Real-time colored terminal showing CPM, valid results, progress and thread status as it runs.</p></div>
+      </div>
+
+      <div class="feature-cat"><span style="color:#f59e0b;">⚙ HYPIXEL (Fixed)</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">🖥️</div><p class="feature-title">Hypixel Profile Scan</p><p class="feature-desc">Network level, Bedwars stars, first/last login, ban status — all pulled in a single pass.</p></div>
+        <div class="feature-card"><div class="feature-icon">⭐</div><p class="feature-title">Rank Detection</p><p class="feature-desc">Detects YOUTUBE, MVP++, MVP+, MVP, VIP+, VIP ranks and flags them separately in results.</p></div>
+        <div class="feature-card"><div class="feature-icon">🚫</div><p class="feature-title">Hypixel Ban Checker</p><p class="feature-desc">Instantly detects whether an account is banned or unbanned on Hypixel and sorts into separate result files.</p></div>
+      </div>
+
+      <div class="feature-cat"><span style="color:#34d399;">⚙ MICROSOFT &amp; REWARDS</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">💰</div><p class="feature-title">Reward Points Fetcher</p><p class="feature-desc">Fetches Microsoft Rewards points balance and flags accounts with high RP. (Bugs persist)</p></div>
+        <div class="feature-card"><div class="feature-icon">🎁</div><p class="feature-title">Xbox Codes &amp; Nitro</p><p class="feature-desc">Extracts Discord Nitro and Xbox reward codes. Automated extraction from MS accounts. (Bugs persist)</p></div>
+        <div class="feature-card"><div class="feature-icon">💳</div><p class="feature-title">Balance &amp; MS Rewards</p><p class="feature-desc">Checking account balance and reward eligibility. Integration with Python backend. (Bugs persist)</p></div>
+      </div>
+
+      <div class="feature-cat"><span style="color:#a78bfa;">⚙ SERVER MODULES (Fixed)</span></div>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">🍩</div><p class="feature-title">DonutSMP Integration</p><p class="feature-desc">Full support for DonutSMP account validation and status checking. Fixed in latest build.</p></div>
+        <div class="feature-card"><div class="feature-icon">🔒</div><p class="feature-title">HWID Lock &amp; TLS</p><p class="feature-desc">HWID-locked licensing with TLS fingerprinting ensures stable sessions and prevents account sharing.</p></div>
+        <div class="feature-card"><div class="feature-icon">📂</div><p class="feature-title">CSV/JSON Export</p><p class="feature-desc">Export results in multiple formats for easy sorting and data management across tools.</p></div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="sec-header">
+        <span class="badge badge-blue">Pricing</span>
+        <h2 class="sec-title">Simple, Transparent Pricing</h2>
+        <p class="sec-sub">Start with a trial, scale to lifetime — all features included in every plan.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="plan-card">
+          <p class="plan-name">Trial</p>
+          <div class="plan-price"><span class="amount">$1</span><span class="period"> / 3 days</span></div>
+          <ul class="plan-features">
+            <li>3-Day Trial License Key</li>
+            <li>All Features Included</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Email Support</li>
+          </ul>
+          <button class="btn-plan btn-plan-outline" onclick="showDashboard()">Get Started</button>
+        </div>
+
+        <div class="plan-card highlight">
+          <div class="plan-badge">Most Popular</div>
+          <p class="plan-name">Monthly</p>
+          <div class="plan-price"><span class="amount">$5</span><span class="period"> / month</span></div>
+          <ul class="plan-features">
+            <li>1 Month Access License Key</li>
+            <li>All Features Included</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Priority Support</li>
+            <li>Early Access</li>
+          </ul>
+          <button class="btn-plan btn-plan-fill" onclick="showDashboard()">Get Started</button>
+        </div>
+
+        <div class="plan-card">
+          <p class="plan-name">Lifetime</p>
+          <div class="plan-price"><span class="amount">$20</span><span class="period"> one-time</span></div>
+          <ul class="plan-features">
+            <li>Lifetime Access License Key</li>
+            <li>All Future Updates</li>
+            <li>All Core Modules</li>
+            <li>HWID Lock</li>
+            <li>Priority Support</li>
+          </ul>
+          <button class="btn-plan btn-plan-outline" onclick="showDashboard()">Get Started</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="sec-header">
+        <span class="badge badge-yellow">☆ User Reviews</span>
+        <h2 class="sec-title">What our users are saying about WardenX</h2>
+        <p class="sec-sub" style="margin-bottom:1.5rem;">Trusted by account checkers worldwide</p>
+        <button class="btn-review" onclick="openReviewModal()">Write a Review</button>
+      </div>
+
+      <div class="rating-summary">
+        <div class="rating-box">
+          <span style="font-size:20px;color:var(--yellow);">★</span>
+          <span class="rating-num" style="color:var(--yellow);" id="avg-rating">4.8</span>
+          <span class="rating-label">Average Rating</span>
+        </div>
+        <div class="rating-box">
+          <span style="font-size:20px;color:var(--blue);">💬</span>
+          <span class="rating-num" style="color:#fff;" id="review-count">6</span>
+          <span class="rating-label">Total Reviews</span>
+        </div>
+      </div>
+
+      <div class="reviews-grid" id="reviews-grid"></div>
+    </section>
+
+    <section id="contact">
+      <div class="sec-header">
+        <span class="badge badge-blue">🔔 Get in Touch</span>
+        <h2 class="sec-title">Contact Us</h2>
+        <p class="sec-sub">Have a question or feedback? We'd love to hear from you!</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-form-card">
+          <p class="contact-title">Send us a Message</p>
+          <p class="contact-sub">Fill out the form below and we'll get back to you as soon as possible.</p>
+          
+          <div id="contact-success" class="form-success" style="display:none;">✓ Message sent! We'll get back to you soon.</div>
+          
+          <form id="contact-form" onsubmit="submitContact(event)">
+            <div class="form-group">
+              <label>Your Name</label>
+              <input type="text" class="form-input" placeholder="John Doe" id="cf-name" required>
+            </div>
+            <div class="form-group">
+              <label>License Key</label>
+              <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="cf-key">
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea class="form-input" placeholder="How can we help?" id="cf-msg" required></textarea>
+            </div>
+            <button type="submit" class="btn-send" id="cf-btn">Send Message</button>
+          </form>
+        </div>
+
+        <div class="contact-sidebar">
+          <div class="contact-card">
+            <div class="contact-card-icon">💬</div>
+            <p class="contact-card-title">Join Discord</p>
+            <p class="contact-card-sub">Get support &amp; chat with us</p>
+            <p class="contact-card-note">.gg/PCWJ9BNvgU</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">🛠️</div>
+            <p class="contact-card-title">Support Desk</p>
+            <p class="contact-card-sub">Ticket response within 24h</p>
+            <p class="contact-card-note">Indore, India</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-brand">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+        <span>WardenX</span>
+      </div>
+      <p class="footer-copy">© 2026 WardenX Tools. All rights reserved.</p>
+    </footer>
+
   </div>
 
   <div id="dashboard-page" class="page">
-    <div id="stats-login-view" style="max-width: 400px; margin: 0 auto; background: var(--bg2); padding: 2rem; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
-      <h3 style="margin-bottom: 1rem;">License Verification</h3>
-      <input type="password" id="stats-key-input" class="form-input" placeholder="WARDENX-XXXX-XXXX" style="margin-bottom: 1rem;" />
-      <p id="stats-login-error" style="color: var(--red); font-size: 12px; margin-bottom: 1rem; display: none;"></p>
-      <button class="btn-primary" style="width: 100%;" onclick="statsLogin()">Login</button>
+    
+    <div id="login-view" class="login-card">
+      <div class="login-brand">
+        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo">
+        <div class="login-brand-text">
+          <p class="login-brand-name">WardenX</p>
+          <p class="login-brand-sub">Security Portal</p>
+        </div>
+      </div>
+
+      <label class="login-label">Enter License Key</label>
+      <input type="text" id="license-key" class="login-input" placeholder="WardenX-XXXX-XXXX-XXXX" />
+      
+      <div id="verify-bar" class="verify-bar">
+        <div class="verify-left">
+          <div class="verify-spinner"></div>
+          <span class="verify-text">Verifying...</span>
+        </div>
+        <div class="verify-right">
+          <span class="cloudflare-badge">Cloudflare</span>
+          <span class="cf-logo">🛡️</span>
+        </div>
+      </div>
+
+      <div id="login-error" class="login-error"></div>
+      
+      <button class="btn-continue" id="login-btn" onclick="handleLogin()">Continue to Dashboard</button>
+      
+      <p class="no-license">Don't have a license? <a href="#pricing" onclick="showHome()">Get one here</a></p>
     </div>
 
-    <div id="stats-dash-view" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1.5rem;">
-        <div>
-          <h2 id="stats-license-display">Dashboard</h2>
-          <p style="color: var(--muted); font-size: 13px;">Live global performance</p>
+    <div id="portal-view" class="portal-wrap" style="display:none;">
+      <div class="portal-header">
+        <div class="portal-header-left">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+          <span>Logged in as Admin</span>
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-          <div class="status-pill" id="stats-status-pill"><div class="status-dot" id="stats-dot"></div><span id="stats-status-text">Live</span></div>
-          <button class="btn-ghost" onclick="statsLogout()">Logout</button>
+        <div class="portal-header-right">
+          <button class="btn-stats" onclick="showStatsView()">Live Stats</button>
+          <button class="btn-signout" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+      
+      <div class="portal-body">
+        <div class="portal-version">
+          <span class="portal-v">WardenX v1.0.1</span>
+          <span class="release-badge">Stable Release</span>
+          <a href="#" class="dl-btn">Download .exe</a>
+        </div>
+        <p class="portal-date">Released: April 10, 2026</p>
+
+        <div class="portal-feats">
+          <div>
+            <p class="portal-feat-label">Active Modules</p>
+            <ul class="portal-feat-list">
+              <li>Full Hypixel Scan (Fixed)</li>
+              <li>DonutSMP Support (Fixed)</li>
+              <li>SFA/MFA/Cookie Support</li>
+              <li>Insane CPM Threading Engine</li>
+              <li>Auto-Proxy Rotation</li>
+            </ul>
+          </div>
+          <div>
+            <p class="portal-feat-label" style="color:var(--yellow);">Beta Modules (Buggy)</p>
+            <ul class="portal-feat-list">
+              <li style="color:var(--muted);">Xbox Codes Extraction</li>
+              <li style="color:var(--muted);">MS Rewards Points Fetcher</li>
+              <li style="color:var(--muted);">Microsoft Account Balance</li>
+              <li style="color:var(--muted);">Nitro Link Generator</li>
+            </ul>
+          </div>
+        </div>
+
+        <button class="back-home" onclick="showHome()">← Back to Main Page</button>
+      </div>
+    </div>
+
+    <div id="stats-view" class="portal-wrap" style="display:none; max-width:440px;">
+      <div class="portal-header">
+        <div class="portal-header-left">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse-dot 1.5s infinite;"></div>
+          <span style="color:#fff; font-size:12px; font-weight:700;">LIVE INSTANCE</span>
+        </div>
+        <button class="btn-signout" style="color:var(--muted); border-color:var(--border);" onclick="hideStatsView()">Close</button>
+      </div>
+      <div class="portal-body" style="padding:2rem;">
+        <div class="stat-row"><span>Checks Per Minute</span><span style="color:var(--blue);">5,241</span></div>
+        <div class="stat-row"><span>Active Threads</span><span>500</span></div>
+        <div class="stat-row"><span>Valids Found</span><span style="color:var(--green);">142</span></div>
+        <div class="stat-row"><span>Retries</span><span style="color:var(--yellow);">12</span></div>
+        <div class="stat-row" style="border:none;"><span>Status</span><span style="color:var(--green);">Checking...</span></div>
+        
+        <div style="margin-top:2rem; background:rgba(0,0,0,.3); border:1px solid var(--border); border-radius:8px; padding:1rem; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);">
+          [04:22:15] Thread #42 Valid: user@mail.com<br>
+          [04:22:18] Thread #192 Bad: test@mail.com<br>
+          [04:22:21] Thread #12 Valid: player@mail.com
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="review-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeReviewModal()">×</button>
+      <div class="modal-header">
+        <div style="font-size:40px;margin-bottom:1rem;">⭐</div>
+        <h3 class="modal-title">Write a Review</h3>
+        <p class="modal-sub">How was your experience with WardenX?</p>
+      </div>
+      
+      <div id="review-error" class="form-error" style="display:none;">Please fill in all fields.</div>
+
+      <div class="form-group">
+        <label>Your Display Name</label>
+        <input type="text" class="form-input" id="rev-name" placeholder="DarioBladez">
+      </div>
+      
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="stars" style="gap:8px;margin-top:4px;">
+          <span class="star interactive filled" data-v="1">★</span>
+          <span class="star interactive filled" data-v="2">★</span>
+          <span class="star interactive filled" data-v="3">★</span>
+          <span class="star interactive filled" data-v="4">★</span>
+          <span class="star interactive filled" data-v="5">★</span>
         </div>
       </div>
 
-      <div class="dash-grid">
-        <div class="stat-card"><div class="sc-label">Checked</div><div class="sc-val" id="st-checked">0</div></div>
-        <div class="stat-card"><div class="sc-label">Hits</div><div class="sc-val" id="st-hits" style="color: var(--green);">0</div></div>
-        <div class="stat-card"><div class="sc-label">Bad</div><div class="sc-val" id="st-bad" style="color: var(--red);">0</div></div>
-        <div class="stat-card"><div class="sc-label">CPM</div><div class="sc-val" id="st-cpm" style="color: var(--blue);">0</div></div>
+      <div class="form-group">
+        <label>Your Review</label>
+        <textarea class="form-input" id="rev-text" placeholder="Explain your experience..." maxlength="160"></textarea>
+        <div class="char-count"><span id="rev-chars">0</span>/160</div>
       </div>
 
-      <div style="margin-top: 2rem; background: var(--bg2); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
-        <h4 style="font-size: 12px; text-transform: uppercase; color: var(--muted2); margin-bottom: 1rem;">Recent Instances</h4>
-        <div id="session-items-list"></div>
-      </div>
+      <button class="btn-submit-review" onclick="submitReview()">Post Review</button>
     </div>
   </div>
 
   <script>
-    const LICENSE_SERVER_URL = "https://wardenx.dpdns.org/api/validate";
-    const STATS_API_URL = "https://wardenx.dpdns.org/";
-    let statsInterval = null;
-
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(pageId).classList.add('active');
+    // ── Navigation ──
+    function showDashboard() {
+      document.getElementById('home-page').classList.remove('active');
+      document.getElementById('dashboard-page').classList.add('active');
+      window.scrollTo(0,0);
+    }
+    function showHome() {
+      document.getElementById('dashboard-page').classList.remove('active');
+      document.getElementById('home-page').classList.add('active');
     }
 
-    async function statsLogin() {
-      const key = document.getElementById('stats-key-input').value.trim();
-      const errorText = document.getElementById('stats-login-error');
-      if (!key) return;
+    // ── Login Logic ──
+    function handleLogin() {
+      const key = document.getElementById('license-key').value.trim();
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-error');
+      const bar = document.getElementById('verify-bar');
 
-      try {
-        const response = await fetch(LICENSE_SERVER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ license_key: key })
-        });
-        const result = await response.json();
+      if (!key) { err.textContent = "Please enter a license key"; return; }
+      
+      btn.style.display = 'none';
+      bar.classList.add('show');
+      err.textContent = "";
 
-        if (response.ok && result.status === "success") {
-          errorText.style.display = 'none';
-          document.getElementById('stats-login-view').style.display = 'none';
-          document.getElementById('stats-dash-view').style.display = 'block';
-          document.getElementById('stats-license-display').textContent = 'Key: ' + key.substring(0, 10) + '...';
-          startStatsPolling();
+      // Simulated Verification
+      setTimeout(() => {
+        if (key.toLowerCase().startsWith("wardenx")) {
+          document.getElementById('login-view').style.display = 'none';
+          document.getElementById('portal-view').style.display = 'block';
         } else {
-          errorText.textContent = result.message || "Invalid license key.";
-          errorText.style.display = 'block';
+          bar.classList.remove('show');
+          btn.style.display = 'block';
+          err.textContent = "INVALID OR EXPIRED LICENSE KEY";
         }
-      } catch (e) {
-        errorText.textContent = "Connection to license server failed.";
-        errorText.style.display = 'block';
-      }
+      }, 1500);
     }
 
-    function startStatsPolling() {
-      updateStats();
-      statsInterval = setInterval(updateStats, 5000);
+    function logout() {
+      document.getElementById('portal-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'block';
+      document.getElementById('verify-bar').classList.remove('show');
+      document.getElementById('login-btn').style.display = 'block';
     }
 
-    async function updateStats() {
-      try {
-        const resp = await fetch(STATS_API_URL);
-        const data = await resp.json();
-        document.getElementById('st-checked').textContent = (data.checked || 0).toLocaleString();
-        document.getElementById('st-hits').textContent = (data.hits || 0).toLocaleString();
-        document.getElementById('st-bad').textContent = (data.bad || 0).toLocaleString();
-        document.getElementById('st-cpm').textContent = (data.cpm || 0).toLocaleString();
-
-        const list = document.getElementById('session-items-list');
-        if (data.sessions) {
-          list.innerHTML = data.sessions.slice(0, 5).map(s => `
-            <div class="session-item">
-              <span>ID: ${s.session_id}</span>
-              <span style="color:var(--blue)">${(s.hits||0).toLocaleString()} hits</span>
-            </div>`).join('');
-        }
-      } catch (e) {
-        document.getElementById('stats-status-pill').style.background = 'rgba(248,113,113,0.1)';
-        document.getElementById('stats-status-text').textContent = 'Offline';
-        document.getElementById('stats-dot').style.background = 'var(--red)';
-      }
+    // ── Stats View ──
+    function showStatsView() {
+      document.getElementById('portal-view').style.display = 'none';
+      document.getElementById('stats-view').style.display = 'block';
+    }
+    function hideStatsView() {
+      document.getElementById('stats-view').style.display = 'none';
+      document.getElementById('portal-view').style.display = 'block';
     }
 
-    function statsLogout() {
-      clearInterval(statsInterval);
-      document.getElementById('stats-dash-view').style.display = 'none';
-      document.getElementById('stats-login-view').style.display = 'block';
-      document.getElementById('stats-key-input').value = '';
+    // ── Reviews Logic ──
+    let reviews = [
+      { name: "SlayerMC", rating: 5, text: "Fastest checker I've used. The CPM boost in v1.0.1 is insane!" },
+      { name: "VoidLink", rating: 4, text: "Hypixel module works perfectly now. Waiting for the MS fixes." },
+      { name: "CheckGod", rating: 5, text: "WardenX is a beast. 5k+ CPM and no skips." },
+      { name: "Rando", rating: 5, text: "Best value for money. Lifetime is a steal." },
+      { name: "Flux", rating: 4, text: "Smooth UI and easy to use. Great support on Discord too." },
+      { name: "Dario", rating: 5, text: "The new updates are amazing. Goated tool." }
+    ];
+
+    function renderReviews() {
+      const grid = document.getElementById('reviews-grid');
+      grid.innerHTML = reviews.map(r => `
+        <div class="review-card">
+          <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          <p class="review-text">"${r.text}"</p>
+          <div class="review-author">
+            <div class="avatar" style="background:var(--blue)">${r.name[0]}</div>
+            <span class="author-name">${r.name}</span>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('review-count').textContent = reviews.length;
     }
+
+    // ── Modal Logic ──
+    function openReviewModal() { document.getElementById('review-modal').classList.add('open'); }
+    function closeReviewModal() { document.getElementById('review-modal').classList.remove('open'); }
+
+    let selectedRating = 5;
+    document.querySelectorAll('.star.interactive').forEach(s => {
+      s.onclick = () => {
+        selectedRating = parseInt(s.dataset.v);
+        document.querySelectorAll('.star.interactive').forEach(star => {
+          star.classList.toggle('filled', parseInt(star.dataset.v) <= selectedRating);
+        });
+      };
+    });
+
+    document.getElementById('rev-text').oninput = (e) => {
+      document.getElementById('rev-chars').textContent = e.target.value.length;
+    };
+
+    function submitReview() {
+      const name = document.getElementById('rev-name').value.trim();
+      const text = document.getElementById('rev-text').value.trim();
+      if (!name || !text) { document.getElementById('review-error').style.display = 'block'; return; }
+      
+      reviews.unshift({ name, rating: selectedRating, text });
+      renderReviews();
+      closeReviewModal();
+    }
+
+    function submitContact(e) {
+      e.preventDefault();
+      document.getElementById('cf-btn').textContent = "Sending...";
+      setTimeout(() => {
+        document.getElementById('contact-form').style.display = 'none';
+        document.getElementById('contact-success').style.display = 'block';
+      }, 1000);
+    }
+
+    renderReviews();
   </script>
+
 </body>
 </html>
