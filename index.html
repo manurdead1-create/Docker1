@@ -300,8 +300,12 @@
 </head>
 <body>
 
+  <!-- ══════════════════════════════════
+       MAIN LANDING PAGE
+  ══════════════════════════════════ -->
   <div id="home-page" class="page active">
 
+    <!-- Nav -->
     <nav>
       <div class="nav-logo">
         <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
@@ -317,6 +321,7 @@
       <button class="btn-primary" onclick="showDashboard()">Dashboard</button>
     </nav>
 
+    <!-- Hero -->
     <section id="home" style="text-align:center;padding:6rem 1.5rem 4rem;position:relative;overflow:hidden;">
       <div class="hero-glow"></div>
       <div class="hero-content">
@@ -330,12 +335,13 @@
         </div>
         <div class="hero-stats">
           <div class="stat-item"><div class="stat-val">5,000+</div><div class="stat-label">Checks Per Minute</div></div>
-          <div class="stat-item"><div class="stat-val">20+</div><div class="stat-label">Check Modules</div></div>
+          <div class="stat-item"><div class="stat-val">15+</div><div class="stat-label">Check Modules</div></div>
           <div class="stat-item"><div class="stat-val">99.9%</div><div class="stat-label">Uptime</div></div>
         </div>
       </div>
     </section>
 
+    <!-- Features -->
     <section id="features">
       <div class="sec-header">
         <span class="badge badge-blue">Features</span>
@@ -345,12 +351,12 @@
 
       <div class="feature-cat"><span style="color:#5196ff;">⚙ CORE ENGINE</span></div>
       <div class="feature-grid">
-        <div class="feature-card"><div class="feature-icon">⚡</div><p class="feature-title">Insane CPM Boost</p><p class="feature-desc">Optimized threading engine for extreme throughput. High-speed validation with minimal overhead.</p></div>
+        <div class="feature-card"><div class="feature-icon">⚡</div><p class="feature-title">Extreme Throughput</p><p class="feature-desc">Up to 5,000+ CPM via aggressive multi-threading. Auto or manual thread control. Built in Go.</p></div>
         <div class="feature-card"><div class="feature-icon">🌐</div><p class="feature-title">Proxy Engine</p><p class="feature-desc">HTTP/HTTPS proxy rotation with rate limit retry handling and configurable smart retry delays.</p></div>
         <div class="feature-card"><div class="feature-icon">📊</div><p class="feature-title">Live Dashboard</p><p class="feature-desc">Real-time colored terminal showing CPM, valid results, progress and thread status as it runs.</p></div>
       </div>
 
-      <div class="feature-cat"><span style="color:#f59e0b;">⚙ HYPIXEL (Fixed)</span></div>
+      <div class="feature-cat"><span style="color:#f59e0b;">⚙ HYPIXEL</span></div>
       <div class="feature-grid">
         <div class="feature-card"><div class="feature-icon">🖥️</div><p class="feature-title">Hypixel Profile Scan</p><p class="feature-desc">Network level, Bedwars stars, first/last login, ban status — all pulled in a single pass.</p></div>
         <div class="feature-card"><div class="feature-icon">⭐</div><p class="feature-title">Rank Detection</p><p class="feature-desc">Detects YOUTUBE, MVP++, MVP+, MVP, VIP+, VIP ranks and flags them separately in results.</p></div>
@@ -359,27 +365,21 @@
 
       <div class="feature-cat"><span style="color:#34d399;">⚙ MICROSOFT &amp; REWARDS</span></div>
       <div class="feature-grid">
-        <div class="feature-card"><div class="feature-icon">💰</div><p class="feature-title">Reward Points Fetcher</p><p class="feature-desc">Fetches Microsoft Rewards points balance and flags accounts with high RP. (Bugs persist)</p></div>
-        <div class="feature-card"><div class="feature-icon">🎁</div><p class="feature-title">Xbox Codes &amp; Nitro</p><p class="feature-desc">Extracts Discord Nitro and Xbox reward codes. Automated extraction from MS accounts. (Bugs persist)</p></div>
-        <div class="feature-card"><div class="feature-icon">💳</div><p class="feature-title">Balance &amp; MS Rewards</p><p class="feature-desc">Checking account balance and reward eligibility. Integration with Python backend. (Bugs persist)</p></div>
-      </div>
-
-      <div class="feature-cat"><span style="color:#a78bfa;">⚙ SERVER MODULES (Fixed)</span></div>
-      <div class="feature-grid">
-        <div class="feature-card"><div class="feature-icon">🍩</div><p class="feature-title">DonutSMP Integration</p><p class="feature-desc">Full support for DonutSMP account validation and status checking. Fixed in latest build.</p></div>
+        <div class="feature-card"><div class="feature-icon">💰</div><p class="feature-title">Reward Points Fetcher</p><p class="feature-desc">Fetches Microsoft Rewards points balance and flags accounts with high RP for easy farming.</p></div>
+        <div class="feature-card"><div class="feature-icon">🎁</div><p class="feature-title">Nitro &amp; Xbox Codes</p><p class="feature-desc">Extracts Discord Nitro promo codes and Xbox reward codes from Microsoft accounts automatically.</p></div>
         <div class="feature-card"><div class="feature-icon">🔒</div><p class="feature-title">HWID Lock &amp; TLS</p><p class="feature-desc">HWID-locked licensing with TLS fingerprinting ensures stable sessions and prevents account sharing.</p></div>
-        <div class="feature-card"><div class="feature-icon">📂</div><p class="feature-title">CSV/JSON Export</p><p class="feature-desc">Export results in multiple formats for easy sorting and data management across tools.</p></div>
       </div>
     </section>
 
+    <!-- Pricing -->
     <section id="pricing">
       <div class="sec-header">
         <span class="badge badge-blue">Pricing</span>
         <h2 class="sec-title">Simple, Transparent Pricing</h2>
         <p class="sec-sub">Start with a trial, scale to lifetime — all features included in every plan.</p>
       </div>
-
       <div class="pricing-grid">
+        <!-- Trial -->
         <div class="plan-card">
           <p class="plan-name">Trial</p>
           <div class="plan-price"><span class="amount">$1</span><span class="period"> / 3 days</span></div>
@@ -392,7 +392,7 @@
           </ul>
           <button class="btn-plan btn-plan-outline" onclick="showDashboard()">Get Started</button>
         </div>
-
+        <!-- Monthly -->
         <div class="plan-card highlight">
           <div class="plan-badge">Most Popular</div>
           <p class="plan-name">Monthly</p>
@@ -407,7 +407,7 @@
           </ul>
           <button class="btn-plan btn-plan-fill" onclick="showDashboard()">Get Started</button>
         </div>
-
+        <!-- Lifetime -->
         <div class="plan-card">
           <p class="plan-name">Lifetime</p>
           <div class="plan-price"><span class="amount">$20</span><span class="period"> one-time</span></div>
@@ -423,6 +423,7 @@
       </div>
     </section>
 
+    <!-- Reviews -->
     <section id="reviews">
       <div class="sec-header">
         <span class="badge badge-yellow">☆ User Reviews</span>
@@ -447,20 +448,19 @@
       <div class="reviews-grid" id="reviews-grid"></div>
     </section>
 
+    <!-- Contact -->
     <section id="contact">
       <div class="sec-header">
         <span class="badge badge-blue">🔔 Get in Touch</span>
         <h2 class="sec-title">Contact Us</h2>
         <p class="sec-sub">Have a question or feedback? We'd love to hear from you!</p>
       </div>
-
       <div class="contact-grid">
+        <!-- Form -->
         <div class="contact-form-card">
           <p class="contact-title">Send us a Message</p>
           <p class="contact-sub">Fill out the form below and we'll get back to you as soon as possible.</p>
-          
           <div id="contact-success" class="form-success" style="display:none;">✓ Message sent! We'll get back to you soon.</div>
-          
           <form id="contact-form" onsubmit="submitContact(event)">
             <div class="form-group">
               <label>Your Name</label>
@@ -468,302 +468,725 @@
             </div>
             <div class="form-group">
               <label>License Key</label>
-              <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="cf-key">
+              <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="cf-licensekey" required
+                style="font-family:'JetBrains Mono',monospace;letter-spacing:.06em;"
+                oninput="validateLicenseFormat(this)">
+              <div id="cf-key-error" style="color:var(--red);font-size:11px;margin-top:4px;display:none;">
+                Format must be: WardenX-XXXX-XXXX-XXXX
+              </div>
             </div>
             <div class="form-group">
-              <label>Message</label>
-              <textarea class="form-input" placeholder="How can we help?" id="cf-msg" required></textarea>
+              <label>Subject</label>
+              <input type="text" class="form-input" placeholder="How can we help?" id="cf-subject" required>
             </div>
-            <button type="submit" class="btn-send" id="cf-btn">Send Message</button>
+            <div class="form-group" style="margin-bottom:1.5rem;">
+              <label>Message</label>
+              <textarea class="form-input" placeholder="Tell us more about your inquiry..." id="cf-message" required rows="5"></textarea>
+            </div>
+            <button type="submit" class="btn-send">Send Message</button>
           </form>
         </div>
-
+        <!-- Sidebar -->
         <div class="contact-sidebar">
           <div class="contact-card">
             <div class="contact-card-icon">💬</div>
-            <p class="contact-card-title">Join Discord</p>
-            <p class="contact-card-sub">Get support &amp; chat with us</p>
-            <p class="contact-card-note">.gg/PCWJ9BNvgU</p>
+            <p class="contact-card-title">Community</p>
+            <p class="contact-card-sub">
+              Join our <a href="https://discord.gg/PA6xtWpzNz" target="_blank" style="color:var(--blue);">Discord Server</a>
+            </p>
+            <p class="contact-card-note">Get instant help from the community</p>
           </div>
           <div class="contact-card">
-            <div class="contact-card-icon">🛠️</div>
-            <p class="contact-card-title">Support Desk</p>
-            <p class="contact-card-sub">Ticket response within 24h</p>
-            <p class="contact-card-note">Indore, India</p>
+            <div class="contact-card-icon">🐛</div>
+            <p class="contact-card-title">Bug Reports</p>
+            <p class="contact-card-sub" style="color:var(--muted2);">Use the Contact Form</p>
+            <p class="contact-card-note">Report bugs and request features</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">📖</div>
+            <p class="contact-card-title">Documentation</p>
+            <p class="contact-card-sub" style="color:var(--muted2);">Read our guides</p>
+            <p class="contact-card-note">Learn how to use WardenX</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Footer -->
     <footer>
       <div class="footer-brand">
         <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
         <span>WardenX</span>
       </div>
-      <p class="footer-copy">© 2026 WardenX Tools. All rights reserved.</p>
+      <p class="footer-copy">© 2025 WardenX. All rights reserved.</p>
     </footer>
+  </div><!-- /home-page -->
 
-  </div>
-
-  <div id="dashboard-page" class="page">
-    
-    <div id="login-view" class="login-card">
-      <div class="login-brand">
-        <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo">
-        <div class="login-brand-text">
-          <p class="login-brand-name">WardenX</p>
-          <p class="login-brand-sub">Security Portal</p>
-        </div>
-      </div>
-
-      <label class="login-label">Enter License Key</label>
-      <input type="text" id="license-key" class="login-input" placeholder="WardenX-XXXX-XXXX-XXXX" />
-      
-      <div id="verify-bar" class="verify-bar">
-        <div class="verify-left">
-          <div class="verify-spinner"></div>
-          <span class="verify-text">Verifying...</span>
-        </div>
-        <div class="verify-right">
-          <span class="cloudflare-badge">Cloudflare</span>
-          <span class="cf-logo">🛡️</span>
-        </div>
-      </div>
-
-      <div id="login-error" class="login-error"></div>
-      
-      <button class="btn-continue" id="login-btn" onclick="handleLogin()">Continue to Dashboard</button>
-      
-      <p class="no-license">Don't have a license? <a href="#pricing" onclick="showHome()">Get one here</a></p>
-    </div>
-
-    <div id="portal-view" class="portal-wrap" style="display:none;">
-      <div class="portal-header">
-        <div class="portal-header-left">
-          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
-          <span>Logged in as Admin</span>
-        </div>
-        <div class="portal-header-right">
-          <button class="btn-stats" onclick="showStatsView()">Live Stats</button>
-          <button class="btn-signout" onclick="logout()">Sign Out</button>
-        </div>
-      </div>
-      
-      <div class="portal-body">
-        <div class="portal-version">
-          <span class="portal-v">WardenX v1.0.1</span>
-          <span class="release-badge">Stable Release</span>
-          <a href="#" class="dl-btn">Download .exe</a>
-        </div>
-        <p class="portal-date">Released: April 10, 2026</p>
-
-        <div class="portal-feats">
-          <div>
-            <p class="portal-feat-label">Active Modules</p>
-            <ul class="portal-feat-list">
-              <li>Full Hypixel Scan (Fixed)</li>
-              <li>DonutSMP Support (Fixed)</li>
-              <li>SFA/MFA/Cookie Support</li>
-              <li>Insane CPM Threading Engine</li>
-              <li>Auto-Proxy Rotation</li>
-            </ul>
-          </div>
-          <div>
-            <p class="portal-feat-label" style="color:var(--yellow);">Beta Modules (Buggy)</p>
-            <ul class="portal-feat-list">
-              <li style="color:var(--muted);">Xbox Codes Extraction</li>
-              <li style="color:var(--muted);">MS Rewards Points Fetcher</li>
-              <li style="color:var(--muted);">Microsoft Account Balance</li>
-              <li style="color:var(--muted);">Nitro Link Generator</li>
-            </ul>
-          </div>
-        </div>
-
-        <button class="back-home" onclick="showHome()">← Back to Main Page</button>
-      </div>
-    </div>
-
-    <div id="stats-view" class="portal-wrap" style="display:none; max-width:440px;">
-      <div class="portal-header">
-        <div class="portal-header-left">
-          <div style="width:8px; height:8px; border-radius:50%; background:var(--green); animation: pulse-dot 1.5s infinite;"></div>
-          <span style="color:#fff; font-size:12px; font-weight:700;">LIVE INSTANCE</span>
-        </div>
-        <button class="btn-signout" style="color:var(--muted); border-color:var(--border);" onclick="hideStatsView()">Close</button>
-      </div>
-      <div class="portal-body" style="padding:2rem;">
-        <div class="stat-row"><span>Checks Per Minute</span><span style="color:var(--blue);">5,241</span></div>
-        <div class="stat-row"><span>Active Threads</span><span>500</span></div>
-        <div class="stat-row"><span>Valids Found</span><span style="color:var(--green);">142</span></div>
-        <div class="stat-row"><span>Retries</span><span style="color:var(--yellow);">12</span></div>
-        <div class="stat-row" style="border:none;"><span>Status</span><span style="color:var(--green);">Checking...</span></div>
-        
-        <div style="margin-top:2rem; background:rgba(0,0,0,.3); border:1px solid var(--border); border-radius:8px; padding:1rem; font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);">
-          [04:22:15] Thread #42 Valid: user@mail.com<br>
-          [04:22:18] Thread #192 Bad: test@mail.com<br>
-          [04:22:21] Thread #12 Valid: player@mail.com
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="modal-overlay" id="review-modal">
+  <!-- ══════════════════════════════════
+       REVIEW MODAL
+  ══════════════════════════════════ -->
+  <div class="modal-overlay" id="review-modal" onclick="closeReviewModalOutside(event)">
     <div class="modal">
       <button class="modal-close" onclick="closeReviewModal()">×</button>
       <div class="modal-header">
-        <div style="font-size:40px;margin-bottom:1rem;">⭐</div>
-        <h3 class="modal-title">Write a Review</h3>
-        <p class="modal-sub">How was your experience with WardenX?</p>
+        <span class="badge badge-purple">✦ Share Your Experience</span>
+        <h3 class="modal-title">Add Your Review</h3>
+        <p class="modal-sub">Help others by sharing your experience with WardenX</p>
       </div>
-      
-      <div id="review-error" class="form-error" style="display:none;">Please fill in all fields.</div>
-
-      <div class="form-group">
-        <label>Your Display Name</label>
-        <input type="text" class="form-input" id="rev-name" placeholder="DarioBladez">
-      </div>
-      
-      <div class="form-group">
-        <label>Rating</label>
-        <div class="stars" style="gap:8px;margin-top:4px;">
-          <span class="star interactive filled" data-v="1">★</span>
-          <span class="star interactive filled" data-v="2">★</span>
-          <span class="star interactive filled" data-v="3">★</span>
-          <span class="star interactive filled" data-v="4">★</span>
-          <span class="star interactive filled" data-v="5">★</span>
+      <form id="review-form" onsubmit="submitReview(event)">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" class="form-input" id="rf-name" required>
         </div>
-      </div>
-
-      <div class="form-group">
-        <label>Your Review</label>
-        <textarea class="form-input" id="rev-text" placeholder="Explain your experience..." maxlength="160"></textarea>
-        <div class="char-count"><span id="rev-chars">0</span>/160</div>
-      </div>
-
-      <button class="btn-submit-review" onclick="submitReview()">Post Review</button>
+        <div class="form-group">
+          <label>License Key *</label>
+          <input type="text" class="form-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="rf-key" required style="font-family:'JetBrains Mono',monospace;letter-spacing:.08em;">
+        </div>
+        <div class="form-group">
+          <label>Rating *</label>
+          <div class="stars" id="star-input" style="gap:6px;"></div>
+        </div>
+        <div class="form-group">
+          <label>Your Review *</label>
+          <textarea class="form-input" placeholder="Share your experience with WardenX..." id="rf-text" rows="4" maxlength="1000" oninput="updateCharCount(this)"></textarea>
+          <div class="char-count" id="char-count">0/1000</div>
+        </div>
+        <div class="form-error" id="review-error"></div>
+        <button type="submit" class="btn-submit-review">Submit Review</button>
+      </form>
     </div>
   </div>
 
+  <!-- ══════════════════════════════════
+       DASHBOARD PAGE
+  ══════════════════════════════════ -->
+  <div id="dashboard-page">
+
+    <!-- Login state -->
+    <div id="login-view">
+      <div class="login-card">
+        <div class="login-brand">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" class="login-logo">
+          <div class="login-brand-text">
+            <div class="login-brand-name">WardenX</div>
+            <div class="login-brand-sub">Member Portal</div>
+          </div>
+        </div>
+
+        <label class="login-label">License Key</label>
+        <input type="text" class="login-input" placeholder="WardenX-XXXX-XXXX-XXXX" id="license-input"
+          autocomplete="off" spellcheck="false"
+          oninput="clearLoginError()"
+          onkeydown="if(event.key==='Enter') doLogin()">
+
+        <div class="verify-bar" id="verify-bar">
+          <div class="verify-left">
+            <div class="verify-spinner"></div>
+            <span class="verify-text">Verifying...</span>
+          </div>
+          <div class="verify-right">
+            <span class="cf-logo">🟠</span>
+            <div>
+              <div class="cloudflare-badge">Cloudflare</div>
+              <div style="font-size:8px;color:#2e3050;">Privacy · Help</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="login-error" id="login-error"></div>
+
+        <button class="btn-continue" id="login-btn" onclick="doLogin()">Continue →</button>
+
+        <p class="no-license">No license? <a href="https://discord.gg/PA6xtWpzNz" target="_blank">Get one here</a></p>
+        <button class="back-home" onclick="hideDashboard()">← Back to Home</button>
+      </div>
+    </div>
+
+    <!-- Authed portal -->
+    <div id="portal-view" style="display:none;width:100%;max-width:1060px;padding:1.5rem 1rem;">
+      <div class="portal-wrap">
+        <header class="portal-header">
+          <div class="portal-header-left">
+            <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX">
+            <span>Portal</span>
+          </div>
+          <div class="portal-header-right">
+            <button class="btn-stats" onclick="showStats()">📡 Web Stats</button>
+            <button class="btn-signout" onclick="doSignOut()">Sign Out</button>
+          </div>
+        </header>
+        <div class="portal-body">
+          <div class="portal-version">
+            <span class="portal-v">v1.0.0</span>
+            <span class="release-badge">Release</span>
+            <a href="WardenX_v1.0.0.zip" download class="dl-btn">Download Now</a>
+          </div>
+          <p class="portal-date">Released: 2025-04-01</p>
+          <div class="portal-feats">
+            <section style="padding:0;">
+              <p class="portal-feat-label">⚡ Core Features</p>
+              <ul class="portal-feat-list">
+                <li>Hypixel Ban &amp; Rank checker</li>
+                <li>DonutSMP Ban &amp; Stats Checker</li>
+                <li>Microsoft Reward Points & Balance Fetcher</li>
+                <li>Xbox Game Pass detection</li>
+                <li>Xbox Codes &amp; Nitro Promo Fetcher</li>
+                <li>High-speed multi-threading</li>
+              </ul>
+            </section>
+            <section style="padding:0;">
+              <p class="portal-feat-label">🔐 Advanced Technology</p>
+              <ul class="portal-feat-list">
+                <li>TLS fingerprinting for stable sessions</li>
+                <li>HWID-locked licensing</li>
+                <li>Multi-channel webhooks (Hypixel, Donut, XboxPerks)</li>
+                <li>Minecraft Auto-Skin changer</li>
+                <li>Minecraft Auto-Name changer</li>
+              <p class="portal-feat-label">⚙ Bugs & Fixes</p>
+              <ul class="portal-feat-list">
+                <li>Added High CPM Support (500+ CPM on 5 Threads)</li>
+                <li>85% Accurate Results on High CPM</li>
+                <li>MS Rewards & Balance in Development</li>
+                <li>Logs Screen mode is not Completed yet</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dashboard-page -->
+
+  <!-- ══════════════════════════════════
+       STATS PAGE
+  ══════════════════════════════════ -->
+  <div id="stats-page" style="display:none;min-height:100vh;background:linear-gradient(135deg,#050507 0%,#0a0a0f 50%,#11111a 100%);color:#d1d5db;align-items:flex-start;justify-content:center;">
+
+    <!-- Stats Login -->
+    <div id="stats-login-view" style="display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;padding:2rem;">
+      <div style="width:100%;max-width:380px;">
+        <div style="text-align:center;margin-bottom:2rem;">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX"
+            style="width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(124,92,255,.5));margin-bottom:.75rem;display:block;margin-left:auto;margin-right:auto;">
+          <span style="display:block;font-size:26px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">WardenX</span>
+          <p style="color:rgba(255,255,255,.3);font-size:13px;margin-top:.25rem;">Web Stats · License Required</p>
+        </div>
+        <div style="background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.5rem;backdrop-filter:blur(12px);">
+          <label style="display:block;color:rgba(255,255,255,.6);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;">License Key</label>
+          <input type="text" id="stats-key-input" placeholder="WardenX-XXXX-XXXX-XXXX"
+            style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.75rem 1rem;color:#fff;font-size:14px;font-family:'JetBrains Mono',monospace;outline:none;margin-bottom:1rem;transition:border-color .2s;"
+            onkeydown="if(event.key==='Enter') statsLogin()"
+            onfocus="this.style.borderColor='rgba(124,92,255,.6)'"
+            onblur="this.style.borderColor='rgba(255,255,255,.1)'">
+          <div id="stats-login-error" style="display:none;margin-bottom:.75rem;padding:.625rem .75rem;border-radius:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:13px;"></div>
+          <button onclick="statsLogin()" id="stats-login-btn"
+            style="width:100%;padding:.75rem;border-radius:12px;font-weight:600;font-size:14px;border:none;cursor:pointer;background:linear-gradient(90deg,#7c5cff,#00f0ff);color:#fff;transition:opacity .2s;">
+            Login & Continue
+          </button>
+        </div>
+        <button onclick="backToPortal()"
+          style="display:block;margin:.75rem auto 0;background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;transition:color .2s;"
+          onmouseover="this.style.color='rgba(255,255,255,.6)'"
+          onmouseout="this.style.color='rgba(255,255,255,.3)'">
+          ← Back to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Dashboard -->
+    <div id="stats-dash-view" style="display:none;width:100%;max-width:1300px;padding:2rem 1.5rem;margin:0 auto;">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(124,92,255,.5));">
+          <span style="font-size:18px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">WardenX</span>
+          <span style="color:rgba(255,255,255,.2);font-size:13px;">Web Stats</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+          <div id="stats-status-pill"
+            style="display:flex;align-items:center;gap:.5rem;padding:.375rem .75rem;border-radius:999px;font-size:13px;font-weight:500;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.1);color:#f87171;">
+            <span id="stats-dot" style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;"></span>
+            <span id="stats-status-text">Offline</span>
+          </div>
+          <span id="stats-key-display"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:11px;font-family:'JetBrains Mono',monospace;">
+          </span>
+          <button onclick="statsLogout()"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;">
+            Logout
+          </button>
+          <button onclick="backToPortal()"
+            style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(81,150,255,.2);background:rgba(81,150,255,.08);color:#5196ff;font-size:12px;cursor:pointer;">
+            ← Portal
+          </button>
+        </div>
+      </div>
+
+      <!-- Banner -->
+      <div id="stats-banner"
+        style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:2rem;margin-bottom:2rem;text-align:center;">
+        <div id="stats-banner-title" style="font-size:1.75rem;font-weight:800;color:#f87171;">OFFLINE</div>
+        <p id="stats-banner-sub" style="color:rgba(255,255,255,.4);margin-top:.5rem;">Waiting for checker session updates...</p>
+        <div id="stats-live-nums" style="display:none;justify-content:center;gap:2.5rem;margin-top:1.5rem;flex-wrap:wrap;">
+          <div style="text-align:center;"><div id="sl-checked" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Checked</div></div>
+          <div style="text-align:center;"><div id="sl-hits" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Hits</div></div>
+          <div style="text-align:center;"><div id="sl-cpm" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">CPM</div></div>
+          <div style="text-align:center;"><div id="sl-bad" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Bad</div></div>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+        <!-- Core Performance -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Core Performance</div>
+          <div class="stat-row"><span>Invalid</span><span id="s-bad">0</span></div>
+          <div class="stat-row"><span>MC Hits</span><span id="s-hits">0</span></div>
+          <div class="stat-row"><span>2FA Locked</span><span id="s-twofa">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>CPM</span><span id="s-cpm">0</span></div>
+        </div>
+        <!-- DonutSMP -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">DonutSMP Details</div>
+          <div class="stat-row"><span>Donut Banned</span><span id="s-donut_banned">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Donut Unbanned</span><span id="s-donut_unbanned">0</span></div>
+        </div>
+        <!-- Microsoft & Rewards -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Microsoft &amp; Rewards</div>
+          <div class="stat-row"><span>MS Rewards</span><span id="s-ms_rewards_found">0</span></div>
+          <div class="stat-row"><span>MS Balance</span><span id="s-ms_balance_found">0</span></div>
+          <div class="stat-row"><span>Valid MS</span><span id="s-vm">0</span></div>
+          <div class="stat-row"><span>Nitro Promos</span><span id="s-nitro_found">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Xbox Codes</span><span id="s-xbox_codes_found">0</span></div>
+        </div>
+        <!-- Hypixel -->
+        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Hypixel Details</div>
+          <div class="stat-row"><span>Hypixel Banned</span><span id="s-hypixel_banned">0</span></div>
+          <div class="stat-row" style="border-bottom:none;"><span>Hypixel Unbanned</span><span id="s-hypixel_unbanned">0</span></div>
+        </div>
+        <!-- Sessions -->
+        <div id="sessions-card" style="display:none;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Active Sessions</div>
+          <div id="sessions-list"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /stats-page -->
+
   <script>
-    // ── Navigation ──
-    function showDashboard() {
-      document.getElementById('home-page').classList.remove('active');
-      document.getElementById('dashboard-page').classList.add('active');
-      window.scrollTo(0,0);
-    }
-    function showHome() {
-      document.getElementById('dashboard-page').classList.remove('active');
-      document.getElementById('home-page').classList.add('active');
-    }
+    const LOGO = "https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png";
+    const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
 
-    // ── Login Logic ──
-    function handleLogin() {
-      const key = document.getElementById('license-key').value.trim();
-      const btn = document.getElementById('login-btn');
-      const err = document.getElementById('login-error');
-      const bar = document.getElementById('verify-bar');
-
-      if (!key) { err.textContent = "Please enter a license key"; return; }
-      
-      btn.style.display = 'none';
-      bar.classList.add('show');
-      err.textContent = "";
-
-      // Simulated Verification
-      setTimeout(() => {
-        if (key.toLowerCase().startsWith("wardenx")) {
-          document.getElementById('login-view').style.display = 'none';
-          document.getElementById('portal-view').style.display = 'block';
-        } else {
-          bar.classList.remove('show');
-          btn.style.display = 'block';
-          err.textContent = "INVALID OR EXPIRED LICENSE KEY";
-        }
-      }, 1500);
-    }
-
-    function logout() {
-      document.getElementById('portal-view').style.display = 'none';
-      document.getElementById('login-view').style.display = 'block';
-      document.getElementById('verify-bar').classList.remove('show');
-      document.getElementById('login-btn').style.display = 'block';
-    }
-
-    // ── Stats View ──
-    function showStatsView() {
-      document.getElementById('portal-view').style.display = 'none';
-      document.getElementById('stats-view').style.display = 'block';
-    }
-    function hideStatsView() {
-      document.getElementById('stats-view').style.display = 'none';
-      document.getElementById('portal-view').style.display = 'block';
-    }
-
-    // ── Reviews Logic ──
+    // ─── Reviews data ───
     let reviews = [
-      { name: "SlayerMC", rating: 5, text: "Fastest checker I've used. The CPM boost in v1.0.1 is insane!" },
-      { name: "VoidLink", rating: 4, text: "Hypixel module works perfectly now. Waiting for the MS fixes." },
-      { name: "CheckGod", rating: 5, text: "WardenX is a beast. 5k+ CPM and no skips." },
-      { name: "Rando", rating: 5, text: "Best value for money. Lifetime is a steal." },
-      { name: "Flux", rating: 4, text: "Smooth UI and easy to use. Great support on Discord too." },
-      { name: "Dario", rating: 5, text: "The new updates are amazing. Goated tool." }
+      { name: "1XDarkSlayer",  rating: 5, text: "ngl this is the best checker till now It has many good result best hits captures least hit skipping No complaint, just appreciation!" },
+      { name: "Monit0",        rating: 5, text: "Best checker off al times, many good results, rp codes and more op things!" },
+      { name: "CryptoHunterr",  rating: 4, text: "Great checker, close to no misses, AML and sniper is good asf, though the speed is slower compared to popular checkers out there but I believe this can be improved" },
+      { name: "ProxyKing69",   rating: 5, text: "Absolutely insane tool. The Hypixel ban checker and DonutSMP stats are accurate and fast. Worth every penny." },
+      { name: "NitroFarm",   rating: 5, text: "Xbox Nitro promo fetcher works like a charm. HWID lock is solid. No complaints at all!" },
+      { name: "ShadowAccs",     rating: 4, text: "Multi-threading is top notch. Would love to see even more webhook options but overall a fantastic tool." },
     ];
+
+    let selectedRating = 0;
+
+    const AVATAR_COLORS = ["#5196ff","#7c5cff","#34d399","#f59e0b","#f87171","#a78bfa"];
+    function avatarColor(name) { return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length]; }
+
+    function starsHTML(rating, interactive = false) {
+      let html = '<span class="stars">';
+      for (let i = 1; i <= 5; i++) {
+        const cls = "star" + (interactive ? " interactive" : "") + (i <= rating ? " filled" : " empty");
+        html += `<span class="${cls}"${interactive ? ` onclick="setRating(${i})" onmouseenter="hoverRating(${i})" onmouseleave="unhoverRating()"` : ""}>★</span>`;
+      }
+      html += '</span>';
+      return html;
+    }
 
     function renderReviews() {
       const grid = document.getElementById('reviews-grid');
       grid.innerHTML = reviews.map(r => `
         <div class="review-card">
-          <div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          ${starsHTML(r.rating)}
           <p class="review-text">"${r.text}"</p>
           <div class="review-author">
-            <div class="avatar" style="background:var(--blue)">${r.name[0]}</div>
+            <div class="avatar" style="background:${avatarColor(r.name)}">${r.name[0].toUpperCase()}</div>
             <span class="author-name">${r.name}</span>
           </div>
         </div>
       `).join('');
+      const avg = (reviews.reduce((a,r)=>a+r.rating,0)/reviews.length).toFixed(1);
+      document.getElementById('avg-rating').textContent = avg;
       document.getElementById('review-count').textContent = reviews.length;
     }
 
-    // ── Modal Logic ──
-    function openReviewModal() { document.getElementById('review-modal').classList.add('open'); }
+    function renderStarInput() {
+      const wrap = document.getElementById('star-input');
+      wrap.innerHTML = '';
+      for (let i = 1; i <= 5; i++) {
+        const s = document.createElement('span');
+        s.className = 'star interactive' + (i <= selectedRating ? ' filled' : ' empty');
+        s.textContent = '★';
+        s.onclick = () => setRating(i);
+        s.onmouseenter = () => hoverRating(i);
+        s.onmouseleave = () => unhoverRating();
+        wrap.appendChild(s);
+      }
+    }
+
+    function setRating(r) { selectedRating = r; renderStarInput(); }
+    function hoverRating(r) {
+      const stars = document.querySelectorAll('#star-input .star');
+      stars.forEach((s,i) => { s.style.color = i < r ? '#f59e0b' : 'rgba(255,255,255,.2)'; });
+    }
+    function unhoverRating() {
+      const stars = document.querySelectorAll('#star-input .star');
+      stars.forEach((s,i) => { s.style.color = i < selectedRating ? '#f59e0b' : 'rgba(255,255,255,.2)'; });
+    }
+
+    function openReviewModal() {
+      selectedRating = 0;
+      document.getElementById('review-form').reset();
+      document.getElementById('char-count').textContent = '0/1000';
+      document.getElementById('review-error').textContent = '';
+      renderStarInput();
+      document.getElementById('review-modal').classList.add('open');
+    }
     function closeReviewModal() { document.getElementById('review-modal').classList.remove('open'); }
+    function closeReviewModalOutside(e) { if (e.target === e.currentTarget) closeReviewModal(); }
+    function updateCharCount(el) { document.getElementById('char-count').textContent = el.value.length + '/1000'; }
 
-    let selectedRating = 5;
-    document.querySelectorAll('.star.interactive').forEach(s => {
-      s.onclick = () => {
-        selectedRating = parseInt(s.dataset.v);
-        document.querySelectorAll('.star.interactive').forEach(star => {
-          star.classList.toggle('filled', parseInt(star.dataset.v) <= selectedRating);
-        });
-      };
-    });
-
-    document.getElementById('rev-text').oninput = (e) => {
-      document.getElementById('rev-chars').textContent = e.target.value.length;
-    };
-
-    function submitReview() {
-      const name = document.getElementById('rev-name').value.trim();
-      const text = document.getElementById('rev-text').value.trim();
-      if (!name || !text) { document.getElementById('review-error').style.display = 'block'; return; }
-      
+    function submitReview(e) {
+      e.preventDefault();
+      const name = document.getElementById('rf-name').value.trim();
+      const key  = document.getElementById('rf-key').value.trim();
+      const text = document.getElementById('rf-text').value.trim();
+      const errEl = document.getElementById('review-error');
+      if (!name || !key || !selectedRating || !text) {
+        errEl.textContent = 'Please fill in all fields and select a rating.';
+        return;
+      }
       reviews.unshift({ name, rating: selectedRating, text });
       renderReviews();
       closeReviewModal();
     }
 
-    function submitContact(e) {
-      e.preventDefault();
-      document.getElementById('cf-btn').textContent = "Sending...";
-      setTimeout(() => {
-        document.getElementById('contact-form').style.display = 'none';
-        document.getElementById('contact-success').style.display = 'block';
-      }, 1000);
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1490300619972411453/5rfAqfBMt7LU1Hs2jbMuPMZxpz-H-z_6ZiauoH9jcYNwpuEsjHIbXj161T-s7fIuhDYl";
+    const LICENSE_FORMAT  = /^WardenX-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/;
+
+    function validateLicenseFormat(input) {
+      const errEl = document.getElementById('cf-key-error');
+      if (input.value && !LICENSE_FORMAT.test(input.value)) {
+        errEl.style.display = 'block';
+        input.style.borderColor = 'var(--red)';
+      } else {
+        errEl.style.display = 'none';
+        input.style.borderColor = input.value ? 'var(--green)' : 'var(--border2)';
+      }
     }
 
-    renderReviews();
-  </script>
+    async function submitContact(e) {
+      e.preventDefault();
+      const name    = document.getElementById('cf-name').value.trim();
+      const lickey  = document.getElementById('cf-licensekey').value.trim();
+      const subject = document.getElementById('cf-subject').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
+      const errEl   = document.getElementById('cf-key-error');
+      const btn     = e.target.querySelector('button[type="submit"]');
 
+      if (!LICENSE_FORMAT.test(lickey)) {
+        errEl.style.display = 'block';
+        document.getElementById('cf-licensekey').style.borderColor = 'var(--red)';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      const embed = {
+        username: "WardenX Contact",
+        avatar_url: "https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png",
+        embeds: [{
+          title: "📬 New Contact Message",
+          color: 0x5196ff,
+          fields: [
+            { name: "👤 Name",        value: name,    inline: true },
+            { name: "🔑 License Key", value: `\`${lickey}\``, inline: true },
+            { name: "📋 Subject",     value: subject, inline: false },
+            { name: "💬 Message",     value: message, inline: false },
+          ],
+          timestamp: new Date().toISOString(),
+          footer: { text: "WardenX Portal" },
+        }],
+      };
+
+      try {
+        await fetch(DISCORD_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(embed),
+        });
+        document.getElementById('contact-success').style.display = 'block';
+        document.getElementById('contact-form').reset();
+        document.getElementById('cf-licensekey').style.borderColor = 'var(--border2)';
+        errEl.style.display = 'none';
+        setTimeout(() => { document.getElementById('contact-success').style.display = 'none'; }, 5000);
+      } catch {
+        alert("Failed to send message. Please try again.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
+    }
+
+    // ─── Dashboard ───
+    function showDashboard() {
+      document.getElementById('home-page').classList.remove('active');
+      document.getElementById('dashboard-page').classList.add('active');
+      document.getElementById('dashboard-page').style.display = 'flex';
+      // Check session
+      if (sessionStorage.getItem('portal_key')) {
+        showPortal();
+      } else {
+        document.getElementById('login-view').style.display = 'flex';
+        document.getElementById('login-view').style.justifyContent = 'center';
+        document.getElementById('portal-view').style.display = 'none';
+      }
+    }
+
+    function hideDashboard() {
+      document.getElementById('dashboard-page').classList.remove('active');
+      document.getElementById('dashboard-page').style.display = 'none';
+      document.getElementById('home-page').classList.add('active');
+    }
+
+    function showPortal() {
+      document.getElementById('login-view').style.display = 'none';
+      document.getElementById('portal-view').style.display = 'block';
+    }
+
+    function doSignOut() {
+      sessionStorage.removeItem('portal_key');
+      document.getElementById('license-input').value = '';
+      document.getElementById('login-error').textContent = '';
+      document.getElementById('portal-view').style.display = 'none';
+      document.getElementById('login-view').style.display = 'flex';
+      document.getElementById('login-view').style.justifyContent = 'center';
+    }
+
+    function clearLoginError() { document.getElementById('login-error').textContent = ''; }
+
+    async function doLogin() {
+      const key = document.getElementById('license-input').value.trim();
+      if (!key) return;
+      const btn = document.getElementById('login-btn');
+      const bar = document.getElementById('verify-bar');
+      const errEl = document.getElementById('login-error');
+
+      btn.disabled = true;
+      bar.classList.add('show');
+      errEl.textContent = '';
+
+      try {
+        const res = await fetch(LICENSE_SERVER, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+          body: JSON.stringify({ license_key: key, hwid: 'WEB_PORTAL', version: '1.0.0' }),
+        });
+        const data = await res.json();
+        if (data.valid) {
+          sessionStorage.setItem('portal_key', key);
+          bar.classList.remove('show');
+          showPortal();
+        } else {
+          bar.classList.remove('show');
+          errEl.textContent = data.reason || 'Invalid License Key';
+        }
+      } catch {
+        bar.classList.remove('show');
+        errEl.textContent = 'Server Error — Please Try Again';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // ─── Stats page ───
+    const STATS_API = "https://wardenx.dpdns.org";
+    let statsInterval = null;
+    let statsActiveKey = "";
+
+    function showStats() {
+      document.getElementById('dashboard-page').style.display = 'none';
+      document.getElementById('dashboard-page').classList.remove('active');
+      const sp = document.getElementById('stats-page');
+      sp.style.display = 'block';
+      const saved = localStorage.getItem('stats_key');
+      if (saved) {
+        statsStartSession(saved);
+      } else {
+        document.getElementById('stats-login-view').style.display = 'flex';
+        document.getElementById('stats-dash-view').style.display = 'none';
+      }
+    }
+
+    function backToPortal() {
+      if (statsInterval) { clearInterval(statsInterval); statsInterval = null; }
+      document.getElementById('stats-page').style.display = 'none';
+      document.getElementById('dashboard-page').style.display = 'flex';
+      document.getElementById('dashboard-page').classList.add('active');
+      showPortal();
+    }
+
+    async function statsLogin() {
+      const key = document.getElementById('stats-key-input').value.trim();
+      if (!key) return;
+      const btn = document.getElementById('stats-login-btn');
+      const errEl = document.getElementById('stats-login-error');
+      btn.disabled = true;
+      btn.textContent = 'Verifying...';
+      errEl.style.display = 'none';
+      try {
+        const res = await fetch(LICENSE_SERVER, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Web-Bypass': 'dariobladez_web' },
+          body: JSON.stringify({ license_key: key, hwid: 'WEB_STATS', version: '1.0.0' }),
+        });
+        const d = await res.json();
+        if (d.valid) {
+          localStorage.setItem('stats_key', key);
+          statsStartSession(key);
+        } else {
+          errEl.textContent = 'Invalid License Key';
+          errEl.style.display = 'block';
+        }
+      } catch {
+        errEl.textContent = 'Server Error — Please Try Again';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Unlock Dashboard';
+      }
+    }
+
+    function statsStartSession(key) {
+      statsActiveKey = key;
+      document.getElementById('stats-key-display').textContent = key.slice(0, 12) + '...';
+      document.getElementById('stats-login-view').style.display = 'none';
+      document.getElementById('stats-dash-view').style.display = 'block';
+      statsDoFetch(key);
+      if (statsInterval) clearInterval(statsInterval);
+      statsInterval = setInterval(() => statsDoFetch(key), 3000);
+    }
+
+    async function statsDoFetch(key) {
+      try {
+        const res = await fetch(`${STATS_API}/api/stats?license_key=${encodeURIComponent(key)}`);
+        if (!res.ok) throw new Error();
+        const d = await res.json();
+        statsRender(d);
+      } catch {
+        statsSetOffline();
+      }
+    }
+
+    function n(v) { return (v || 0).toLocaleString(); }
+
+    function statsRender(d) {
+      const t = d;
+      const online = d.offline === false;
+
+      // Status pill
+      const pill = document.getElementById('stats-status-pill');
+      const dot  = document.getElementById('stats-dot');
+      const stxt = document.getElementById('stats-status-text');
+      if (online) {
+        pill.style.cssText = pill.style.cssText.replace(/border:[^;]+/,'border:1px solid rgba(52,211,153,.3)');
+        pill.style.background = 'rgba(52,211,153,.1)'; pill.style.color = '#34d399';
+        dot.style.background = '#34d399'; dot.style.animation = 'pulse-dot 2s infinite';
+        stxt.textContent = 'Online';
+      } else { statsSetOffline(); }
+
+      // Banner
+      const bannerTitle = document.getElementById('stats-banner-title');
+      const bannerSub   = document.getElementById('stats-banner-sub');
+      const liveNums    = document.getElementById('stats-live-nums');
+      if (online) {
+        bannerTitle.style.cssText = 'font-size:1.75rem;font-weight:800;background:linear-gradient(90deg,#00ff9c,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;';
+        bannerTitle.textContent = 'LIVE SESSION active';
+        bannerSub.style.display = 'none';
+        liveNums.style.display = 'flex';
+        document.getElementById('sl-checked').textContent = n(t.total_checked);
+        document.getElementById('sl-hits').textContent    = n(t.mc_hits);
+        document.getElementById('sl-cpm').textContent     = n(t.cpm);
+        document.getElementById('sl-bad').textContent     = n(t.total_bad);
+      } else {
+        bannerTitle.style.cssText = 'font-size:1.75rem;font-weight:800;color:#f87171;';
+        bannerTitle.textContent = 'OFFLINE';
+        bannerSub.style.display = 'block';
+        liveNums.style.display = 'none';
+      }
+
+      // Stat cards
+      document.getElementById('s-bad').textContent    = n(t.total_bad);
+      document.getElementById('s-hits').textContent   = n(t.mc_hits);
+      document.getElementById('s-twofa').textContent  = n(t.twofa);
+      document.getElementById('s-cpm').textContent    = n(t.cpm);
+      document.getElementById('s-vm').textContent    = n(t.total_vm);
+      document.getElementById('s-donut_banned').textContent   = n(t.donut_banned);
+      document.getElementById('s-donut_unbanned').textContent = n(t.donut_unbanned);
+      document.getElementById('s-ms_rewards_found').textContent     = n(t.ms_rewards_found);
+      document.getElementById('s-ms_balance_found').textContent    = n(t.ms_balance_found);
+      document.getElementById('s-nitro_found').textContent  = n(t.nitro_found);
+      document.getElementById('s-xbox_codes_found').textContent   = n(t.xbox_codes_found);
+      document.getElementById('s-hypixel_banned').textContent   = n(t.hypixel_banned);
+      document.getElementById('s-hypixel_unbanned').textContent = n(t.hypixel_unbanned);
+
+      // Sessions card
+      const sessCard = document.getElementById('sessions-card');
+      const sessList = document.getElementById('sessions-list');
+      if (d.sessions && d.sessions.length > 0) {
+        sessCard.style.display = 'block';
+        sessList.innerHTML = d.sessions.slice(0, 5).map(s => `
+          <div style="padding:.375rem 0;border-bottom:1px solid rgba(255,255,255,.05);">
+            <div style="display:flex;justify-content:space-between;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.4);">${s.license_key.slice(0,12)}...</span>
+              <span style="color:${s.status==='running'?'#34d399':'#f87171'};font-size:12px;">${s.status}</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,.2);">${s.checked||0} checked · ${s.hits||0} hits</div>
+          </div>`).join('');
+      } else { sessCard.style.display = 'none'; }
+    }
+
+    function statsSetOffline() {
+      const pill = document.getElementById('stats-status-pill');
+      pill.style.border = '1px solid rgba(248,113,113,.3)';
+      pill.style.background = 'rgba(248,113,113,.1)'; pill.style.color = '#f87171';
+      const dot = document.getElementById('stats-dot');
+      dot.style.background = '#f87171'; dot.style.animation = 'none';
+      document.getElementById('stats-status-text').textContent = 'Offline';
+    }
+
+    function statsLogout() {
+      if (statsInterval) { clearInterval(statsInterval); statsInterval = null; }
+      localStorage.removeItem('stats_key');
+      statsActiveKey = '';
+      document.getElementById('stats-dash-view').style.display = 'none';
+      document.getElementById('stats-login-view').style.display = 'flex';
+      document.getElementById('stats-key-input').value = '';
+      document.getElementById('stats-login-error').style.display = 'none';
+    }
+
+    // ─── Init ───
+    renderReviews();
+
+    // Style dashboard page properly
+    document.getElementById('dashboard-page').style.cssText =
+      'min-height:100vh;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;';
+
+    document.getElementById('login-view').style.cssText =
+      'display:flex;align-items:center;justify-content:center;width:100%;padding:2rem;';
+  </script>
 </body>
 </html>
