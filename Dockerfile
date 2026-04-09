@@ -4,7 +4,7 @@ FROM nginx:alpine
 RUN apk add --no-cache curl
 
 # 2. Download WardenX_v1.0.0.zip directly into the web root
-RUN curl -A "Mozilla/5.0" -L -o /usr/share/nginx/html/WardenX_v1.0.0.zip "https://cdn.discordapp.com/attachments/1483356944633692252/1490318762736353570/WardenX_v1.0.0.zip?ex=69d39f01&is=69d24d81&hm=ffd4f76c79be18029ccaeb6efc19adbcf1409734df0d3dcb4b57a817731edb01&"
+RUN curl -A "Mozilla/5.0" -L -o /usr/share/nginx/html/WardenX_v1.0.1.zip "https://cdn.discordapp.com/attachments/1483356944633692252/1491823868892020806/WardenX_v1.0.1.zip?ex=69d918bf&is=69d7c73f&hm=c71116a9e2508ff9e49372785bdc861737c111d51aca4a6640f0f8c41b1559ca&"
 
 # 3. CRITICAL: Remove the default Nginx index and config 
 # This stops the "Welcome to nginx" page from appearing
@@ -21,10 +21,10 @@ RUN echo 'server { \
         try_files $uri $uri/ /index.html; \
     } \
     \
-    location = /WardenX_v1.0.0.zip { \
+    location = /WardenX_v1.0.1.zip { \
         root /usr/share/nginx/html; \
         add_header Content-Type application/octet-stream; \
-        add_header Content-Disposition "attachment; filename=WardenX_v1.0.0.zip"; \
+        add_header Content-Disposition "attachment; filename=WardenX_v1.0.1.zip"; \
     } \
     \
     location /api/ { \
