@@ -317,11 +317,12 @@
         <a href="#pricing">Pricing</a>
         <a href="#reviews">Reviews</a>
         <a href="#contact">Contact</a>
+      <div class="nav-actions" style="display: flex; gap: 10px; align-items: center;">
+        <button class="btn-primary" onclick="showDashboard()">Dashboard</button>
+        <button id="adminOpenBtn" class="btn-primary" style="display: none; background: rgba(234, 179, 8, 0.1); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);" onclick="requestAdminAccess()">
+          ⚙️ Admin
+        </button>
       </div>
-      <button class="btn-primary" onclick="showDashboard()">Dashboard</button>
-      <button id="adminOpenBtn" style="display: none;" onclick="toggleAdminPanel()">
-          ⚙️ Admin Settings
-      </button>
     </nav>
 
     <!-- Hero -->
@@ -1305,77 +1306,60 @@ alert("Feature UI dynamic support coming next")
 applyAdmin();
 
 // --- ADMIN CONFIGURATION ---
-const ADMIN_KEYS = [
-    "WardenX-DB64-BDB0-FB3A"
-];
+const ADMIN_SECRET_KEY = "WardenX-DB64-BDB0-FB3A";
 
 let portalData = JSON.parse(localStorage.getItem("warden_admin")) || {
     version: "v1.0.1",
     file: "WardenX_v1.0.1.zip"
 };
 
-// This replaces your previous showPortal function
-function showPortal() {
-    const keyInput = document.getElementById("licenseInput");
-    const key = keyInput ? keyInput.value.trim() : "";
-    const statusText = document.querySelector(".status-text");
-
-    // --- YOUR NORMAL VALIDATION LOGIC ---
-    // Example: Allow login if key length > 5. Replace with your actual API check if needed.
-    if (key.length < 5) {
-        if(statusText) {
-            statusText.innerText = "Invalid License Key";
-            statusText.style.color = "#ef4444";
+// 1. Secret Reveal: Press Ctrl + Shift + A to show the button
+document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.shiftKey && e.code === "KeyA") {
+        const btn = document.getElementById("adminOpenBtn");
+        if (btn) {
+            btn.style.display = "block";
+            console.log("Admin Mode Triggered");
         }
-        return;
     }
+});
 
-    // SUCCESS: Show the standard Portal for all users
-    document.getElementById("loginScreen").style.display = "none";
-    document.getElementById("portalScreen").style.display = "block";
-    applyAdmin();
-
-    // --- THE ADMIN CHECK ---
-    // If the key is one of the special keys, show the button next to Web Stats
-    if (ADMIN_KEYS.includes(key)) {
-        console.log("Admin session detected.");
-        injectAdminButton();
+// 2. Access Request: Ask for the license key
+function requestAdminAccess() {
+    const key = prompt("Enter Admin Access License Key:");
+    
+    if (key === ADMIN_SECRET_KEY) {
+        localStorage.setItem("warden_is_admin", "true"); // Remembers your browser
+        toggleAdminPanel(true);
+    } else if (key !== null) {
+        alert("Access Denied.");
     }
 }
 
-function injectAdminButton() {
-    // Look for the "Web Stats" button (the action button inside the first card)
-    const statsBtn = document.querySelector('.stats-card .action-btn');
-    
-    if (statsBtn && !document.getElementById("adminOpenBtn")) {
-        const adminBtn = document.createElement("button");
-        adminBtn.id = "adminOpenBtn";
-        adminBtn.innerHTML = "⚙️ Admin Panel";
-        
-        // Apply styling to match your portal theme
-        adminBtn.className = "action-btn"; 
-        adminBtn.style.background = "rgba(234, 179, 8, 0.1)";
-        adminBtn.style.color = "#eab308";
-        adminBtn.style.border = "1px solid rgba(234, 179, 8, 0.2)";
-        adminBtn.style.marginLeft = "10px";
-        adminBtn.style.cursor = "pointer";
-
-        adminBtn.onclick = () => {
-            document.querySelector(".admin-panel").style.display = "block";
-            document.querySelector(".admin-overlay").style.display = "block";
-        };
-
-        // Put it right next to the existing button
-        statsBtn.parentNode.appendChild(adminBtn);
+// 3. Show/Hide Panel
+function toggleAdminPanel(show) {
+    const panel = document.querySelector(".admin-panel");
+    const overlay = document.querySelector(".admin-overlay");
+    if (panel && overlay) {
+        panel.style.display = show ? "block" : "none";
+        overlay.style.display = show ? "block" : "none";
+        if(show) applyAdmin();
     }
+}
+
+// 4. Persistence: If you logged in before, show the button automatically
+function initAdminState() {
+    if (localStorage.getItem("warden_is_admin") === "true") {
+        const btn = document.getElementById("adminOpenBtn");
+        if (btn) btn.style.display = "block";
+    }
+    applyAdmin();
 }
 
 function saveAdmin() {
     localStorage.setItem("warden_admin", JSON.stringify(portalData));
     applyAdmin();
-    // Close panel after saving
-    document.querySelector(".admin-panel").style.display = "none";
-    document.querySelector(".admin-overlay").style.display = "none";
+    toggleAdminPanel(false);
 }
 
 function applyAdmin() {
@@ -1395,14 +1379,15 @@ function updateFile(){
     saveAdmin();
 }
 
-// Close Panel when clicking the overlay
-const overlay = document.querySelector(".admin-overlay");
-if (overlay) {
-    overlay.onclick = () => {
-        document.querySelector(".admin-panel").style.display = "none";
-        document.querySelector(".admin-overlay").style.display = "none";
-    };
-}
+// Close logic for overlay
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('admin-overlay')) {
+        toggleAdminPanel(false);
+    }
+});
+
+// Run on page load
+window.onload = initAdminState;
 </script>
 
 </body>
