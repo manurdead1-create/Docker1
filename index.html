@@ -1197,32 +1197,28 @@
 
 <!-- Hidden Admin Panel -->
 <style>
-#adminPanel{
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-background:#0b0b15;
-border:1px solid #222;
-padding:25px;
-border-radius:12px;
-z-index:99999;
-display:none;
-width:500px;
-max-height:80vh;
-overflow:auto;
-color:white;
-}
-#adminOverlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-display:none;
-z-index:99998;
-}
+.admin-overlay {
+      display: none; 
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+    }
+    .admin-panel {
+      display: none; 
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%; max-width: 500px;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 24px;
+      z-index: 1001;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
 .admin-input{
 width:100%;
 padding:8px;
@@ -1308,33 +1304,99 @@ alert("Feature UI dynamic support coming next")
 
 applyAdmin();
 
-// List of license keys allowed to see the Admin button
-const adminKeys = [
-    "WardenX-ADMIN-0001", // Add your own admin keys here
-    "WardenX-TEST-9999"
+// --- ADMIN CONFIGURATION ---
+const ADMIN_KEYS = [
+    "WardenX-DB64-BDB0-FB3A"
 ];
 
-function checkAdminAccess(enteredKey) {
-    const adminBtn = document.getElementById("adminOpenBtn");
-    
-    // If the key is in our list, show the button
-    if (adminKeys.includes(enteredKey)) {
-        if (adminBtn) adminBtn.style.display = "flex";
-    } else {
-        if (adminBtn) adminBtn.style.display = "none";
+let portalData = JSON.parse(localStorage.getItem("warden_admin")) || {
+    version: "v1.0.1",
+    file: "WardenX_v1.0.1.zip"
+};
+
+// This function handles the normal API login + Admin check
+function showPortal() {
+    const key = document.getElementById("licenseInput").value.trim();
+    const statusText = document.querySelector(".status-text");
+
+    // 1. Normal API/Validation Check (Simulated)
+    if (key.length < 5) {
+        statusText.innerText = "Invalid License Format";
+        statusText.style.color = "#ef4444";
+        return;
+    }
+
+    // 2. Success: Show the regular Portal for everyone
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("portalScreen").style.display = "block";
+    applyAdmin();
+
+    // 3. Special Check: If the key is an Admin key, show the button
+    if (ADMIN_KEYS.includes(key)) {
+        console.log("Admin session detected.");
+        showAdminButton();
     }
 }
 
-// Update your existing login function to include the check
-async function verifyLicense() {
-    const keyInput = document.getElementById("licenseInput").value;
+function showAdminButton() {
+    // Finds the "Web Stats" button inside the portal
+    const statsBtn = document.querySelector('.stats-card .action-btn');
     
-    // ... your existing verification logic ...
-    
-    if (verificationSuccess) {
-        checkAdminAccess(keyInput); // Run the admin check
-        showPortal();
+    if (statsBtn && !document.getElementById("adminOpenBtn")) {
+        const adminBtn = document.createElement("button");
+        adminBtn.id = "adminOpenBtn";
+        adminBtn.innerHTML = "⚙️ Admin Panel";
+        adminBtn.className = "action-btn"; 
+        adminBtn.style.background = "rgba(234, 179, 8, 0.1)";
+        adminBtn.style.color = "#eab308";
+        adminBtn.style.border = "1px solid rgba(234, 179, 8, 0.2)";
+        adminBtn.style.marginLeft = "10px";
+        adminBtn.style.cursor = "pointer";
+
+        adminBtn.onclick = () => {
+            document.querySelector(".admin-panel").style.display = "block";
+            document.querySelector(".admin-overlay").style.display = "block";
+        };
+
+        // Put it next to the Web Stats button
+        statsBtn.parentNode.appendChild(adminBtn);
     }
+}
+
+function saveAdmin() {
+    localStorage.setItem("warden_admin", JSON.stringify(portalData));
+    applyAdmin();
+    // Close panel
+    document.querySelector(".admin-panel").style.display = "none";
+    document.querySelector(".admin-overlay").style.display = "none";
+}
+
+function applyAdmin() {
+    let v = document.querySelector(".portal-v");
+    if(v) v.innerText = portalData.version;
+    let dl = document.querySelector(".dl-btn");
+    if(dl) dl.href = portalData.file;
+}
+
+function updateVersion(){
+    portalData.version = document.getElementById("adminVersion").value;
+    saveAdmin();
+}
+
+function updateFile(){
+    portalData.file = document.getElementById("adminFile").value;
+    saveAdmin();
+}
+
+// Close Panel Logic
+const overlay = document.querySelector(".admin-overlay");
+if (overlay) {
+    overlay.onclick = () => {
+        document.querySelector(".admin-panel").style.display = "none";
+        document.querySelector(".admin-overlay").style.display = "none";
+    };
+}
+</script>
 }
 
 </script>
