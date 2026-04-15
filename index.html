@@ -1191,5 +1191,133 @@
     document.getElementById('login-view').style.cssText =
       'display:flex;align-items:center;justify-content:center;width:100%;padding:2rem;';
   </script>
+
+<!-- Hidden Admin Panel -->
+<style>
+#adminPanel{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#0b0b15;
+border:1px solid #222;
+padding:25px;
+border-radius:12px;
+z-index:99999;
+display:none;
+width:500px;
+max-height:80vh;
+overflow:auto;
+color:white;
+}
+#adminOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:none;
+z-index:99998;
+}
+.admin-input{
+width:100%;
+padding:8px;
+margin:5px 0;
+background:#111;
+border:1px solid #333;
+color:white;
+}
+.admin-btn{
+padding:8px 12px;
+margin-top:5px;
+background:#5196ff;
+border:none;
+color:white;
+cursor:pointer;
+border-radius:6px;
+}
+</style>
+
+<div id="adminOverlay"></div>
+
+<div id="adminPanel">
+<h2>WardenX Admin</h2>
+
+<label>Version</label>
+<input id="adminVersion" class="admin-input" placeholder="v1.0.2">
+<button class="admin-btn" onclick="updateVersion()">Update Version</button>
+
+<label>Download File</label>
+<input id="adminFile" class="admin-input" placeholder="WardenX_v1.0.2.zip">
+<button class="admin-btn" onclick="updateFile()">Update File</button>
+
+<hr>
+
+<label>Add Category</label>
+<input id="adminCategory" class="admin-input">
+<button class="admin-btn" onclick="addCategory()">Add</button>
+
+<label>Add Feature</label>
+<input id="adminCat2" class="admin-input" placeholder="Category">
+<input id="adminFeature" class="admin-input" placeholder="Feature">
+<button class="admin-btn" onclick="addFeature()">Add Feature</button>
+
+</div>
+
+<script>
+
+let portalData = JSON.parse(localStorage.getItem("wardenx_admin")) || {
+version:"v1.0.1",
+file:"WardenX_v1.0.1.zip"
+}
+
+function saveAdmin(){
+localStorage.setItem("wardenx_admin",JSON.stringify(portalData))
+applyAdmin()
+}
+
+function applyAdmin(){
+let v=document.querySelector(".portal-v")
+if(v) v.innerText=portalData.version
+
+let dl=document.querySelector(".dl-btn")
+if(dl) dl.href=portalData.file
+}
+
+function updateVersion(){
+portalData.version=document.getElementById("adminVersion").value
+saveAdmin()
+}
+
+function updateFile(){
+portalData.file=document.getElementById("adminFile").value
+saveAdmin()
+}
+
+function addCategory(){
+alert("Category UI dynamic support coming next")
+}
+
+function addFeature(){
+alert("Feature UI dynamic support coming next")
+}
+
+applyAdmin()
+
+document.addEventListener("keydown",e=>{
+if(e.ctrlKey && e.altKey && e.shiftKey && e.key==="X"){
+document.getElementById("adminPanel").style.display="block"
+document.getElementById("adminOverlay").style.display="block"
+}
+})
+
+document.getElementById("adminOverlay").onclick=()=>{
+document.getElementById("adminPanel").style.display="none"
+document.getElementById("adminOverlay").style.display="none"
+}
+
+</script>
+
 </body>
 </html>
