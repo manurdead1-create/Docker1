@@ -1,17 +1,12 @@
 FROM nginx:alpine
 
-# 1. Install curl to fetch the file from Discord
+# Install curl (optional, keeping for future use)
 RUN apk add --no-cache curl
 
-# 2. Download WardenX_v1.0.0.zip directly into the web root
-RUN curl -A "Mozilla/5.0" -L -o /usr/share/nginx/html/WardenX_v1.0.1.zip "https://cdn.discordapp.com/attachments/1483356944633692252/1491823868892020806/WardenX_v1.0.1.zip?ex=69d918bf&is=69d7c73f&hm=c71116a9e2508ff9e49372785bdc861737c111d51aca4a6640f0f8c41b1559ca&"
-
-# 3. CRITICAL: Remove the default Nginx index and config 
-# This stops the "Welcome to nginx" page from appearing
+# Remove default nginx files
 RUN rm /usr/share/nginx/html/index.html && rm /etc/nginx/conf.d/default.conf
 
-# 4. Create your custom Nginx configuration
-# This version assumes you have an index.html in your build folder
+# Create custom nginx config
 RUN echo 'server { \
     listen 30469; \
     \
@@ -21,10 +16,11 @@ RUN echo 'server { \
         try_files $uri $uri/ /index.html; \
     } \
     \
-    location = /WardenX_v1.0.1.zip { \
+    # Allow download of ANY zip dynamically \
+    location ~* \.zip$ { \
         root /usr/share/nginx/html; \
         add_header Content-Type application/octet-stream; \
-        add_header Content-Disposition "attachment; filename=WardenX_v1.0.1.zip"; \
+        add_header Content-Disposition "attachment"; \
     } \
     \
     location /api/ { \
@@ -36,9 +32,11 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
-# 5. Copy YOUR index.html from your computer to the container
-# This is what will show instead of the "Welcome to nginx" page
+# Copy index.html
 COPY index.html /usr/share/nginx/html/index.html
+
+# Create downloads folder
+RUN mkdir -p /usr/share/nginx/html
 
 EXPOSE 30469
 
