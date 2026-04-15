@@ -1303,18 +1303,34 @@ function addFeature(){
 alert("Feature UI dynamic support coming next")
 }
 
-applyAdmin()
+applyAdmin();
 
-document.addEventListener("keydown",e=>{
-if (e.ctrlKey && e.altKey && e.code === "KeyX"){
-document.getElementById("adminPanel").style.display="block"
-document.getElementById("adminOverlay").style.display="block"
-}
-})
+// --- SECRET SEQUENCE TRIGGER ---
+let inputLog = "";
+const secretWord = "wardenx"; // Change this to your secret word
 
-document.getElementById("adminOverlay").onclick=()=>{
-document.getElementById("adminPanel").style.display="none"
-document.getElementById("adminOverlay").style.display="none"
+document.addEventListener("keydown", e => {
+    // Add the new key to our string
+    inputLog += e.key.toLowerCase();
+
+    // Keep only the last few characters (matching the length of our secret word)
+    inputLog = inputLog.slice(-secretWord.length);
+
+    // If the last letters typed match the secret word, show the panel
+    if (inputLog === secretWord) {
+        document.getElementById("adminPanel").style.display = "block";
+        document.getElementById("adminOverlay").style.display = "block";
+        inputLog = ""; // Clear log after success
+    }
+});
+
+// --- OVERLAY CLOSE LOGIC ---
+const overlay = document.getElementById("adminOverlay");
+if (overlay) {
+    overlay.onclick = () => {
+        document.getElementById("adminPanel").style.display = "none";
+        document.getElementById("adminOverlay").style.display = "none";
+    };
 }
 
 </script>
