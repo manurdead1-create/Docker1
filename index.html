@@ -1306,7 +1306,7 @@ alert("Feature UI dynamic support coming next")
 applyAdmin()
 
 document.addEventListener("keydown",e=>{
-if(e.ctrlKey && e.altKey && e.shiftKey && e.key==="X"){
+if (e.ctrlKey && e.altKey && e.code === "KeyX"){
 document.getElementById("adminPanel").style.display="block"
 document.getElementById("adminOverlay").style.display="block"
 }
