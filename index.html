@@ -1307,29 +1307,37 @@ applyAdmin();
 
 // --- SECRET SEQUENCE TRIGGER ---
 let inputLog = "";
-const secretWord = "wardenx"; // Change this to your secret word
+const secretWord = "wardenx"; 
 
 document.addEventListener("keydown", e => {
-    // Add the new key to our string
     inputLog += e.key.toLowerCase();
-
-    // Keep only the last few characters (matching the length of our secret word)
     inputLog = inputLog.slice(-secretWord.length);
 
-    // If the last letters typed match the secret word, show the panel
     if (inputLog === secretWord) {
-        document.getElementById("adminPanel").style.display = "block";
-        document.getElementById("adminOverlay").style.display = "block";
-        inputLog = ""; // Clear log after success
+        // Use querySelector because you used a class (.admin-panel) in your CSS
+        const panel = document.querySelector(".admin-panel");
+        const overlay = document.querySelector(".admin-overlay");
+        
+        if (panel && overlay) {
+            panel.style.display = "block";
+            overlay.style.display = "block";
+            // Optional: smooth scroll to the panel once it appears
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+        inputLog = ""; 
     }
 });
 
 // --- OVERLAY CLOSE LOGIC ---
-const overlay = document.getElementById("adminOverlay");
+const overlay = document.querySelector(".admin-overlay");
 if (overlay) {
     overlay.onclick = () => {
-        document.getElementById("adminPanel").style.display = "none";
-        document.getElementById("adminOverlay").style.display = "none";
+        const panel = document.querySelector(".admin-panel");
+        const overlayEl = document.querySelector(".admin-overlay");
+        if (panel && overlayEl) {
+            panel.style.display = "none";
+            overlayEl.style.display = "none";
+        }
     };
 }
 
