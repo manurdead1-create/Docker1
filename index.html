@@ -1315,7 +1315,7 @@ let portalData = JSON.parse(localStorage.getItem("warden_admin")) || {
 
 // 1. Secret Reveal: Press Ctrl + Shift + A to show the button
 document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.shiftKey && e.code === "KeyA") {
+    if (e.ctrlKey && e.shiftKey && e.code === "KeyF") {
         const btn = document.getElementById("adminOpenBtn");
         if (btn) {
             btn.style.display = "block";
