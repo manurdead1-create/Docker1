@@ -1314,38 +1314,45 @@ let portalData = JSON.parse(localStorage.getItem("warden_admin")) || {
     file: "WardenX_v1.0.1.zip"
 };
 
-// This function handles the normal API login + Admin check
+// This replaces your previous showPortal function
 function showPortal() {
-    const key = document.getElementById("licenseInput").value.trim();
+    const keyInput = document.getElementById("licenseInput");
+    const key = keyInput ? keyInput.value.trim() : "";
     const statusText = document.querySelector(".status-text");
 
-    // 1. Normal API/Validation Check (Simulated)
+    // --- YOUR NORMAL VALIDATION LOGIC ---
+    // Example: Allow login if key length > 5. Replace with your actual API check if needed.
     if (key.length < 5) {
-        statusText.innerText = "Invalid License Format";
-        statusText.style.color = "#ef4444";
+        if(statusText) {
+            statusText.innerText = "Invalid License Key";
+            statusText.style.color = "#ef4444";
+        }
         return;
     }
 
-    // 2. Success: Show the regular Portal for everyone
+    // SUCCESS: Show the standard Portal for all users
     document.getElementById("loginScreen").style.display = "none";
     document.getElementById("portalScreen").style.display = "block";
     applyAdmin();
 
-    // 3. Special Check: If the key is an Admin key, show the button
+    // --- THE ADMIN CHECK ---
+    // If the key is one of the special keys, show the button next to Web Stats
     if (ADMIN_KEYS.includes(key)) {
         console.log("Admin session detected.");
-        showAdminButton();
+        injectAdminButton();
     }
 }
 
-function showAdminButton() {
-    // Finds the "Web Stats" button inside the portal
+function injectAdminButton() {
+    // Look for the "Web Stats" button (the action button inside the first card)
     const statsBtn = document.querySelector('.stats-card .action-btn');
     
     if (statsBtn && !document.getElementById("adminOpenBtn")) {
         const adminBtn = document.createElement("button");
         adminBtn.id = "adminOpenBtn";
         adminBtn.innerHTML = "⚙️ Admin Panel";
+        
+        // Apply styling to match your portal theme
         adminBtn.className = "action-btn"; 
         adminBtn.style.background = "rgba(234, 179, 8, 0.1)";
         adminBtn.style.color = "#eab308";
@@ -1358,7 +1365,7 @@ function showAdminButton() {
             document.querySelector(".admin-overlay").style.display = "block";
         };
 
-        // Put it next to the Web Stats button
+        // Put it right next to the existing button
         statsBtn.parentNode.appendChild(adminBtn);
     }
 }
@@ -1366,7 +1373,7 @@ function showAdminButton() {
 function saveAdmin() {
     localStorage.setItem("warden_admin", JSON.stringify(portalData));
     applyAdmin();
-    // Close panel
+    // Close panel after saving
     document.querySelector(".admin-panel").style.display = "none";
     document.querySelector(".admin-overlay").style.display = "none";
 }
@@ -1388,7 +1395,7 @@ function updateFile(){
     saveAdmin();
 }
 
-// Close Panel Logic
+// Close Panel when clicking the overlay
 const overlay = document.querySelector(".admin-overlay");
 if (overlay) {
     overlay.onclick = () => {
@@ -1396,9 +1403,6 @@ if (overlay) {
         document.querySelector(".admin-overlay").style.display = "none";
     };
 }
-</script>
-}
-
 </script>
 
 </body>
