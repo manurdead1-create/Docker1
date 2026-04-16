@@ -26,7 +26,7 @@ const upload = multer({
 
 app.post("/upload", upload.single("file"), (req, res) => {
 
-    // Delete old zip files
+    // Delete old ZIP
     fs.readdirSync(uploadPath).forEach(file => {
         if (file.endsWith(".zip") && file !== req.file.filename) {
             fs.unlinkSync(path.join(uploadPath, file));
