@@ -1313,23 +1313,30 @@ let portalData = JSON.parse(localStorage.getItem("warden_admin")) || {
     file: "WardenX_v1.0.1.zip"
 };
 
-// 1. Secret Reveal: Press Ctrl + Shift + A to show the button
-document.addEventListener("keydown", (e) => {
-    if (e.ctrlKey && e.shiftKey && e.code === "KeyF") {
-        const btn = document.getElementById("adminOpenBtn");
-        if (btn) {
-            btn.style.display = "block";
-            console.log("Admin Mode Triggered");
-        }
+// 1. Auto Check License & Show Button
+function autoAdminAccess() {
+    const storedKey = localStorage.getItem("warden_admin_key");
+
+    if (storedKey === ADMIN_SECRET_KEY) {
+        localStorage.setItem("warden_is_admin", "true");
+        showAdminButton();
     }
-});
+}
+
+// Show Admin Button
+function showAdminButton() {
+    const btn = document.getElementById("adminOpenBtn");
+    if (btn) btn.style.display = "block";
+}
 
 // 2. Access Request: Ask for the license key
 function requestAdminAccess() {
     const key = prompt("Enter Admin Access License Key:");
     
     if (key === ADMIN_SECRET_KEY) {
-        localStorage.setItem("warden_is_admin", "true"); // Remembers your browser
+        localStorage.setItem("warden_is_admin", "true");
+        localStorage.setItem("warden_admin_key", key);
+        showAdminButton();
         toggleAdminPanel(true);
     } else if (key !== null) {
         alert("Access Denied.");
@@ -1347,12 +1354,12 @@ function toggleAdminPanel(show) {
     }
 }
 
-// 4. Persistence: If you logged in before, show the button automatically
+// 4. Persistence
 function initAdminState() {
     if (localStorage.getItem("warden_is_admin") === "true") {
-        const btn = document.getElementById("adminOpenBtn");
-        if (btn) btn.style.display = "block";
+        showAdminButton();
     }
+    autoAdminAccess();
     applyAdmin();
 }
 
