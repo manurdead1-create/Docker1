@@ -1,28 +1,47 @@
-FROM nginx:alpine
+# Use Node (needed for upload server)
+FROM node:18-alpine
 
-# Install curl (optional, keeping for future use)
-RUN apk add --no-cache curl
+# Install nginx + curl
+RUN apk add --no-cache nginx curl
 
-# Remove default nginx files
-RUN rm /usr/share/nginx/html/index.html && rm /etc/nginx/conf.d/default.conf
+# Create app directory
+WORKDIR /app
+
+# Copy package.json
+COPY package.json .
+
+# Install dependencies
+RUN npm install
+
+# Copy all project files
+COPY . .
+
+# Create uploads folder
+RUN mkdir -p /app/files
+
+# Remove default nginx config
+RUN rm -f /etc/nginx/http.d/default.conf
 
 # Create custom nginx config
 RUN echo 'server { \
     listen 30469; \
     \
     location / { \
-        root /usr/share/nginx/html; \
-        index index.html; \
-        try_files $uri $uri/ /index.html; \
+        proxy_pass http://localhost:3000; \
+        proxy_set_header Host $host; \
+        proxy_set_header X-Real-IP $remote_addr; \
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
+        proxy_set_header X-Forwarded-Proto $scheme; \
     } \
     \
-    # Allow download of ANY zip dynamically \
-    location ~* \.zip$ { \
-        root /usr/share/nginx/html; \
+    # ZIP downloads \
+    location /files/ { \
+        proxy_pass http://localhost:3000/files/; \
         add_header Content-Type application/octet-stream; \
         add_header Content-Disposition "attachment"; \
     } \
     \
+    # Your External API Server \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
@@ -30,14 +49,10 @@ RUN echo 'server { \
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
         proxy_set_header X-Forwarded-Proto $scheme; \
     } \
-}' > /etc/nginx/conf.d/default.conf
+}' > /etc/nginx/http.d/default.conf
 
-# Copy index.html
-COPY index.html /usr/share/nginx/html/index.html
-
-# Create downloads folder
-RUN mkdir -p /usr/share/nginx/html
-
+# Expose port
 EXPOSE 30469
 
-CMD ["nginx", "-g", "daemon off;"]
+# Start Node + Nginx
+CMD node server.js & nginx -g "daemon off;"
