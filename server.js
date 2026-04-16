@@ -4,6 +4,8 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
+const PORT = 3000;
+
 const uploadPath = path.join(__dirname, "files");
 
 if (!fs.existsSync(uploadPath)) {
@@ -17,10 +19,14 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage });
+const upload = multer({
+    storage,
+    limits: { fileSize: Infinity }
+});
 
 app.post("/upload", upload.single("file"), (req, res) => {
 
+    // Delete old zip files
     fs.readdirSync(uploadPath).forEach(file => {
         if (file.endsWith(".zip") && file !== req.file.filename) {
             fs.unlinkSync(path.join(uploadPath, file));
@@ -36,6 +42,6 @@ app.post("/upload", upload.single("file"), (req, res) => {
 app.use("/files", express.static(uploadPath));
 app.use(express.static(__dirname));
 
-app.listen(3000, () => {
-    console.log("Server running on port 3000");
+app.listen(PORT, () => {
+    console.log("Upload server running on port " + PORT);
 });
