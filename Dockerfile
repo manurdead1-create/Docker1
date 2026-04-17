@@ -1,23 +1,15 @@
-# Use Node 18 Alpine for a small footprint
 FROM node:18-alpine
-
-# Install nginx and curl
 RUN apk add --no-cache nginx curl
-
-# Create app directory
 WORKDIR /app
 
-# Copy package files first for better caching
+# Copy package files
 COPY package*.json ./
-
-# Install all dependencies (including typescript and ts-node)
 RUN npm install
 RUN npm install -g ts-node typescript
 
-# Copy the entire project
-COPY . .
+# COPY EVERYTHING (including tsconfig.json and src folder)
+COPY . . 
 
-# Ensure the start script is executable
 RUN chmod +x start.sh
 
 # Create folder for file uploads
