@@ -1,5 +1,9 @@
 {
 "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@workspace/api-zod": ["./path/to/your/zod/folder/index.ts"]
+    },
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
