@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Start the TypeScript API using the ESM loader
-# This tells Node.js how to handle the .ts extension
-node --loader ts-node/esm src/index.ts &
+# Start the TypeScript API using tsx (it replaces ts-node/esm)
+# No loaders or complex flags needed
+tsx src/index.ts &
 
 # Start Nginx
 nginx -g "daemon off;"
