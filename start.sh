@@ -1,8 +1,9 @@
 #!/bin/sh
 
-# Start the API using tsx
-# tsx automatically reads the 'paths' in your tsconfig.json
+# Start the TS API on port 3000 (Internal)
+# tsx will resolve your @workspace/api-zod paths automatically
 tsx src/index.ts &
 
-# Start Nginx
+# Start Nginx on port 30469 (External)
+# This matches your Railway custom domain port
 nginx -g "daemon off;"
