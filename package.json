@@ -1,5 +1,10 @@
 {
   "name": "wardenx-api",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "shared/*"
+  ],
   "version": "1.0.1",
   "description": "API Server for WardenX Portal",
   "type": "module",
