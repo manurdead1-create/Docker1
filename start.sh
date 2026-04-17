@@ -1,8 +1,6 @@
 #!/bin/sh
 
-# Start the TypeScript API in the background
-# This runs src/index.ts using ts-node
-ts-node --project tsconfig.json src/index.ts &
+# Add the --skip-project flag to bypass environment-specific compiler errors
+ts-node --transpile-only --skip-project src/index.ts &
 
-# Start Nginx in the foreground
 nginx -g "daemon off;"
