@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Start the TypeScript API from the src folder
-ts-node --esm --transpile-only src/index.ts &
+# Start the TypeScript API using the ESM loader
+# This tells Node.js how to handle the .ts extension
+node --loader ts-node/esm src/index.ts &
 
 # Start Nginx
 nginx -g "daemon off;"
