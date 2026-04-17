@@ -1435,38 +1435,45 @@
       } catch { showMsg('admin-upload-msg','Upload failed. Check server.','err'); }
     }
 
-    async function adminAddCategory() {
-        // Get the actual name from your input field
-        const nameInput = document.getElementById('categoryNameInput'); 
-        const categoryName = nameInput.value.trim();
+async function adminAddCategory() {
+        const nameInput = document.getElementById('admin-newcat-name');
+        const colorInput = document.getElementById('admin-newcat-color'); // Add this ID to HTML
+        const emojiInput = document.getElementById('admin-newcat-emoji'); // Add this ID to HTML
+        
+        const name = nameInput.value.trim();
+        const color = colorInput ? colorInput.value : "#5196ff";
+        const icon = emojiInput ? emojiInput.value.trim() : "⚡";
 
-        if (!categoryName) {
-            alert("Please enter a category name");
-            return;
+        if (!name) { 
+            showMsg('admin-cat-msg', 'Category name is required.', 'err'); 
+            return; 
         }
 
-        const response = await fetch(`${API_BASE}/admin/category/add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Admin-Secret': 'dariobladez' 
-            },
-            // Send the variable 'categoryName' instead of the hardcoded string
-            body: JSON.stringify({ 
-                name: categoryName,
-                color: "#5196ff",
-                icon: "⚡" 
-            })
-        });
-
-        if (response.ok) {
-            nameInput.value = ""; // Clear the input after adding
-            fetchPortalData();    // Refresh the list
-        } else {
-            const error = await response.json();
-            alert("Error: " + error.error);
+        try {
+            const res = await fetch(`${API_BASE}/admin/category/add`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Admin-Secret': 'dariobladez' 
+                },
+                body: JSON.stringify({ name, color, icon })
+            });
+            
+            const data = await res.json();
+            if (data.ok) {
+                portalData = data.data;
+                nameInput.value = '';
+                if(emojiInput) emojiInput.value = '';
+                populateCategoryDropdown();
+                applyPortalData();
+                renderLandingCategories();
+                showMsg('admin-cat-msg', `Category "${name}" added!`, 'ok');
+            }
+        } catch { 
+            showMsg('admin-cat-msg', 'Error adding category.', 'err'); 
         }
     }
+    
     async function deleteCategory(id) {
         if (!confirm("Are you sure?")) return;
 
