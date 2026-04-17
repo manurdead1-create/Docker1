@@ -1474,16 +1474,32 @@ async function adminAddCategory() {
         }
     }
     
-    async function deleteCategory(id) {
-        if (!confirm("Are you sure?")) return;
+async function adminDeleteCategory(id) {
+        if (!confirm("Are you sure? This will remove all features in this category!")) return;
 
-        const res = await fetch(`${API_BASE}/admin/category/delete`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': 'dariobladez' },
-            body: JSON.stringify({ id })
-        });
+        try {
+            const res = await fetch(`${API_BASE}/admin/category/delete`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Admin-Secret': 'dariobladez' 
+                },
+                body: JSON.stringify({ id: id })
+            });
 
-        res.ok ? fetchPortalData() : alert("Failed: " + (await res.json()).error);
+            const data = await res.json();
+            if (data.ok) {
+                portalData = data.data;
+                populateCategoryDropdown(); 
+                applyPortalData(); 
+                renderLandingCategories();
+                showMsg('admin-cat-msg', 'Category deleted successfully.', 'ok');
+            } else {
+                showMsg('admin-cat-msg', data.error || 'Failed to delete.', 'err');
+            }
+        } catch {
+            showMsg('admin-cat-msg', 'Error connecting to server.', 'err');
+        }
     }
 
 async function adminAddFeature() {
