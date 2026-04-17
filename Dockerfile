@@ -6,15 +6,14 @@ RUN apk add --no-cache nginx curl
 # Create app directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies and the robust TS runner 'tsx'
-RUN npm install && \
-    npm install -g tsx typescript
+# This flag is key for monorepos/workspaces
+RUN npm install --include=dev && npm install -g tsx
 
-# Copy all project files (src, tsconfig.json, start.sh, etc.)
-COPY . . 
+# Copy everything (Ensure you are copying the WHOLE project root, 
+# not just the 'src' or 'api-server' folder)
+COPY . .
 
 # Ensure the start script is executable
 RUN chmod +x start.sh
