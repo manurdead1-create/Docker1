@@ -4,8 +4,11 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm install
-RUN npm install -g ts-node typescript
+
+# Install dependencies and the missing Node types
+RUN npm install && \
+    npm install --save-dev @types/node && \
+    npm install -g ts-node typescript
 
 # COPY EVERYTHING (including tsconfig.json and src folder)
 COPY . . 
