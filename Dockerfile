@@ -1,24 +1,27 @@
 FROM node:18-alpine
+
+# Install nginx and curl
 RUN apk add --no-cache nginx curl
+
+# Create app directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies and the missing Node types
+# Install dependencies and the robust TS runner 'tsx'
 RUN npm install && \
-    npm install --save-dev @types/node && \
-    npm install -g ts-node typescript
+    npm install -g tsx typescript
 
-# COPY EVERYTHING (including tsconfig.json and src folder)
+# Copy all project files (src, tsconfig.json, start.sh, etc.)
 COPY . . 
 
+# Ensure the start script is executable
 RUN chmod +x start.sh
 
 # Create folder for file uploads
 RUN mkdir -p /app/files
 
-# Configure Nginx
 # Configure Nginx with your specific External API IP
 RUN rm -f /etc/nginx/http.d/default.conf
 RUN echo 'server { \
@@ -40,7 +43,7 @@ RUN echo 'server { \
         add_header Content-Disposition "attachment"; \
     } \
     \
-    # Your External API Server (Restored IP) \
+    # Your External API Server \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
