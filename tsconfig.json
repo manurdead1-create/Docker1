@@ -1,14 +1,18 @@
 {
-  "compilerOptions": {
-    "noImplicitAny": false, 
-    "strict": false,
+"compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"]
+    "forceConsistentCasingInFileNames": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "ignoreDeprecations": "5.0",
+    "types": ["node"],
+    "outDir": "./dist"
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "references": [
     {
       "path": "../../lib/db"
