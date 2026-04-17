@@ -38,4 +38,4 @@ WORKDIR /app/services/api
 EXPOSE 30469
 
 # Run the startup script
-CMD ["./start.sh"]
+CMD ["/bin/sh", "./start.sh"]
