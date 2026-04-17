@@ -1,3 +1,8 @@
-#!/bin/bash
-echo "Starting WardenX Web Server on Port 30469..."
+#!/bin/sh
+
+# Start the TypeScript API in the background
+# This runs src/index.ts using ts-node
+ts-node src/index.ts &
+
+# Start Nginx in the foreground
 nginx -g "daemon off;"
