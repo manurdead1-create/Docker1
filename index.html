@@ -1441,7 +1441,7 @@
       const color = document.getElementById('admin-newcat-color').value;
       if (!name) { showMsg('admin-cat-msg','Category name is required.','err'); return; }
       try {
-        const res = await fetch(`${API_BASE}/admin/category/add`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,icon,color})});
+        const res = await fetch(`${API_BASE}/admin/category/add`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': 'dariobladez' }, body: JSON.stringify({ name: "New Category" }) });
         const data = await res.json();
         if (data.ok) {
           portalData=data.data;
