@@ -6,33 +6,22 @@ RUN apk add --no-cache nginx curl
 # Create app directory
 WORKDIR /app
 
-# 1. Copy package files first
-COPY package*.json ./
-
-# 2. Install dependencies for the whole workspace
-RUN npm install && npm install -g tsx typescript
-
-# 3. Copy the ENTIRE project (This includes /lib and your api folder)
+# 1. Copy everything from the root
+# This ensures /app/lib and /app/services/api both exist
 COPY . .
 
-# 4. FIX: Use find to locate start.sh and chmod it, regardless of folder depth
-RUN find . -name "start.sh" -exec chmod +x {} +
+# 2. Install dependencies (Clean install)
+RUN npm install && npm install -g tsx typescript
 
-# 5. Create folder for file uploads (Adjust path if needed)
-RUN mkdir -p /app/files
-
-# 6. Configure Nginx
+# 3. Configure Nginx to talk to the local API
 RUN rm -f /etc/nginx/http.d/default.conf
 RUN echo 'server { \
     listen 30469; \
     location / { \
-        proxy_pass http://localhost:3000; \
+        proxy_pass http://127.0.0.1:3000; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
-    } \
-    location /files/ { \
-        proxy_pass http://localhost:3000/files/; \
-        add_header Content-Type application/octet-stream; \
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
     } \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
@@ -40,11 +29,13 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/http.d/default.conf
 
-EXPOSE 30469
+# 4. Make sure start.sh is executable (searching the whole /app folder)
+RUN find . -name "start.sh" -exec chmod +x {} +
 
-# 7. IMPORTANT: Set the WORKDIR to the folder containing your index.ts
-# Replace "services/api" with the actual path to your api folder from the root
+# 5. Move to your API service folder
 WORKDIR /app/services/api
+
+EXPOSE 30469
 
 # Run the startup script
 CMD ["./start.sh"]
