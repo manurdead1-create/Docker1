@@ -8,7 +8,7 @@ RUN apk add --no-cache curl
 # This routes domain traffic (Port 80) to your Python API (Port 30469)
 RUN rm -f /etc/nginx/conf.d/default.conf
 RUN echo 'server { \
-    listen 80; \
+    listen 30469; \
     server_name wardenx.dpdns.org; \
 \
     # Forward domain API calls to your Python Server running at the IP \
@@ -27,8 +27,8 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/conf.d/wardenx.conf
 
-# 4. Expose Port 80 for the Domain
-EXPOSE 80
+# 4. Expose Port 30469 for the Domain
+EXPOSE 30469
 
 # 5. Run Nginx
 CMD ["nginx", "-g", "daemon off;"]
