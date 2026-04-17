@@ -1,26 +1,17 @@
-# 1. Start with Python base
-FROM python:3.11-slim
+# 1. Use a tiny Nginx image
+FROM nginx:alpine
 
-# 2. Install Nginx and system tools
-RUN apt-get update && apt-get install -y \
-    nginx \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# 2. Install curl for health checks
+RUN apk add --no-cache curl
 
-# 3. Setup workspace
-WORKDIR /app
-RUN pip install --no-cache-dir flask flask-cors werkzeug
-COPY app.py .
-RUN mkdir -p uploads
-
-# 4. CONFIGURE NGINX (Explicitly using your IP)
-# This ensures traffic to wardenx.dpdns.org/api/ hits your IP server logic
-RUN rm -f /etc/nginx/sites-enabled/default
+# 3. Configure Nginx (Explicitly using your IP: 176.100.37.91)
+# This routes domain traffic (Port 80) to your Python API (Port 30469)
+RUN rm -f /etc/nginx/conf.d/default.conf
 RUN echo 'server { \
     listen 80; \
     server_name wardenx.dpdns.org; \
 \
-    # Forward domain API calls to the local IP process \
+    # Forward domain API calls to your Python Server running at the IP \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469/api/; \
         proxy_set_header Host $host; \
@@ -29,22 +20,15 @@ RUN echo 'server { \
         proxy_set_header X-Forwarded-Proto $scheme; \
     } \
 \
-    # Serve your main dashboard / static files \
+    # Serve static files if you have them, or just a basic response \
     location / { \
-        root /var/www/html; \
+        root /usr/share/nginx/html; \
         index index.html; \
-        try_files $uri $uri/ /index.html; \
     } \
 }' > /etc/nginx/conf.d/wardenx.conf
 
-# 5. Startup script to run both services
-RUN echo '#!/bin/sh\n\
-nginx\n\
-python app.py' > /app/start.sh
-RUN chmod +x /app/start.sh
-
-# 6. Open the doors
+# 4. Expose Port 80 for the Domain
 EXPOSE 80
-EXPOSE 30469
 
-CMD ["/app/start.sh"]
+# 5. Run Nginx
+CMD ["nginx", "-g", "daemon off;"]
