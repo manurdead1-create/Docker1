@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Start the TypeScript API using tsx (it replaces ts-node/esm)
-# No loaders or complex flags needed
+# Start the API using tsx
+# tsx automatically reads the 'paths' in your tsconfig.json
 tsx src/index.ts &
 
 # Start Nginx
