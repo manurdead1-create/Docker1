@@ -4,6 +4,13 @@ FROM nginx:alpine
 # 2. Install curl for health checks
 RUN apk add --no-cache curl
 
+# 2. Setup the web directory
+WORKDIR /usr/share/nginx/html
+
+# 3. COPY your dashboard files into the container
+# Make sure your index.html is in the same folder as this Dockerfile!
+COPY index.html .
+
 # 3. Configure Nginx (Explicitly using your IP: 176.100.37.91)
 # This routes domain traffic (Port 80) to your Python API (Port 30469)
 RUN rm -f /etc/nginx/conf.d/default.conf
