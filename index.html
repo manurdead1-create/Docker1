@@ -856,20 +856,20 @@
         </div>
 
         <!-- Add New Category -->
-        <div class="admin-row" style="margin-bottom:.5rem;">
-          <div class="admin-field">
-            <label>New Category Name</label>
-            <input id="admin-newcat-name" class="admin-input" placeholder="e.g. Minecraft Features">
-          </div>
-          <div class="admin-field" style="max-width:60px;">
-            <label>Icon</label>
-            <input id="admin-newcat-icon" class="admin-input" placeholder="&#9881;" style="text-align:center;">
-          </div>
-          <div class="admin-field" style="max-width:120px;">
-            <label>Color</label>
-            <input id="admin-newcat-color" type="color" class="admin-input" value="#5196ff" style="padding:.3rem .5rem;height:38px;">
-          </div>
-          <button class="admin-btn" onclick="adminAddCategory()">Add Category</button>
+        <div class="admin-row">
+            <div class="admin-field">
+                <label>Name</label>
+                <input type="text" id="admin-newcat-name" class="admin-input" placeholder="e.g. Social">
+            </div>
+            <div class="admin-field" style="flex: 0.3;">
+                <label>Emoji</label>
+                <input type="text" id="admin-newcat-emoji" class="admin-input" placeholder="⚡">
+            </div>
+            <div class="admin-field" style="flex: 0.2;">
+                <label>Color</label>
+                <input type="color" id="admin-newcat-color" class="admin-input" value="#5196ff" style="height: 42px; padding: 5px;">
+            </div>
+            <button class="admin-btn" onclick="adminAddCategory()">Add Category</button>
         </div>
         <div class="admin-msg" id="admin-cat-msg"></div>
 
