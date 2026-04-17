@@ -3,25 +3,28 @@ FROM node:18-alpine
 # Install nginx and curl
 RUN apk add --no-cache nginx curl
 
-# Create app directory
+# Create app directory at the ROOT of the monorepo
 WORKDIR /app
 
+# Copy the root package files to install workspace dependencies
 COPY package*.json ./
+# If you have a pnpm-workspace.yaml or lerna.json, copy those too
+# COPY pnpm-workspace.yaml ./ 
 
-# This flag is key for monorepos/workspaces
-RUN npm install --include=dev && npm install -g tsx
+# Install dependencies for the whole workspace
+RUN npm install && npm install -g tsx typescript
 
-# Copy everything (Ensure you are copying the WHOLE project root, 
-# not just the 'src' or 'api-server' folder)
+# Copy the ENTIRE project (this includes /lib and /services/api)
 COPY . .
 
 # Ensure the start script is executable
-RUN chmod +x start.sh
+# Adjust this path if start.sh is inside your api service folder
+RUN chmod +x ./services/api/start.sh
 
 # Create folder for file uploads
-RUN mkdir -p /app/files
+RUN mkdir -p /app/services/api/files
 
-# Configure Nginx with your specific External API IP
+# Configure Nginx
 RUN rm -f /etc/nginx/http.d/default.conf
 RUN echo 'server { \
     listen 30469; \
@@ -42,7 +45,7 @@ RUN echo 'server { \
         add_header Content-Disposition "attachment"; \
     } \
     \
-    # Your External API Server \
+    # External API Routing \
     location /api/ { \
         proxy_pass http://176.100.37.91:30469; \
         proxy_set_header Host $host; \
@@ -52,8 +55,10 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/http.d/default.conf
 
-# Expose the external port
+# Set the working directory to the API service before running
+WORKDIR /app/services/api
+
 EXPOSE 30469
 
-# Run the startup script
+# Run the startup script from within the service folder
 CMD ["./start.sh"]
