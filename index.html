@@ -1435,23 +1435,38 @@
       } catch { showMsg('admin-upload-msg','Upload failed. Check server.','err'); }
     }
 
-    async function adminAddCategory() {
-      const name = document.getElementById('admin-newcat-name').value.trim();
-      const icon = document.getElementById('admin-newcat-icon').value.trim() || '⚙️';
-      const color = document.getElementById('admin-newcat-color').value;
-      if (!name) { showMsg('admin-cat-msg','Category name is required.','err'); return; }
-      try {
-        const res = await fetch(`${API_BASE}/admin/category/add`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': 'dariobladez' }, body: JSON.stringify({ name: "New Category" }) });
-        const data = await res.json();
-        if (data.ok) {
-          portalData=data.data;
-          document.getElementById('admin-newcat-name').value='';
-          populateCategoryDropdown(); applyPortalData(); renderLandingCategories();
-          showMsg('admin-cat-msg',`Category "${name}" added!`,'ok');
-        }
-      } catch { showMsg('admin-cat-msg','Error adding category.','err'); }
-    }
+    async function addCategory() {
+        // Get the actual name from your input field
+        const nameInput = document.getElementById('categoryNameInput'); 
+        const categoryName = nameInput.value.trim();
 
+        if (!categoryName) {
+            alert("Please enter a category name");
+            return;
+        }
+
+        const response = await fetch(`${API_BASE}/admin/category/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Admin-Secret': 'dariobladez' 
+            },
+            // Send the variable 'categoryName' instead of the hardcoded string
+            body: JSON.stringify({ 
+                name: categoryName,
+                color: "#5196ff",
+                icon: "⚡" 
+            })
+        });
+
+        if (response.ok) {
+            nameInput.value = ""; // Clear the input after adding
+            fetchPortalData();    // Refresh the list
+        } else {
+            const error = await response.json();
+            alert("Error: " + error.error);
+        }
+    }
     async function adminDeleteCategory() {
       const catId = document.getElementById('admin-cat-select').value;
       if (!catId) return;
