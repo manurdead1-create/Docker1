@@ -899,7 +899,7 @@
     const LOGO = "https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png";
     const LICENSE_SERVER = "https://wardenx.dpdns.org/api/validate";
     const ADMIN_SECRET = "WardenX-DB64-BDB0-FB3A";
-    const API_BASE = "http://localhost:5000";
+    const API_BASE = "http://wardenx.dpdns.org/api";
 
     // ─── Reviews ──────────────────────────────────────────────
     let reviews = [
@@ -1027,7 +1027,7 @@
 
     async function fetchPortalData() {
       try {
-        const res = await fetch(`${API_BASE}/admin/data`);
+        const res = await fetch(`api/admin/data`);
         portalData = await res.json();
         applyPortalData();
         renderLandingCategories();
