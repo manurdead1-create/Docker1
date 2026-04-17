@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Add the --skip-project flag to bypass environment-specific compiler errors
-ts-node --transpile-only --skip-project src/index.ts &
+# Start the TypeScript API from the src folder
+ts-node --esm --transpile-only src/index.ts &
 
+# Start Nginx
 nginx -g "daemon off;"
