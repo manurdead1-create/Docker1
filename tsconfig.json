@@ -1,12 +1,13 @@
 {
-"compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@workspace/api-zod": ["./path/to/your/zod/folder/index.ts"]
-    },
+  "compilerOptions": {
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
+    "baseUrl": ".",
+    "paths": {
+      "@workspace/api-zod": ["../../lib/api-zod/index.ts"],
+      "@workspace/db": ["../../lib/db/index.ts"]
+    },
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,9 +17,10 @@
     "types": ["node"],
     "outDir": "./dist"
   },
-"ts-node": {
+  "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
   },
   "include": ["src/**/*"],
   "references": [
