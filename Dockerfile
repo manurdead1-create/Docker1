@@ -1,39 +1,50 @@
-FROM node:18-alpine
+# 1. Start with Python base
+FROM python:3.11-slim
 
-RUN apk add --no-cache nginx curl
+# 2. Install Nginx and system tools
+RUN apt-get update && apt-get install -y \
+    nginx \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
+# 3. Setup workspace
 WORKDIR /app
+RUN pip install --no-cache-dir flask flask-cors werkzeug
+COPY app.py .
+RUN mkdir -p uploads
 
-# 1. Copy everything from your local root to /app in Docker
-COPY . .
-
-# 2. Install dependencies
-RUN npm install && npm install -g tsx typescript
-
-# 3. Configure Nginx
-RUN rm -f /etc/nginx/http.d/default.conf
+# 4. CONFIGURE NGINX (Explicitly using your IP)
+# This ensures traffic to wardenx.dpdns.org/api/ hits your IP server logic
+RUN rm -f /etc/nginx/sites-enabled/default
 RUN echo 'server { \
-    listen 30469; \
-    location / { \
-        proxy_pass http://127.0.0.1:3000; \
-        proxy_set_header Host $host; \
-    } \
+    listen 80; \
+    server_name wardenx.dpdns.org; \
+\
+    # Forward domain API calls to the local IP process \
     location /api/ { \
-        proxy_pass http://176.100.37.91:30469; \
+        proxy_pass http://176.100.37.91:30469/api/; \
         proxy_set_header Host $host; \
+        proxy_set_header X-Real-IP $remote_addr; \
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
+        proxy_set_header X-Forwarded-Proto $scheme; \
     } \
-}' > /etc/nginx/http.d/default.conf
+\
+    # Serve your main dashboard / static files \
+    location / { \
+        root /var/www/html; \
+        index index.html; \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/wardenx.conf
 
-# 4. FIND the start.sh file and move it to the root of /app 
-# This prevents the "No such file" error regardless of your folder structure
-RUN find . -name "start.sh" -exec cp {} /app/start.sh \;
+# 5. Startup script to run both services
+RUN echo '#!/bin/sh\n\
+nginx\n\
+python app.py' > /app/start.sh
 RUN chmod +x /app/start.sh
 
-# 5. Set Workdir to where your code is (usually /app/services/api)
-# But we will run the script from /app
-WORKDIR /app/services/api
-
+# 6. Open the doors
+EXPOSE 80
 EXPOSE 30469
 
-# 6. Run the script using the absolute path we created in step 4
-CMD ["/bin/sh", "/app/start.sh"]
+CMD ["/app/start.sh"]
