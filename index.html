@@ -1055,31 +1055,28 @@
       renderPortalFeats();
     }
 
-    function renderPortalFeats() {
-      const container = document.getElementById('portal-feats');
-      if (!portalData || !portalData.categories || !portalData.categories.length) {
-        container.innerHTML = '<p style="color:var(--muted);font-size:13px;">No features listed yet.</p>';
-        return;
-      }
-      container.innerHTML = portalData.categories.map(cat => `
-        <section style="padding:0;">
-          <p class="portal-feat-label" style="color:${cat.color||'#5196ff'};">${cat.icon||''} ${cat.name}</p>
-          <ul class="portal-feat-list" style="--cat-color:${cat.color||'#5196ff'};">
-            ${cat.features.map(f=>`<li style="--cat-color:${cat.color||'#5196ff'}">${f.name}</li>`).join('')}
-          </ul>
-        </section>`).join('');
-      // Apply bullet colors
-      container.querySelectorAll('.portal-feat-list li').forEach(li => {
-        li.style.setProperty('--before-color', li.closest('ul').style.getPropertyValue('--cat-color'));
-      });
-      container.querySelectorAll('.portal-feat-list').forEach(ul => {
-        const color = ul.style.getPropertyValue('--cat-color') || '#5196ff';
-        ul.querySelectorAll('li').forEach(li => { li.style.cssText += `--cat-color:${color}`; });
-      });
-    }
+      function renderPortalFeats() {
+        const container = document.getElementById('portal-feats');
 
-    // Apply colored bullets dynamically
-    document.head.insertAdjacentHTML('beforeend',`<style>.portal-feat-list li::before{color:var(--cat-color,#5196ff)}</style>`);
+        if (!portalData || !portalData.categories || !portalData.categories.length) {
+            container.innerHTML = '<p style="color:var(--muted);font-size:13px;">No features listed yet.</p>';
+            return;
+        }
+
+        container.innerHTML = portalData.categories.map(cat => `
+            <section style="padding:0;">
+                <p class="portal-feat-label" style="color:${cat.color || '#5196ff'};">
+                    ${cat.icon || ''} ${cat.name}
+                </p>
+
+                <ul class="portal-feat-list">
+                    ${cat.features.map(f =>
+                        `<li>${typeof f === "string" ? f : f.name}</li>`
+                    ).join('')}
+                </ul>
+            </section>
+        `).join('');
+    }
 
     function renderLandingCategories() {
       const container = document.getElementById('landing-categories');
@@ -1095,11 +1092,11 @@
         cat.features.slice(0,3).forEach(f => {
           html += `<div class="feature-card">
             <div class="feature-icon" style="background:rgba(81,150,255,.1);">${cat.icon||'⚙️'}</div>
-            <p class="feature-title">${f.name}</p>
+            <p class="feature-title">${typeof f === "string" ? f : f.name}</p>
             ${f.desc ? `<p class="feature-desc">${f.desc}</p>` : ''}
           </div>`;
         });
-        html += `</div>`;
+        html += `</div>`; 
       });
       container.innerHTML = html;
       // Update module count
