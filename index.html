@@ -1027,7 +1027,7 @@
 
     async function fetchPortalData() {
       try {
-        const res = await fetch(`api/admin/data`);
+        const res = await fetch(`${API_BASE}/admin/data`);
         portalData = await res.json();
         applyPortalData();
         renderLandingCategories();
