@@ -288,8 +288,23 @@
     .back-home { display: inline-block; margin-top: 1.5rem; font-size: 12px; color: #334155; cursor: pointer; transition: color .2s; background: none; border: none; }
     .back-home:hover { color: var(--muted); }
     .stat-row { display:flex; justify-content:space-between; align-items:center; padding:.375rem 0; border-bottom:1px solid rgba(255,255,255,.05); }
-    .stat-row span:first-child { color:rgba(255,255,255,.6); font-size:13px; }
-    .stat-row span:last-child { color:#fff; font-weight:500; font-size:13px; font-variant-numeric:tabular-nums; }
+    .stats-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.25rem;backdrop-filter:blur(10px);transition:all .2s ease;}
+    .stats-card:hover{border-color:rgba(124,92,255,.35);transform:translateY(-2px);}
+    .stats-title{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);font-weight:700;margin-bottom:1rem;}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+    .stat-row:last-child{border-bottom:none;}
+    .stat-row span:first-child{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,.6);}
+    .stat-row span:last-child{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;letter-spacing:.02em;color:#fff;}
+    .stat-blue{color:#5196ff;}
+    .stat-green{color:#34d399;}
+    .stat-purple{color:#7c5cff;}
+    .stat-yellow{color:#f59e0b;}
+    .stat-red{color:#f87171;}
+    .stat-blue{text-shadow:0 0 8px rgba(81,150,255,.25);}
+    .stat-green{text-shadow:0 0 8px rgba(52,211,153,.25);}
+    .stat-purple{text-shadow:0 0 8px rgba(124,92,255,.25);}
+    .stat-yellow{text-shadow:0 0 8px rgba(245,158,11,.25);}
+    .stat-red{text-shadow:0 0 8px rgba(248,113,113,.25);}
     @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.4} }
 
     /* ── ADMIN PANEL ── */
@@ -721,67 +736,198 @@
 
     <!-- Stats Dashboard -->
     <div id="stats-dash-view" style="display:none;width:100%;max-width:1300px;padding:2rem 1.5rem;margin:0 auto;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
-        <div style="display:flex;align-items:center;gap:.75rem;">
-          <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png" alt="WardenX" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(124,92,255,.5));">
-          <span style="font-size:18px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">WardenX</span>
-          <span style="color:rgba(255,255,255,.2);font-size:13px;">Web Stats</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
-          <div id="stats-status-pill" style="display:flex;align-items:center;gap:.5rem;padding:.375rem .75rem;border-radius:999px;font-size:13px;font-weight:500;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.1);color:#f87171;">
-            <span id="stats-dot" style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;"></span>
-            <span id="stats-status-text">Offline</span>
-          </div>
-          <span id="stats-key-display" style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:11px;font-family:'JetBrains Mono',monospace;"></span>
-          <button onclick="statsLogout()" style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;">Logout</button>
-          <button onclick="backToPortal()" style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(81,150,255,.2);background:rgba(81,150,255,.08);color:#5196ff;font-size:12px;cursor:pointer;">&larr; Portal</button>
-        </div>
-      </div>
 
-      <div id="stats-banner" style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:2rem;margin-bottom:2rem;text-align:center;">
-        <div id="stats-banner-title" style="font-size:1.75rem;font-weight:800;color:#f87171;">OFFLINE</div>
-        <p id="stats-banner-sub" style="color:rgba(255,255,255,.4);margin-top:.5rem;">Waiting for checker session updates...</p>
-        <div id="stats-live-nums" style="display:none;justify-content:center;gap:2.5rem;margin-top:1.5rem;flex-wrap:wrap;">
-          <div style="text-align:center;"><div id="sl-checked" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Checked</div></div>
-          <div style="text-align:center;"><div id="sl-hits" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Hits</div></div>
-          <div style="text-align:center;"><div id="sl-cpm" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">CPM</div></div>
-          <div style="text-align:center;"><div id="sl-bad" style="font-size:1.75rem;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;">0</div><div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:.25rem;">Bad</div></div>
-        </div>
-      </div>
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;">
 
-      <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
-        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
-          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Core Performance</div>
-          <div class="stat-row"><span>Invalid</span><span id="s-bad">0</span></div>
-          <div class="stat-row"><span>MC Hits</span><span id="s-hits">0</span></div>
-          <div class="stat-row"><span>2FA Locked</span><span id="s-twofa">0</span></div>
-          <div class="stat-row" style="border-bottom:none;"><span>CPM</span><span id="s-cpm">0</span></div>
+            <div style="display:flex;align-items:center;gap:.75rem;">
+                <img src="https://ik.imagekit.io/soiz1wejp/upscalemedia-transformed.png"
+                     alt="WardenX"
+                     style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(124,92,255,.5));">
+
+                <span style="font-size:18px;font-weight:800;background:linear-gradient(90deg,#7c5cff,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">
+                    WardenX
+                </span>
+
+                <span style="color:rgba(255,255,255,.2);font-size:13px;">
+                    Web Stats
+                </span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+
+                <div id="stats-status-pill"
+                     style="display:flex;align-items:center;gap:.5rem;padding:.375rem .75rem;border-radius:999px;font-size:13px;font-weight:500;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.1);color:#f87171;">
+
+                    <span id="stats-dot"
+                          style="width:8px;height:8px;border-radius:50%;background:#f87171;display:inline-block;">
+                    </span>
+
+                    <span id="stats-status-text">Offline</span>
+
+                </div>
+
+                <span id="stats-key-display"
+                      style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:11px;font-family:'JetBrains Mono',monospace;">
+                </span>
+
+                <button onclick="statsLogout()"
+                        style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;">
+                    Logout
+                </button>
+
+                <button onclick="backToPortal()"
+                        style="padding:.375rem .75rem;border-radius:999px;border:1px solid rgba(81,150,255,.2);background:rgba(81,150,255,.08);color:#5196ff;font-size:12px;cursor:pointer;">
+                    ← Portal
+                </button>
+
+            </div>
         </div>
-        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
-          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">DonutSMP Details</div>
-          <div class="stat-row"><span>Donut Banned</span><span id="s-donut_banned">0</span></div>
-          <div class="stat-row" style="border-bottom:none;"><span>Donut Unbanned</span><span id="s-donut_unbanned">0</span></div>
+
+        <!-- Banner -->
+        <div id="stats-banner"
+             style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);padding:2rem;margin-bottom:2rem;text-align:center;">
+
+            <div id="stats-banner-title"
+                 style="font-size:1.75rem;font-weight:800;color:#f87171;">
+                OFFLINE
+            </div>
+
+            <p id="stats-banner-sub"
+               style="color:rgba(255,255,255,.4);margin-top:.5rem;">
+                Waiting for checker session updates...
+            </p>
+
+            <div id="stats-live-nums"
+                 style="display:none;justify-content:center;gap:2.5rem;margin-top:1.5rem;flex-wrap:wrap;">
+
+                <div style="text-align:center;">
+                    <div id="sl-checked" style="font-size:1.75rem;font-weight:700;">0</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,.4);">Checked</div>
+                </div>
+
+                <div style="text-align:center;">
+                    <div id="sl-hits" style="font-size:1.75rem;font-weight:700;">0</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,.4);">Hits</div>
+                </div>
+
+                <div style="text-align:center;">
+                    <div id="sl-cpm" style="font-size:1.75rem;font-weight:700;">0</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,.4);">CPM</div>
+                </div>
+
+                <div style="text-align:center;">
+                    <div id="sl-bad" style="font-size:1.75rem;font-weight:700;">0</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,.4);">Bad</div>
+                </div>
+
+            </div>
         </div>
-        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
-          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Microsoft &amp; Rewards</div>
-          <div class="stat-row"><span>MS Rewards</span><span id="s-ms_rewards_found">0</span></div>
-          <div class="stat-row"><span>MS Balance</span><span id="s-ms_balance_found">0</span></div>
-          <div class="stat-row"><span>Valid MS</span><span id="s-vm">0</span></div>
-          <div class="stat-row"><span>Nitro Promos</span><span id="s-nitro_found">0</span></div>
-          <div class="stat-row" style="border-bottom:none;"><span>Xbox Codes</span><span id="s-xbox_codes_found">0</span></div>
+
+
+        <div style="display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+
+        <div class="stats-card">
+        <div class="stats-title">CORE</div>
+        <div class="stat-row">
+        <span>Invalid</span>
+        <span id="s-bad" class="stat-red">0</span>
         </div>
-        <div style="border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
-          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Hypixel Details</div>
-          <div class="stat-row"><span>Hypixel Banned</span><span id="s-hypixel_banned">0</span></div>
-          <div class="stat-row" style="border-bottom:none;"><span>Hypixel Unbanned</span><span id="s-hypixel_unbanned">0</span></div>
+        <div class="stat-row">
+        <span>2FA Locked</span>
+        <span id="s-twofa" class="stat-yellow">0</span>
         </div>
-        <div id="sessions-card" style="display:none;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
-          <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">Active Sessions</div>
-          <div id="sessions-list"></div>
+        <div class="stat-row">
+        <span>CPM</span>
+        <span id="s-cpm" class="stat-blue">0</span>
         </div>
-      </div>
+        </div>
+
+        <div class="stats-card">
+        <div class="stats-title">HITS</div>
+        <div class="stat-row">
+        <span>MC Hits</span>
+        <span id="s-hits" class="stat-green">0</span>
+        </div>
+        <div class="stat-row">
+        <span>XGP Hits</span>
+        <span id="s-xgp" class="stat-purple">0</span>
+        </div>
+        <div class="stat-row">
+        <span>XGPU Hits</span>
+        <span id="s-xgpu" class="stat-blue">0</span>
+        </div>
+        </div>
+
+        <div class="stats-card">
+        <div class="stats-title">DONUTSMP DETAILS</div>
+        <div class="stat-row">
+        <span>Donut Banned</span>
+        <span id="s-donut_banned" class="stat-red">0</span>
+        </div>
+        <div class="stat-row">
+        <span>Donut Unbanned</span>
+        <span id="s-donut_unbanned" class="stat-green">0</span>
+        </div>
+        </div>
+
+        <div class="stats-card">
+        <div class="stats-title">HYPIXEL DETAILS</div>
+        <div class="stat-row">
+        <span>Hypixel Banned</span>
+        <span id="s-hypixel_banned" class="stat-red">0</span>
+        </div>
+        <div class="stat-row">
+        <span>Hypixel Unbanned</span>
+        <span id="s-hypixel_unbanned" class="stat-green">0</span>
+        </div>
+        </div>
+
+        <div class="stats-card">
+        <div class="stats-title">MICROSOFT</div>
+        <div class="stat-row">
+        <span>MS Rewards</span>
+        <span id="s-ms_rewards_found" class="stat-purple">0</span>
+        </div>
+        <div class="stat-row">
+        <span>MS Balance</span>
+        <span id="s-ms_balance_found" class="stat-blue">0</span>
+        </div>
+        <div class="stat-row">
+        <span>Valid MS</span>
+        <span id="s-vm" class="stat-green">0</span>
+        </div>
+        </div>
+
+        <div class="stats-card">
+        <div class="stats-title">XBOX PERKS</div>
+        <div class="stat-row">
+        <span>Nitro Promo</span>
+        <span id="s-nitro_found" class="stat-purple">0</span>
+        </div>
+        <div class="stat-row">
+        <span>Xbox Codes</span>
+        <span id="s-xbox_codes_found" class="stat-green">0</span>
+        </div>
+        </div>
+
+        </div>
+
+            <!-- Sessions -->
+            <div id="sessions-card"
+                 style="display:none;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.035);padding:1.25rem;backdrop-filter:blur(8px);">
+
+                <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem;">
+                    Active Sessions
+                </div>
+
+                <div id="sessions-list"></div>
+
+            </div>
+
+        </div>
+
     </div>
-
   </div><!-- /stats-page -->
 
   <!-- ══════════════════════════════════
@@ -1244,25 +1390,27 @@
       if (online) {
         bannerTitle.style.cssText='font-size:1.75rem;font-weight:800;background:linear-gradient(90deg,#00ff9c,#00f0ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;';
         bannerTitle.textContent='LIVE SESSION active'; bannerSub.style.display='none'; liveNums.style.display='flex';
-        document.getElementById('sl-checked').textContent=n(d.total_checked);
+        document.getElementById('sl-checked').textContent=n(d.checked);
         document.getElementById('sl-hits').textContent=n(d.mc_hits);
         document.getElementById('sl-cpm').textContent=n(d.cpm);
-        document.getElementById('sl-bad').textContent=n(d.total_bad);
+        document.getElementById('sl-bad').textContent=n(d.bad);
       } else {
         bannerTitle.style.cssText='font-size:1.75rem;font-weight:800;color:#f87171;';
         bannerTitle.textContent='OFFLINE'; bannerSub.style.display='block'; liveNums.style.display='none';
       }
-      document.getElementById('s-bad').textContent=n(d.total_bad);
+      document.getElementById('s-bad').textContent=n(d.bad);
       document.getElementById('s-hits').textContent=n(d.mc_hits);
       document.getElementById('s-twofa').textContent=n(d.twofa);
       document.getElementById('s-cpm').textContent=n(d.cpm);
-      document.getElementById('s-vm').textContent=n(d.total_vm);
+      document.getElementById('s-vm').textContent=n(d.vm);
+      document.getElementById('s-xgp').textContent=n(d.xgp);
+      document.getElementById('s-xgpu').textContent=n(d.xgpu);
       document.getElementById('s-donut_banned').textContent=n(d.donut_banned);
       document.getElementById('s-donut_unbanned').textContent=n(d.donut_unbanned);
-      document.getElementById('s-ms_rewards_found').textContent=n(d.ms_rewards_found);
-      document.getElementById('s-ms_balance_found').textContent=n(d.ms_balance_found);
-      document.getElementById('s-nitro_found').textContent=n(d.nitro_found);
-      document.getElementById('s-xbox_codes_found').textContent=n(d.xbox_codes_found);
+      document.getElementById('s-ms_rewards_found').textContent=n(d.ms_rewards);
+      document.getElementById('s-ms_balance_found').textContent=n(d.ms_balance);
+      document.getElementById('s-nitro_found').textContent=n(d.nitro_promos);
+      document.getElementById('s-xbox_codes_found').textContent=n(d.xbox_codes);
       document.getElementById('s-hypixel_banned').textContent=n(d.hypixel_banned);
       document.getElementById('s-hypixel_unbanned').textContent=n(d.hypixel_unbanned);
       const sessCard=document.getElementById('sessions-card');
